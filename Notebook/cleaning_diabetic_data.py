@@ -81,23 +81,31 @@ print("Drugs kept:", kept_drugs)
 
 # %% [markdown]
 # ## 4. Group the ID columns (using `IDS_mapping.csv`)
+# The groups get a clear name directly, so every item can be read on its own.
 
 # %%
 # Codes that mean NULL / Not Mapped / Unknown are not in the dictionaries -> they become NaN (= no item)
-admission_type_dict = {1: "Emergency", 2: "Emergency", 7: "Emergency",
-                       3: "Elective", 4: "Newborn"}
+admission_type_dict = {1: "Emergency admission", 2: "Emergency admission", 7: "Emergency admission",
+                       3: "Elective admission", 4: "Newborn admission"}
 
-discharge_dict = {1: "Home", 6: "Home", 8: "Home",
-                  2: "Transfer", 3: "Transfer", 4: "Transfer", 5: "Transfer", 15: "Transfer",
-                  16: "Transfer", 17: "Transfer", 22: "Transfer", 23: "Transfer", 24: "Transfer",
-                  27: "Transfer", 28: "Transfer", 29: "Transfer", 30: "Transfer",
-                  7: "LeftAMA"}
+discharge_dict = {1: "Discharged home", 6: "Discharged home", 8: "Discharged home",
+                  2: "Discharged to another facility", 3: "Discharged to another facility",
+                  4: "Discharged to another facility", 5: "Discharged to another facility",
+                  15: "Discharged to another facility", 16: "Discharged to another facility",
+                  17: "Discharged to another facility", 22: "Discharged to another facility",
+                  23: "Discharged to another facility", 24: "Discharged to another facility",
+                  27: "Discharged to another facility", 28: "Discharged to another facility",
+                  29: "Discharged to another facility", 30: "Discharged to another facility",
+                  7: "Left against medical advice"}
 
-admission_source_dict = {1: "Referral", 2: "Referral", 3: "Referral",
-                         4: "Transfer", 5: "Transfer", 6: "Transfer", 10: "Transfer",
-                         18: "Transfer", 22: "Transfer", 25: "Transfer", 26: "Transfer",
-                         7: "EmergencyRoom",
-                         11: "Birth", 12: "Birth", 13: "Birth", 14: "Birth", 23: "Birth", 24: "Birth"}
+admission_source_dict = {1: "Admitted by referral", 2: "Admitted by referral", 3: "Admitted by referral",
+                         4: "Admitted by transfer", 5: "Admitted by transfer", 6: "Admitted by transfer",
+                         10: "Admitted by transfer", 18: "Admitted by transfer", 22: "Admitted by transfer",
+                         25: "Admitted by transfer", 26: "Admitted by transfer",
+                         7: "Admitted from emergency room",
+                         11: "Birth-related admission", 12: "Birth-related admission",
+                         13: "Birth-related admission", 14: "Birth-related admission",
+                         23: "Birth-related admission", 24: "Birth-related admission"}
 
 df["admission_type"]   = df["admission_type_id"].map(admission_type_dict)
 df["discharge"]        = df["discharge_disposition_id"].map(discharge_dict)
@@ -157,6 +165,7 @@ df["diag_1"].value_counts()
 # %% [markdown]
 # ## 6. Turn numbers into categories
 # Apriori can not use numbers, so we cut them into groups with `pd.cut`.
+# Each group gets a name that explains itself (no `column=value` needed).
 #
 # We work on a **copy** called `items`: you can re-run this cell as many times as you want without errors.
 
@@ -164,24 +173,32 @@ df["diag_1"].value_counts()
 items = df.copy()
 
 items["time_in_hospital"] = pd.cut(items["time_in_hospital"], bins=[0, 3, 7, 100],
-                                   labels=["short(1-3d)", "medium(4-7d)", "long(8d+)"]).astype(object)
+                                   labels=["Short stay (1-3 days)", "Medium stay (4-7 days)",
+                                           "Long stay (8+ days)"]).astype(object)
 
 items["num_lab_procedures"] = pd.cut(items["num_lab_procedures"], bins=[-1, 30, 50, 1000],
-                                     labels=["low", "medium", "high"]).astype(object)
+                                     labels=["Few lab tests (up to 30)", "Moderate lab tests (31-50)",
+                                             "Many lab tests (51+)"]).astype(object)
 
 items["num_procedures"] = pd.cut(items["num_procedures"], bins=[-1, 0, 2, 100],
-                                 labels=["none", "few(1-2)", "many(3+)"]).astype(object)
+                                 labels=["No procedures", "Few procedures (1-2)",
+                                         "Many procedures (3+)"]).astype(object)
 
 items["num_medications"] = pd.cut(items["num_medications"], bins=[-1, 10, 20, 1000],
-                                  labels=["low(<=10)", "medium(11-20)", "high(21+)"]).astype(object)
+                                  labels=["Few medications (up to 10)", "Moderate medications (11-20)",
+                                          "Many medications (21+)"]).astype(object)
 
 items["number_diagnoses"] = pd.cut(items["number_diagnoses"], bins=[-1, 5, 8, 100],
-                                   labels=["few(<=5)", "moderate(6-8)", "many(9+)"]).astype(object)
+                                   labels=["Few diagnoses (up to 5)", "Moderate diagnoses (6-8)",
+                                           "Many diagnoses (9+)"]).astype(object)
 
 # previous visits: 0 / 1 / 2 or more
-for col in ["number_outpatient", "number_emergency", "number_inpatient"]:
+visit_names = {"number_outpatient": "outpatient", "number_emergency": "emergency",
+               "number_inpatient": "inpatient"}
+for col, kind in visit_names.items():
     items[col] = pd.cut(items[col], bins=[-1, 0, 1, 1000],
-                        labels=["none", "one", "several(2+)"]).astype(object)
+                        labels=[f"No previous {kind} visits", f"One previous {kind} visit",
+                                f"Several previous {kind} visits"]).astype(object)
 
 items[["time_in_hospital", "num_medications"]].head()
 
@@ -200,11 +217,83 @@ items["max_glu_serum"] = items["max_glu_serum"].replace("None", np.nan)
 items.head()
 
 # %% [markdown]
-# ## 8. One-hot encoding (True/False table for Apriori)
+# ## 8. Give every item a clear, self-explanatory name
+# No `column=value` any more: each item is a readable name such as
+# `AfricanAmerican`, `Young adult (20-39)`, `Short stay (1-3 days)` or `Insulin dose increased`.
 
 # %%
-# every "column=value" becomes one column of 1 / 0 ; missing values give no item
-onehot = pd.get_dummies(items, prefix_sep="=", dtype=int)
+# --- race / gender ---
+items["race"] = items["race"].replace({"Other": "OtherRace"})   # "Other" is used in other columns too
+
+# --- age: 10 small groups -> 5 named life stages ---
+age_groups = {
+    "[0-10)": "Child/Teen (0-19)",      "[10-20)": "Child/Teen (0-19)",
+    "[20-30)": "Young adult (20-39)",   "[30-40)": "Young adult (20-39)",
+    "[40-50)": "Middle-aged (40-59)",   "[50-60)": "Middle-aged (40-59)",
+    "[60-70)": "Senior (60-79)",        "[70-80)": "Senior (60-79)",
+    "[80-90)": "Elderly (80+)",         "[90-100)": "Elderly (80+)",
+}
+items["age"] = items["age"].map(age_groups)
+
+# --- lab tests ---
+items["A1Cresult"] = items["A1Cresult"].replace(
+    {"Norm": "HbA1c normal", ">7": "HbA1c above 7%", ">8": "HbA1c above 8%"})
+items["max_glu_serum"] = items["max_glu_serum"].replace(
+    {"Norm": "Glucose serum normal", ">200": "Glucose serum above 200", ">300": "Glucose serum above 300"})
+
+# --- treatment ---
+items["change"] = items["change"].replace(
+    {"Ch": "Medication changed", "No": "Medication not changed"})
+items["diabetesMed"] = items["diabetesMed"].replace(
+    {"Yes": "Diabetes medication prescribed", "No": "No diabetes medication prescribed"})
+
+# --- readmission (target) ---
+items["readmitted"] = items["readmitted"].replace(
+    {"<30": "Readmitted within 30 days", ">30": "Readmitted after 30 days", "NO": "Not readmitted"})
+
+# --- diagnoses: say which diagnosis the family belongs to ---
+for col, label in {"diag_1": "primary", "diag_2": "secondary", "diag_3": "additional"}.items():
+    items[col] = items[col].map(lambda v, label=label: f"{v} ({label} diagnosis)" if pd.notna(v) else v)
+
+# --- medical specialty: "InternalMedicine" -> "Internal Medicine (specialty)" ---
+def specialty_name(value):
+    if pd.isna(value):
+        return value
+    value = pd.Series([value]).str.replace(r"(?<=[a-z])(?=[A-Z])", " ", regex=True)[0]
+    return value.replace("/", " / ") + " (specialty)"
+
+items["medical_specialty"] = items["medical_specialty"].map(specialty_name)
+
+# --- drugs: "Insulin" + "Up" -> "Insulin dose increased" ---
+drug_names = {
+    "metformin": "Metformin", "repaglinide": "Repaglinide", "nateglinide": "Nateglinide",
+    "chlorpropamide": "Chlorpropamide", "glimepiride": "Glimepiride", "acetohexamide": "Acetohexamide",
+    "glipizide": "Glipizide", "glyburide": "Glyburide", "tolbutamide": "Tolbutamide",
+    "pioglitazone": "Pioglitazone", "rosiglitazone": "Rosiglitazone", "acarbose": "Acarbose",
+    "miglitol": "Miglitol", "troglitazone": "Troglitazone", "tolazamide": "Tolazamide",
+    "examide": "Examide", "citoglipton": "Citoglipton", "insulin": "Insulin",
+    "glyburide-metformin": "Glyburide + Metformin", "glipizide-metformin": "Glipizide + Metformin",
+    "glimepiride-pioglitazone": "Glimepiride + Pioglitazone",
+    "metformin-rosiglitazone": "Metformin + Rosiglitazone",
+    "metformin-pioglitazone": "Metformin + Pioglitazone",
+}
+dose_text = {"Steady": "dose unchanged", "Up": "dose increased", "Down": "dose decreased"}
+for drug in kept_drugs:
+    name = drug_names[drug]
+    items[drug] = items[drug].map(lambda v, name=name: f"{name} {dose_text[v]}" if pd.notna(v) else v)
+
+items.head()
+
+# %% [markdown]
+# ## 9. One-hot encoding (True/False table for Apriori)
+
+# %%
+# every value becomes one column of 1 / 0 named by the value itself ; missing values give no item
+parts = [pd.get_dummies(items[col], prefix="", prefix_sep="", dtype=int) for col in items.columns]
+onehot = pd.concat(parts, axis=1)
+
+# every item name must be unique (same name in two columns would mix two different things)
+assert not onehot.columns.duplicated().any(), onehot.columns[onehot.columns.duplicated()].tolist()
 
 # remove very rare items (less than 0.5% of patients): they can never be frequent
 support = onehot.mean()
@@ -216,7 +305,7 @@ print("Final table:", onehot.shape)
 onehot.head()
 
 # %% [markdown]
-# ## 9. Quick check
+# ## 10. Quick check
 
 # %%
 print("Patients  :", onehot.shape[0])
@@ -228,7 +317,7 @@ print("Empty patients:", (onehot.sum(axis=1) == 0).sum())
 onehot.mean().sort_values(ascending=False).head(10).round(3)
 
 # %% [markdown]
-# ## 10. Save the Apriori file
+# ## 11. Save the Apriori file
 
 # %%
 onehot.to_csv(DATA_DIR + "/diabetic_data_apriori.csv", index=False)
