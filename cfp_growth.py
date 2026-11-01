@@ -1,151 +1,261 @@
-
+# =====================================================================
+#  CFP_GROWTH.PY  -  l'algorithme CFP-Growth (MIS calculé par quartiles)
+#
+#  But : trouver les groupes de produits (itemsets) achetés souvent ensemble,
+#        avec un seuil DIFFÉRENT pour chaque produit (le MIS).
+#
+#  Sommaire du fichier :
+#     1. Node               : la structure de l'arbre
+#     2. Insert a path      : ajouter un chemin dans l'arbre
+#     3. Mine the tree      : fouiller l'arbre pour trouver les itemsets
+#     4. Item supports      : compter combien de tickets contiennent chaque produit
+#     5. MIS with quartiles : calculer le MIS de chaque produit, puis lancer CFP-Growth
+#
+#  Vocabulaire :
+#     ticket  = liste de produits achetés ensemble (une ligne du dataset)
+#     support = nombre de tickets qui contiennent le produit (ou le groupe)
+#     MIS     = support minimum demandé pour UN produit
+#     LS      = plancher : aucun MIS ne descend en dessous de LS
+#     beta    = part du support du produit utilisée pour son MIS
+#               MIS(i) = max( LS x N , beta_catégorie(i) x Sup(i) )
+#
+#  Ce fichier ne se lance pas seul : il est utilisé par main.py et comparison.py.
+# =====================================================================
 import math
 from collections import defaultdict
 
+import numpy as np
 
+
+# =====================================================================
+#  1. NODE : la structure de l'arbre
+#     Les tickets sont rangés dans un arbre : les débuts communs sont partagés,
+#     ce qui compresse la base.
+# =====================================================================
 class Noeud:
-    __slots__ = ("item", "compte", "parent", "enfants")
+    """Une case de l'arbre : un produit, combien de tickets passent par là, son parent et ses enfants."""
 
     def __init__(self, item, parent):
-        self.item = item
-        self.compte = 0
-        self.parent = parent
-        self.enfants = {}
+        self.item = item          # le produit (None pour la racine)
+        self.compte = 0           # nombre de tickets qui passent par ce nœud
+        self.parent = parent      # le nœud au-dessus
+        self.enfants = {}         # {produit: nœud enfant}
 
 
-def _inserer(racine, chemin, compte, entete, stats):
-    """Insère un chemin dans l'arbre : les préfixes communs sont partagés."""
+# =====================================================================
+#  2. INSERT A PATH : ajouter un chemin dans l'arbre
+# =====================================================================
+def inserer_chemin(racine, chemin, compte, entete, stats):
+    """Ajoute un chemin (liste de produits) dans l'arbre.
+    Si le début du chemin existe déjà, on réutilise les nœuds et on augmente leur compteur."""
     noeud = racine
     for item in chemin:
-        enfant = noeud.enfants.get(item)
-        if enfant is None:
-            enfant = Noeud(item, noeud)
+        if item in noeud.enfants:
+            enfant = noeud.enfants[item]               # le nœud existe déjà
+        else:
+            enfant = Noeud(item, noeud)                # on crée un nouveau nœud
             noeud.enfants[item] = enfant
-            entete[item].append(enfant)          # node-link de la table d'en-tête
+            entete[item].append(enfant)                # on le note dans la table d'en-tête
             stats["noeuds"] += 1
         enfant.compte += compte
         noeud = enfant
 
 
-def _miner(entete, rang, suffixe, seuil_min, sortie, stats):
-    """Parcourt la table d'en-tête depuis le bas et construit les bases conditionnelles."""
-    for item in sorted(entete, key=lambda i: -rang[i]):
-        noeuds = entete[item]
-        sup = sum(n.compte for n in noeuds)
-        motif = suffixe + (item,)
-        sortie[frozenset(motif)] = sup           # motif MIN-fréquent
-        stats["enumeres"] += 1
+def chemin_vers_racine(noeud):
+    """Liste des produits situés au-dessus d'un nœud (de la racine jusqu'à son parent)."""
+    chemin = []
+    parent = noeud.parent
+    while parent.item is not None:                     # on monte jusqu'à la racine
+        chemin.append(parent.item)
+        parent = parent.parent
+    chemin.reverse()                                   # ordre : racine -> bas
+    return chemin
 
-        # base conditionnelle : chemins qui montent vers la racine, sans l'item
-        base = []
-        cnt = defaultdict(int)
+
+# =====================================================================
+#  3. MINE THE TREE : fouiller l'arbre
+# =====================================================================
+def fouiller_arbre(entete, rang, suffixe, seuil_min, resultats, stats):
+    """Fonction qui s'appelle elle-même. Pour chaque produit de la table d'en-tête
+    (en partant du bas de l'arbre) :
+         a) on note son support,
+         b) on regarde les chemins qui mènent à lui (la "base conditionnelle"),
+         c) on construit un petit arbre avec ces chemins,
+         d) on recommence dans ce petit arbre pour trouver les groupes plus grands.
+       suffixe = produits déjà choisis (le groupe en cours de construction)."""
+    produits = sorted(entete, key=lambda p: -rang[p])  # du bas de l'arbre vers le haut
+
+    for item in produits:
+        noeuds = entete[item]
+
+        # a) support du groupe (suffixe + item)
+        support = 0
         for n in noeuds:
-            chemin = []
-            p = n.parent
-            while p.item is not None:
-                chemin.append(p.item)
-                p = p.parent
+            support += n.compte
+        groupe = suffixe + (item,)
+        resultats[frozenset(groupe)] = support
+
+        # b) base conditionnelle : les chemins qui montent vers la racine
+        base = []                                      # liste de (chemin, compte)
+        compteurs = defaultdict(int)                   # combien de fois chaque produit apparaît
+        for n in noeuds:
+            chemin = chemin_vers_racine(n)
             if chemin:
-                chemin.reverse()
                 base.append((chemin, n.compte))
-                for it in chemin:
-                    cnt[it] += n.compte
+                for p in chemin:
+                    compteurs[p] += n.compte
         stats["bases"] += 1
 
-        # arbre conditionnel : on garde les items dont le support conditionnel >= MIN
-        gardes = {it for it, c in cnt.items() if c >= seuil_min}
+        # c) on garde seulement les produits assez fréquents dans cette base
+        gardes = {p for p, c in compteurs.items() if c >= seuil_min}
         if not gardes:
-            continue
-        racine = Noeud(None, None)
-        ent = defaultdict(list)
-        for chemin, c in base:
-            ch = [it for it in chemin if it in gardes]
-            if ch:
-                _inserer(racine, ch, c, ent, stats)
-        _miner(ent, rang, motif, seuil_min, sortie, stats)
+            continue                                   # rien à explorer plus loin
+
+        petite_racine = Noeud(None, None)
+        petit_entete = defaultdict(list)
+        for chemin, compte in base:
+            chemin_filtre = [p for p in chemin if p in gardes]
+            if chemin_filtre:
+                inserer_chemin(petite_racine, chemin_filtre, compte, petit_entete, stats)
+
+        # d) on recommence dans le petit arbre
+        fouiller_arbre(petit_entete, rang, groupe, seuil_min, resultats, stats)
 
 
 def cfp_growth_seuils(tickets, seuils, mis_tri=None):
-    """CFP-Growth avec des seuils MIS donnés en nombre de tickets.
-    seuils[p] = MIS de p (entier). mis_tri[p] = valeur servant au tri (par défaut : seuils)."""
-    tickets_ens = [set(t) for t in tickets]
-    mis_tri = mis_tri or seuils
+    """CFP-Growth quand on connaît déjà le seuil de chaque produit.
+    tickets : liste de tickets (chaque ticket = liste de produits)
+    seuils  : {produit: MIS en nombre de tickets (entier)}
+    mis_tri : valeurs utilisées pour ranger les produits (par défaut : seuils)"""
+    tickets_ens = [set(t) for t in tickets]            # set = pas de doublon dans un ticket
+    if mis_tri is None:
+        mis_tri = seuils
 
-    # 1. supports (premier passage sur la base)
-    nb = defaultdict(int)
-    for t in tickets_ens:
-        for p in t:
-            nb[p] += 1
+    # Étape 1 : support de chaque produit (premier passage sur les données)
+    nb = compter_supports(tickets_ens)
+
+    # Étape 2 : MIN = le plus petit seuil. Un produit sous MIN ne pourra jamais être fréquent.
     MIN = min(seuils[p] for p in nb)
-
-    # 2. supprimer les produits sous MIN
     gardes = [p for p in nb if nb[p] >= MIN]
-    # 3. ordre : MIS décroissant (à égalité : ordre alphabétique)
-    ordre = sorted(gardes, key=lambda p: (-mis_tri[p], p))
-    rang = {p: r for r, p in enumerate(ordre)}
 
-    # 4. MIS-tree (deuxième passage sur la base)
+    # Étape 3 : ordre des produits = MIS décroissant (à égalité : ordre alphabétique)
+    ordre = sorted(gardes, key=lambda p: (-mis_tri[p], p))
+    rang = {produit: position for position, produit in enumerate(ordre)}
+
+    # Étape 4 : construire l'arbre (deuxième passage sur les données)
     racine = Noeud(None, None)
     entete = defaultdict(list)
-    stats = {"noeuds": 0, "enumeres": 0, "bases": 0}
+    stats = {"noeuds": 0, "bases": 0}
     occurrences = 0
-    for t in tickets_ens:
-        chemin = sorted((p for p in t if p in rang), key=lambda p: rang[p])
+    for ticket in tickets_ens:
+        chemin = [p for p in ticket if p in rang]      # on enlève les produits supprimés
+        chemin.sort(key=lambda p: rang[p])             # on les range dans l'ordre de l'arbre
         occurrences += len(chemin)
         if chemin:
-            _inserer(racine, chemin, 1, entete, stats)
+            inserer_chemin(racine, chemin, 1, entete, stats)
     noeuds_arbre = stats["noeuds"]
 
-    # 5-6. bases conditionnelles et arbres conditionnels (motifs MIN-fréquents)
+    # Étape 5 : fouiller l'arbre -> tous les groupes qui atteignent au moins MIN
     brut = {}
-    _miner(entete, rang, (), MIN, brut, stats)
+    fouiller_arbre(entete, rang, (), MIN, brut, stats)
 
-    # 7. test final : Sup(X) >= MIS(X) = plus petit MIS des produits de X
-    frequents = {}
-    par_niveau = defaultdict(list)
-    enumeres_par_niveau = defaultdict(int)
-    for motif, sup in brut.items():
-        k = len(motif)
-        enumeres_par_niveau[k] += 1
-        if sup >= min(seuils[p] for p in motif):
-            noms = tuple(sorted(motif))
-            frequents[noms] = sup
-            par_niveau[k].append(noms)
-    for k in par_niveau:
-        par_niveau[k].sort()
+    # Étape 6 : test final. Un groupe est fréquent si son support >= le plus petit MIS de ses produits
+    frequents = {}                                     # {("a", "b"): support}
+    par_niveau = defaultdict(list)                     # groupes fréquents, classés par taille
+    enumeres_par_niveau = defaultdict(int)             # groupes trouvés avant le test final
+    for groupe, support in brut.items():
+        taille = len(groupe)
+        enumeres_par_niveau[taille] += 1
+        plus_petit_mis = min(seuils[p] for p in groupe)
+        if support >= plus_petit_mis:
+            noms = tuple(sorted(groupe))
+            frequents[noms] = support
+            par_niveau[taille].append(noms)
+    for taille in par_niveau:
+        par_niveau[taille].sort()
 
     return {"frequents": frequents,
             "frequents_par_niveau": dict(par_niveau),
-            "enumeres_par_niveau": dict(enumeres_par_niveau),   # motifs MIN-fréquents (avant le test final)
-            "passages": 2,                                      # 1 pour les supports, 1 pour l'arbre
+            "enumeres_par_niveau": dict(enumeres_par_niveau),
+            "passages": 2,                             # 1 passage pour les supports, 1 pour l'arbre
             "noeuds_arbre": noeuds_arbre,
-            "occurrences": occurrences,                         # produits gardés dans tous les tickets
+            "occurrences": occurrences,                # produits gardés dans tous les tickets
             "bases_conditionnelles": stats["bases"],
-            "noeuds_total": stats["noeuds"],                    # arbre + arbres conditionnels
+            "noeuds_total": stats["noeuds"],           # arbre + petits arbres
             "MIN": MIN, "ordre_arbre": ordre}
 
 
-def cfp_growth(tickets, ls, beta):
-    """Même formule MIS que mis_apriori.py : MIS(i) = max(LS, beta x Sup(i))."""
-    N = len(tickets)
+# =====================================================================
+#  4. ITEM SUPPORTS : compter les produits
+# =====================================================================
+def compter_supports(tickets):
+    """Renvoie {produit: nombre de tickets qui le contiennent}."""
     nb = defaultdict(int)
-    for t in tickets:
-        for p in set(t):
-            nb[p] += 1
-    mis = {p: max(round(ls * N, 9), round(beta * nb[p], 9)) for p in nb}
-    seuils = {p: math.ceil(mis[p]) for p in nb}
+    for ticket in tickets:
+        for produit in set(ticket):
+            nb[produit] += 1
+    return dict(nb)
+
+
+# =====================================================================
+#  5. MIS WITH QUARTILES
+#
+#     1. on calcule le support de chaque produit
+#     2. on calcule Q1 et Q2 avec np.percentile
+#     3. catégorie du produit :  faible  : support < Q1
+#                                moyenne : Q1 <= support < Q2
+#                                forte   : support >= Q2
+#     4. un beta par catégorie (beta_faible <= beta_moyen <= beta_fort <= 1) :
+#             MIS(i) = max( LS x N , beta_catégorie(i) x Sup(i) )
+#
+#  Avec niveaux = (0.25, 0.5, 0.75) et 4 beta, on obtient 4 catégories.
+# =====================================================================
+def categories_quartiles(nb, niveaux=(0.25, 0.75)):
+    """Renvoie (coupures, catégorie de chaque produit).
+    catégorie = nombre de coupures que le support atteint (0 = faible, 1 = moyenne, 2 = forte...)."""
+    supports = list(nb.values())
+    # np.percentile attend un pourcentage de 0 à 100 : 0.25 devient 25
+    coupures = [float(np.percentile(supports, 100 * p)) for p in niveaux]
+    categories = {}
+    for produit in nb:
+        categories[produit] = sum(1 for coupure in coupures if nb[produit] >= coupure)
+    return coupures, categories
+
+
+def calculer_mis_quartiles(nb, N, ls, betas=(0.2, 0.5, 0.8), niveaux=(0.25, 0.75)):
+    """MIS de chaque produit selon sa catégorie, en nombre de tickets."""
+    # vérifications des paramètres
+    if len(betas) != len(niveaux) + 1:
+        raise ValueError("il faut un beta de plus que de niveaux (3 beta pour Q1 et Q2)")
+    if any(betas[i] > betas[i + 1] for i in range(len(betas) - 1)):
+        raise ValueError("les beta doivent être en ordre croissant")
+    if not all(0 < b <= 1 for b in betas):
+        raise ValueError("chaque beta doit être dans ]0, 1]")
+
+    coupures, categories = categories_quartiles(nb, niveaux)
+    mis = {}
+    for produit in nb:
+        beta = betas[categories[produit]]              # le beta de sa catégorie
+        # round(..., 9) évite les petites erreurs de calcul des décimaux
+        mis[produit] = max(round(ls * N, 9), round(beta * nb[produit], 9))
+    return mis, categories, coupures
+
+
+def cfp_growth(tickets, ls, betas=(0.2, 0.5, 0.8), niveaux=(0.25, 0.75)):
+    """LA fonction à appeler : CFP-Growth avec MIS par quartiles.
+    tickets : liste de tickets
+    ls      : plancher du support (fraction, ex : 0.1 = 10 %)
+    betas   : 3 beta croissants (produits faibles, moyens, forts)"""
+    N = len(tickets)
+    nb = compter_supports(tickets)
+    mis, categories, coupures = calculer_mis_quartiles(nb, N, ls, betas, niveaux)
+    seuils = {p: math.ceil(mis[p]) for p in nb}        # nombre entier de tickets (arrondi vers le haut)
+
     res = cfp_growth_seuils(tickets, seuils, mis_tri=mis)
-    res["mis"] = {p: mis[p] / N for p in nb}
-    res["support"] = dict(nb)
+    res["mis"] = {p: mis[p] / N for p in nb}           # MIS en fraction (0 à 1)
+    res["support"] = nb
+    res["seuils"] = seuils
+    res["categories"] = categories
+    res["coupures"] = coupures
+    res["betas"] = tuple(betas)
     return res
-
-
-if __name__ == "__main__":
-    # Exemple de Hu & Chen (2006) : supports en nombre de transactions
-    tickets = [list("dcaf"), list("gcafe"), list("bacfh"), list("gbf"), list("bc")]
-    seuils = dict(a=4, b=4, c=4, d=3, e=3, f=2, g=2, h=2)
-    res = cfp_growth_seuils(tickets, seuils)
-    print("MIN =", res["MIN"], "| ordre de l'arbre :", res["ordre_arbre"])
-    print("Nœuds du MIS-tree :", res["noeuds_arbre"])
-    for k in sorted(res["frequents_par_niveau"]):
-        print("Niveau", k, ":", [("".join(g), res["frequents"][g]) for g in res["frequents_par_niveau"][k]])

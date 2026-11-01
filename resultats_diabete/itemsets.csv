@@ -1,0 +1,1268 @@
+itemset,taille,nb_patients,support_%
+number_emergency=none,1,64879,92.71
+number_inpatient=none,1,61783,88.29
+number_outpatient=none,1,60857,86.96
+diabetesMed=Yes,1,53296,76.16
+discharge=Home,1,52681,75.28
+race=Caucasian,1,52303,74.74
+admission_type=Emergency,1,48296,69.01
+readmitted=NO,1,41472,59.26
+change=No,1,38489,55.0
+admission_source=EmergencyRoom,1,37270,53.26
+gender=Female,1,37237,53.21
+time_in_hospital=short(1-3d),1,35139,50.21
+num_medications=medium(11-20),1,35041,50.07
+gender=Male,1,32742,46.79
+change=Ch,1,31490,45.0
+num_procedures=none,1,30836,44.06
+number_diagnoses=many(9+),1,30791,44.0
+num_lab_procedures=medium,1,27322,39.04
+num_lab_procedures=high,1,25467,36.39
+time_in_hospital=medium(4-7d),1,25073,35.83
+num_procedures=few(1-2),1,22933,32.77
+admission_source=Referral,1,22786,32.56
+number_diagnoses=moderate(6-8),1,22439,32.07
+readmitted=>30,1,22224,31.76
+diag_2=Circulatory,1,22083,31.56
+insulin=Steady,1,21619,30.89
+diag_1=Circulatory,1,21391,30.57
+diag_3=Circulatory,1,20862,29.81
+diag_3=Other,1,20024,28.61
+num_medications=low(<=10),1,19496,27.86
+diag_2=Other,1,18076,25.83
+age=[70-80),1,17749,25.36
+num_lab_procedures=low,1,17190,24.56
+number_diagnoses=few(<=5),1,16749,23.93
+diabetesMed=No,1,16683,23.84
+num_procedures=many(3+),1,16210,23.16
+age=[60-70),1,15684,22.41
+num_medications=high(21+),1,15442,22.07
+admission_type=Elective,1,13782,19.69
+metformin=Steady,1,13632,19.48
+discharge=Transfer,1,13622,19.47
+race=AfricanAmerican,1,12624,18.04
+diag_3=Diabetes,1,12547,17.93
+age=[50-60),1,12351,17.65
+diag_1=Other,1,12124,17.33
+age=[80-90),1,11108,15.87
+medical_specialty=InternalMedicine,1,10641,15.21
+time_in_hospital=long(8d+),1,9767,13.96
+diag_2=Diabetes,1,9697,13.86
+diag_1=Respiratory,1,9491,13.56
+glipizide=Steady,1,8064,11.52
+insulin=Down,1,7323,10.46
+number_emergency=none + number_inpatient=none,2,58058,82.96
+number_emergency=none + number_outpatient=none,2,57306,81.89
+number_inpatient=none + number_outpatient=none,2,54441,77.8
+diabetesMed=Yes + number_emergency=none,2,49126,70.2
+discharge=Home + number_emergency=none,2,48743,69.65
+number_emergency=none + race=Caucasian,2,48637,69.5
+diabetesMed=Yes + number_inpatient=none,2,46816,66.9
+discharge=Home + number_inpatient=none,2,46518,66.47
+diabetesMed=Yes + number_outpatient=none,2,46051,65.81
+number_inpatient=none + race=Caucasian,2,45887,65.57
+discharge=Home + number_outpatient=none,2,45570,65.12
+number_outpatient=none + race=Caucasian,2,44732,63.92
+admission_type=Emergency + number_emergency=none,2,44560,63.68
+admission_type=Emergency + number_inpatient=none,2,42776,61.13
+admission_type=Emergency + number_outpatient=none,2,42621,60.91
+number_emergency=none + readmitted=NO,2,39249,56.09
+number_inpatient=none + readmitted=NO,2,38217,54.61
+number_outpatient=none + readmitted=NO,2,37066,52.97
+change=No + number_emergency=none,2,36067,51.54
+admission_source=EmergencyRoom + admission_type=Emergency,2,35143,50.22
+gender=Female + number_emergency=none,2,34299,49.01
+admission_source=EmergencyRoom + number_emergency=none,2,34057,48.67
+change=No + number_inpatient=none,2,34038,48.64
+change=No + number_outpatient=none,2,33798,48.3
+admission_source=EmergencyRoom + number_outpatient=none,2,32961,47.1
+gender=Female + number_inpatient=none,2,32894,47.01
+admission_source=EmergencyRoom + number_inpatient=none,2,32774,46.83
+number_emergency=none + time_in_hospital=short(1-3d),2,32547,46.51
+num_medications=medium(11-20) + number_emergency=none,2,32374,46.26
+gender=Female + number_outpatient=none,2,32224,46.05
+number_inpatient=none + time_in_hospital=short(1-3d),2,31644,45.22
+change=Ch + diabetesMed=Yes,2,31490,45.0
+gender=Male + number_emergency=none,2,30580,43.7
+num_medications=medium(11-20) + number_inpatient=none,2,30485,43.56
+number_outpatient=none + time_in_hospital=short(1-3d),2,30287,43.28
+num_medications=medium(11-20) + number_outpatient=none,2,30144,43.08
+discharge=Home + time_in_hospital=short(1-3d),2,29247,41.79
+gender=Male + number_inpatient=none,2,28889,41.28
+change=Ch + number_emergency=none,2,28812,41.17
+gender=Male + number_outpatient=none,2,28633,40.92
+num_procedures=none + number_emergency=none,2,28346,40.51
+number_diagnoses=many(9+) + number_emergency=none,2,27938,39.92
+change=Ch + number_inpatient=none,2,27745,39.65
+num_procedures=none + number_inpatient=none,2,27257,38.95
+change=Ch + number_outpatient=none,2,27059,38.67
+num_procedures=none + number_outpatient=none,2,26809,38.31
+number_diagnoses=many(9+) + number_inpatient=none,2,26455,37.8
+number_diagnoses=many(9+) + number_outpatient=none,2,25887,36.99
+num_lab_procedures=medium + number_emergency=none,2,25464,36.39
+admission_type=Emergency + num_procedures=none,2,24942,35.64
+num_lab_procedures=medium + number_inpatient=none,2,24247,34.65
+num_lab_procedures=medium + number_outpatient=none,2,24246,34.65
+num_lab_procedures=high + number_emergency=none,2,23459,33.52
+number_emergency=none + time_in_hospital=medium(4-7d),2,23244,33.22
+num_lab_procedures=high + number_outpatient=none,2,22170,31.68
+number_inpatient=none + time_in_hospital=medium(4-7d),2,21950,31.37
+number_outpatient=none + time_in_hospital=medium(4-7d),2,21888,31.28
+num_lab_procedures=high + number_inpatient=none,2,21768,31.11
+diabetesMed=Yes + insulin=Steady,2,21619,30.89
+admission_source=Referral + number_emergency=none,2,21610,30.88
+num_procedures=few(1-2) + number_emergency=none,2,21251,30.37
+number_diagnoses=moderate(6-8) + number_emergency=none,2,20971,29.97
+diag_2=Circulatory + number_emergency=none,2,20706,29.59
+admission_source=Referral + number_inpatient=none,2,20429,29.19
+diag_1=Circulatory + number_emergency=none,2,20143,28.78
+insulin=Steady + number_emergency=none,2,20106,28.73
+num_procedures=few(1-2) + number_inpatient=none,2,19989,28.56
+number_emergency=none + readmitted=>30,2,19959,28.52
+number_diagnoses=moderate(6-8) + number_inpatient=none,2,19797,28.29
+num_procedures=few(1-2) + number_outpatient=none,2,19756,28.23
+number_diagnoses=moderate(6-8) + number_outpatient=none,2,19572,27.97
+diag_3=Circulatory + number_emergency=none,2,19506,27.87
+admission_source=Referral + number_outpatient=none,2,19339,27.64
+diag_2=Circulatory + number_inpatient=none,2,19300,27.58
+diag_2=Circulatory + number_outpatient=none,2,19266,27.53
+insulin=Steady + number_outpatient=none,2,19037,27.2
+diag_1=Circulatory + number_inpatient=none,2,18967,27.1
+diag_1=Circulatory + number_outpatient=none,2,18872,26.97
+insulin=Steady + number_inpatient=none,2,18809,26.88
+number_inpatient=none + readmitted=>30,2,18544,26.5
+number_outpatient=none + readmitted=>30,2,18437,26.35
+diag_3=Other + number_emergency=none,2,18349,26.22
+num_medications=low(<=10) + number_emergency=none,2,18277,26.12
+diag_3=Circulatory + number_inpatient=none,2,18265,26.1
+diag_3=Circulatory + number_outpatient=none,2,18071,25.82
+num_medications=low(<=10) + number_inpatient=none,2,17884,25.56
+diag_3=Other + number_inpatient=none,2,17685,25.27
+num_medications=low(<=10) + number_outpatient=none,2,17527,25.05
+diag_3=Other + number_outpatient=none,2,17326,24.76
+change=No + diabetesMed=No,2,16683,23.84
+age=[70-80) + number_emergency=none,2,16631,23.77
+diag_2=Other + number_emergency=none,2,16580,23.69
+number_diagnoses=few(<=5) + number_emergency=none,2,15970,22.82
+diag_2=Other + number_inpatient=none,2,15961,22.81
+num_lab_procedures=low + number_emergency=none,2,15956,22.8
+num_lab_procedures=low + number_inpatient=none,2,15768,22.53
+diabetesMed=No + number_emergency=none,2,15753,22.51
+discharge=Home + num_medications=low(<=10),2,15641,22.35
+diag_2=Other + number_outpatient=none,2,15603,22.3
+number_diagnoses=few(<=5) + number_inpatient=none,2,15531,22.19
+age=[70-80) + number_inpatient=none,2,15464,22.1
+number_diagnoses=few(<=5) + number_outpatient=none,2,15398,22.0
+age=[70-80) + number_outpatient=none,2,15289,21.85
+num_procedures=many(3+) + number_emergency=none,2,15282,21.84
+diabetesMed=No + number_inpatient=none,2,14967,21.39
+diabetesMed=No + number_outpatient=none,2,14806,21.16
+age=[60-70) + number_emergency=none,2,14687,20.99
+num_procedures=many(3+) + number_inpatient=none,2,14537,20.77
+num_lab_procedures=low + number_outpatient=none,2,14441,20.64
+num_procedures=many(3+) + number_outpatient=none,2,14292,20.42
+num_medications=high(21+) + number_emergency=none,2,14228,20.33
+age=[70-80) + race=Caucasian,2,14192,20.28
+diabetesMed=Yes + diag_2=Other,2,13875,19.83
+age=[60-70) + number_inpatient=none,2,13861,19.81
+discharge=Home + number_diagnoses=few(<=5),2,13702,19.58
+diabetesMed=Yes + metformin=Steady,2,13632,19.48
+age=[70-80) + diabetesMed=Yes,2,13599,19.43
+age=[60-70) + number_outpatient=none,2,13548,19.36
+num_lab_procedures=low + race=Caucasian,2,13473,19.25
+num_medications=high(21+) + number_inpatient=none,2,13414,19.17
+discharge=Home + num_lab_procedures=low,2,13312,19.02
+diabetesMed=Yes + num_medications=high(21+),2,13276,18.97
+num_medications=high(21+) + number_outpatient=none,2,13186,18.84
+diag_2=Other + race=Caucasian,2,13160,18.81
+diag_2=Other + discharge=Home,2,13156,18.8
+admission_type=Elective + number_emergency=none,2,13050,18.65
+admission_type=Emergency + diag_2=Other,2,13031,18.62
+discharge=Home + num_procedures=many(3+),2,12787,18.27
+diabetesMed=Yes + num_lab_procedures=low,2,12779,18.26
+diabetesMed=Yes + number_diagnoses=few(<=5),2,12682,18.12
+metformin=Steady + number_emergency=none,2,12662,18.09
+age=[70-80) + discharge=Home,2,12630,18.05
+diabetesMed=No + race=Caucasian,2,12601,18.01
+discharge=Transfer + number_emergency=none,2,12551,17.94
+age=[60-70) + discharge=Home,2,12551,17.94
+num_procedures=many(3+) + race=Caucasian,2,12535,17.91
+metformin=Steady + number_inpatient=none,2,12346,17.64
+admission_type=Elective + number_inpatient=none,2,12333,17.62
+admission_source=Referral + admission_type=Elective,2,12290,17.56
+diabetesMed=Yes + num_procedures=many(3+),2,12281,17.55
+diabetesMed=No + discharge=Home,2,12278,17.55
+age=[60-70) + diabetesMed=Yes,2,12188,17.42
+admission_type=Elective + number_outpatient=none,2,12090,17.28
+num_medications=high(21+) + race=Caucasian,2,12049,17.22
+admission_type=Emergency + age=[70-80),2,11899,17.0
+discharge=Transfer + number_inpatient=none,2,11781,16.84
+discharge=Transfer + number_outpatient=none,2,11761,16.81
+diag_3=Diabetes + number_emergency=none,2,11744,16.78
+age=[60-70) + race=Caucasian,2,11715,16.74
+metformin=Steady + number_outpatient=none,2,11679,16.69
+num_lab_procedures=low + time_in_hospital=short(1-3d),2,11641,16.63
+number_outpatient=none + race=AfricanAmerican,2,11565,16.53
+number_diagnoses=few(<=5) + readmitted=NO,2,11500,16.43
+number_emergency=none + race=AfricanAmerican,2,11471,16.39
+age=[50-60) + number_emergency=none,2,11403,16.29
+number_inpatient=none + race=AfricanAmerican,2,11377,16.26
+admission_type=Emergency + diabetesMed=No,2,11366,16.24
+diag_3=Diabetes + number_inpatient=none,2,11220,16.03
+number_diagnoses=few(<=5) + race=Caucasian,2,11163,15.95
+diag_1=Other + number_emergency=none,2,11062,15.81
+diag_3=Diabetes + number_outpatient=none,2,11049,15.79
+age=[50-60) + number_inpatient=none,2,11023,15.75
+admission_type=Emergency + number_diagnoses=few(<=5),2,11022,15.75
+admission_type=Elective + discharge=Home,2,10909,15.59
+admission_type=Elective + race=Caucasian,2,10901,15.58
+discharge=Transfer + race=Caucasian,2,10857,15.51
+diag_2=Other + readmitted=NO,2,10833,15.48
+age=[50-60) + number_outpatient=none,2,10821,15.46
+diabetesMed=No + readmitted=NO,2,10782,15.41
+number_diagnoses=few(<=5) + time_in_hospital=short(1-3d),2,10772,15.39
+num_lab_procedures=low + readmitted=NO,2,10762,15.38
+discharge=Home + metformin=Steady,2,10698,15.29
+discharge=Home + num_medications=high(21+),2,10569,15.1
+change=Ch + metformin=Steady,2,10457,14.94
+diabetesMed=Yes + discharge=Transfer,2,10457,14.94
+admission_type=Elective + diabetesMed=Yes,2,10430,14.9
+age=[50-60) + discharge=Home,2,10405,14.87
+diag_1=Other + number_outpatient=none,2,10351,14.79
+admission_type=Emergency + age=[60-70),2,10327,14.76
+diag_1=Other + number_inpatient=none,2,10318,14.74
+age=[80-90) + number_emergency=none,2,10290,14.7
+metformin=Steady + race=Caucasian,2,10238,14.63
+admission_source=EmergencyRoom + diag_2=Other,2,10165,14.53
+change=No + num_lab_procedures=low,2,10121,14.46
+discharge=Home + race=AfricanAmerican,2,9927,14.19
+diag_3=Diabetes + discharge=Home,2,9916,14.17
+diag_2=Other + gender=Female,2,9897,14.14
+num_procedures=many(3+) + readmitted=NO,2,9880,14.12
+age=[70-80) + change=No,2,9875,14.11
+medical_specialty=InternalMedicine + number_emergency=none,2,9862,14.09
+age=[70-80) + readmitted=NO,2,9805,14.01
+admission_type=Emergency + discharge=Transfer,2,9797,14.0
+change=No + number_diagnoses=few(<=5),2,9768,13.96
+change=No + diag_2=Other,2,9737,13.91
+admission_type=Emergency + race=AfricanAmerican,2,9723,13.89
+diabetesMed=Yes + diag_3=Diabetes,2,9714,13.88
+medical_specialty=InternalMedicine + number_outpatient=none,2,9674,13.82
+diabetesMed=Yes + race=AfricanAmerican,2,9662,13.81
+age=[80-90) + number_inpatient=none,2,9653,13.79
+age=[80-90) + number_outpatient=none,2,9546,13.64
+age=[70-80) + gender=Female,2,9519,13.6
+age=[50-60) + diabetesMed=Yes,2,9500,13.58
+change=Ch + num_medications=high(21+),2,9493,13.57
+admission_type=Emergency + num_procedures=many(3+),2,9491,13.56
+age=[80-90) + race=Caucasian,2,9397,13.43
+gender=Female + num_lab_procedures=low,2,9323,13.32
+age=[60-70) + readmitted=NO,2,9322,13.32
+age=[70-80) + num_medications=medium(11-20),2,9313,13.31
+diabetesMed=No + time_in_hospital=short(1-3d),2,9278,13.26
+diag_3=Diabetes + race=Caucasian,2,9224,13.18
+diag_1=Other + discharge=Home,2,9214,13.17
+num_medications=high(21+) + number_diagnoses=many(9+),2,9171,13.11
+diabetesMed=No + gender=Female,2,9165,13.1
+diabetesMed=Yes + diag_1=Other,2,9110,13.02
+admission_source=EmergencyRoom + age=[70-80),2,9098,13.0
+number_emergency=none + time_in_hospital=long(8d+),2,9088,12.99
+admission_type=Emergency + metformin=Steady,2,9006,12.87
+diag_2=Diabetes + number_emergency=none,2,9003,12.87
+diag_1=Other + race=Caucasian,2,8940,12.78
+admission_type=Elective + readmitted=NO,2,8912,12.74
+gender=Female + number_diagnoses=few(<=5),2,8898,12.72
+admission_source=EmergencyRoom + diabetesMed=No,2,8865,12.67
+admission_type=Emergency + num_medications=high(21+),2,8853,12.65
+change=No + num_procedures=many(3+),2,8843,12.64
+admission_type=Emergency + num_lab_procedures=low,2,8831,12.62
+diag_2=Diabetes + number_inpatient=none,2,8813,12.59
+medical_specialty=InternalMedicine + number_inpatient=none,2,8796,12.57
+num_medications=high(21+) + readmitted=NO,2,8792,12.56
+diag_1=Respiratory + number_emergency=none,2,8728,12.47
+admission_type=Emergency + medical_specialty=InternalMedicine,2,8702,12.44
+number_outpatient=none + time_in_hospital=long(8d+),2,8682,12.41
+num_lab_procedures=low + num_medications=medium(11-20),2,8633,12.34
+diag_1=Circulatory + num_procedures=many(3+),2,8564,12.24
+diag_2=Diabetes + number_outpatient=none,2,8561,12.23
+age=[50-60) + race=Caucasian,2,8505,12.15
+gender=Male + num_procedures=many(3+),2,8458,12.09
+diag_1=Respiratory + number_inpatient=none,2,8454,12.08
+gender=Female + num_medications=high(21+),2,8431,12.05
+admission_type=Emergency + diag_1=Other,2,8410,12.02
+admission_type=Emergency + age=[50-60),2,8391,11.99
+metformin=Steady + readmitted=NO,2,8376,11.97
+diag_1=Respiratory + number_outpatient=none,2,8295,11.85
+admission_type=Emergency + age=[80-90),2,8250,11.79
+age=[60-70) + change=No,2,8227,11.76
+age=[80-90) + diabetesMed=Yes,2,8223,11.75
+discharge=Home + medical_specialty=InternalMedicine,2,8206,11.73
+discharge=Transfer + gender=Female,2,8198,11.71
+number_inpatient=none + time_in_hospital=long(8d+),2,8189,11.7
+diabetesMed=Yes + medical_specialty=InternalMedicine,2,8183,11.69
+admission_type=Emergency + diag_3=Diabetes,2,8183,11.69
+diabetesMed=Yes + glipizide=Steady,2,8064,11.52
+age=[60-70) + gender=Male,2,8030,11.47
+age=[60-70) + time_in_hospital=short(1-3d),2,7978,11.4
+age=[60-70) + num_medications=medium(11-20),2,7885,11.27
+diag_2=Diabetes + discharge=Home,2,7884,11.27
+diabetesMed=Yes + time_in_hospital=long(8d+),2,7873,11.25
+discharge=Transfer + number_diagnoses=many(9+),2,7795,11.14
+num_lab_procedures=high + num_medications=high(21+),2,7779,11.12
+admission_source=EmergencyRoom + discharge=Transfer,2,7762,11.09
+age=[50-60) + readmitted=NO,2,7737,11.06
+diag_3=Diabetes + readmitted=NO,2,7694,10.99
+gender=Female + race=AfricanAmerican,2,7679,10.97
+race=AfricanAmerican + readmitted=NO,2,7662,10.95
+diabetesMed=Yes + diag_2=Diabetes,2,7642,10.92
+admission_type=Emergency + diag_1=Respiratory,2,7617,10.88
+admission_source=EmergencyRoom + race=AfricanAmerican,2,7542,10.78
+discharge=Transfer + readmitted=NO,2,7494,10.71
+diag_1=Respiratory + discharge=Home,2,7482,10.69
+glipizide=Steady + number_emergency=none,2,7467,10.67
+admission_type=Elective + change=No,2,7410,10.59
+diabetesMed=Yes + diag_1=Respiratory,2,7403,10.58
+change=Ch + insulin=Down,2,7323,10.46
+diabetesMed=Yes + insulin=Down,2,7323,10.46
+admission_type=Elective + time_in_hospital=short(1-3d),2,7308,10.44
+race=Caucasian + time_in_hospital=long(8d+),2,7283,10.41
+diag_1=Other + readmitted=NO,2,7265,10.38
+gender=Female + metformin=Steady,2,7220,10.32
+admission_type=Elective + gender=Female,2,7213,10.31
+diag_3=Diabetes + time_in_hospital=short(1-3d),2,7182,10.26
+change=No + discharge=Transfer,2,7174,10.25
+glipizide=Steady + number_inpatient=none,2,7095,10.14
+admission_source=EmergencyRoom + metformin=Steady,2,7067,10.1
+diag_1=Respiratory + race=Caucasian,2,7061,10.09
+number_emergency=none + number_inpatient=none + number_outpatient=none,3,51773,73.98
+diabetesMed=Yes + number_emergency=none + number_inpatient=none,3,43762,62.54
+discharge=Home + number_emergency=none + number_inpatient=none,3,43669,62.4
+number_emergency=none + number_inpatient=none + race=Caucasian,3,43268,61.83
+diabetesMed=Yes + number_emergency=none + number_outpatient=none,3,43130,61.63
+discharge=Home + number_emergency=none + number_outpatient=none,3,42873,61.27
+number_emergency=none + number_outpatient=none + race=Caucasian,3,42300,60.45
+admission_type=Emergency + number_emergency=none + number_inpatient=none,3,40102,57.31
+admission_type=Emergency + number_emergency=none + number_outpatient=none,3,39963,57.11
+number_emergency=none + number_inpatient=none + readmitted=NO,3,36436,52.07
+number_emergency=none + number_outpatient=none + readmitted=NO,3,35455,50.67
+number_inpatient=none + number_outpatient=none + readmitted=NO,3,34427,49.2
+change=No + number_emergency=none + number_inpatient=none,3,32323,46.19
+change=No + number_emergency=none + number_outpatient=none,3,32144,45.93
+admission_source=EmergencyRoom + admission_type=Emergency + number_emergency=none,3,32042,45.79
+admission_source=EmergencyRoom + admission_type=Emergency + number_inpatient=none,3,31039,44.35
+admission_source=EmergencyRoom + admission_type=Emergency + number_outpatient=none,3,30976,44.26
+gender=Female + number_emergency=none + number_inpatient=none,3,30723,43.9
+admission_source=EmergencyRoom + number_emergency=none + number_outpatient=none,3,30652,43.8
+admission_source=EmergencyRoom + number_emergency=none + number_inpatient=none,3,30442,43.5
+gender=Female + number_emergency=none + number_outpatient=none,3,30202,43.16
+number_emergency=none + number_inpatient=none + time_in_hospital=short(1-3d),3,29685,42.42
+change=Ch + diabetesMed=Yes + number_emergency=none,3,28812,41.17
+num_medications=medium(11-20) + number_emergency=none + number_inpatient=none,3,28567,40.82
+number_emergency=none + number_outpatient=none + time_in_hospital=short(1-3d),3,28495,40.72
+num_medications=medium(11-20) + number_emergency=none + number_outpatient=none,3,28299,40.44
+change=Ch + diabetesMed=Yes + number_inpatient=none,3,27745,39.65
+gender=Male + number_emergency=none + number_inpatient=none,3,27335,39.06
+gender=Male + number_emergency=none + number_outpatient=none,3,27104,38.73
+change=Ch + diabetesMed=Yes + number_outpatient=none,3,27059,38.67
+change=Ch + number_emergency=none + number_inpatient=none,3,25735,36.78
+num_procedures=none + number_emergency=none + number_inpatient=none,3,25407,36.31
+num_procedures=none + number_emergency=none + number_outpatient=none,3,25055,35.8
+num_lab_procedures=medium + number_emergency=none + number_outpatient=none,3,22881,32.7
+num_lab_procedures=medium + number_emergency=none + number_inpatient=none,3,22872,32.68
+num_lab_procedures=high + number_emergency=none + number_outpatient=none,3,20809,29.74
+number_emergency=none + number_inpatient=none + time_in_hospital=medium(4-7d),3,20629,29.48
+number_emergency=none + number_outpatient=none + time_in_hospital=medium(4-7d),3,20604,29.44
+num_lab_procedures=high + number_emergency=none + number_inpatient=none,3,20446,29.22
+diabetesMed=Yes + insulin=Steady + number_emergency=none,3,20106,28.73
+admission_source=Referral + number_emergency=none + number_inpatient=none,3,19565,27.96
+diabetesMed=Yes + insulin=Steady + number_outpatient=none,3,19037,27.2
+diabetesMed=Yes + insulin=Steady + number_inpatient=none,3,18809,26.88
+num_procedures=few(1-2) + number_emergency=none + number_inpatient=none,3,18751,26.8
+number_diagnoses=moderate(6-8) + number_emergency=none + number_inpatient=none,3,18682,26.7
+num_procedures=few(1-2) + number_emergency=none + number_outpatient=none,3,18614,26.6
+admission_source=Referral + number_emergency=none + number_outpatient=none,3,18567,26.53
+number_diagnoses=moderate(6-8) + number_emergency=none + number_outpatient=none,3,18530,26.48
+diag_2=Circulatory + number_emergency=none + number_outpatient=none,3,18330,26.19
+diag_2=Circulatory + number_emergency=none + number_inpatient=none,3,18329,26.19
+diag_1=Circulatory + number_emergency=none + number_inpatient=none,3,18067,25.82
+diag_1=Circulatory + number_emergency=none + number_outpatient=none,3,18000,25.72
+insulin=Steady + number_emergency=none + number_outpatient=none,3,17954,25.66
+insulin=Steady + number_emergency=none + number_inpatient=none,3,17778,25.4
+diag_3=Circulatory + number_emergency=none + number_inpatient=none,3,17305,24.73
+diag_3=Circulatory + number_emergency=none + number_outpatient=none,3,17145,24.5
+num_medications=low(<=10) + number_emergency=none + number_inpatient=none,3,16909,24.16
+num_medications=low(<=10) + number_emergency=none + number_outpatient=none,3,16634,23.77
+diag_3=Other + number_emergency=none + number_inpatient=none,3,16450,23.51
+num_medications=low(<=10) + number_inpatient=none + number_outpatient=none,3,16222,23.18
+diag_3=Other + number_emergency=none + number_outpatient=none,3,16151,23.08
+change=No + diabetesMed=No + number_emergency=none,3,15753,22.51
+change=No + diabetesMed=No + number_inpatient=none,3,14967,21.39
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none,3,14899,21.29
+diag_2=Other + number_emergency=none + number_inpatient=none,3,14850,21.22
+change=No + diabetesMed=No + number_outpatient=none,3,14806,21.16
+number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none,3,14802,21.15
+num_lab_procedures=low + number_emergency=none + number_inpatient=none,3,14740,21.06
+age=[70-80) + number_emergency=none + number_inpatient=none,3,14661,20.95
+diag_2=Other + number_emergency=none + number_outpatient=none,3,14564,20.81
+age=[70-80) + number_emergency=none + number_outpatient=none,3,14540,20.78
+number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none,3,14371,20.54
+diabetesMed=No + number_emergency=none + number_inpatient=none,3,14296,20.43
+diabetesMed=No + number_emergency=none + number_outpatient=none,3,14176,20.26
+diag_2=Other + number_inpatient=none + number_outpatient=none,3,13959,19.95
+num_procedures=many(3+) + number_emergency=none + number_inpatient=none,3,13900,19.86
+num_procedures=many(3+) + number_emergency=none + number_outpatient=none,3,13637,19.49
+num_lab_procedures=low + number_emergency=none + number_outpatient=none,3,13616,19.46
+age=[70-80) + number_inpatient=none + number_outpatient=none,3,13515,19.31
+diabetesMed=No + number_inpatient=none + number_outpatient=none,3,13462,19.24
+age=[70-80) + number_emergency=none + race=Caucasian,3,13329,19.05
+num_lab_procedures=low + number_inpatient=none + number_outpatient=none,3,13326,19.04
+age=[60-70) + number_emergency=none + number_inpatient=none,3,13150,18.79
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none,3,13024,18.61
+num_procedures=many(3+) + number_inpatient=none + number_outpatient=none,3,13000,18.58
+age=[60-70) + number_emergency=none + number_outpatient=none,3,12867,18.39
+discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none,3,12701,18.15
+diabetesMed=Yes + diag_2=Other + number_emergency=none,3,12682,18.12
+age=[70-80) + diabetesMed=Yes + number_emergency=none,3,12676,18.11
+diabetesMed=Yes + metformin=Steady + number_emergency=none,3,12662,18.09
+change=No + diabetesMed=No + race=Caucasian,3,12601,18.01
+num_medications=high(21+) + number_emergency=none + number_inpatient=none,3,12582,17.98
+num_lab_procedures=low + number_emergency=none + race=Caucasian,3,12536,17.91
+discharge=Home + number_diagnoses=few(<=5) + number_outpatient=none,3,12513,17.88
+discharge=Home + num_lab_procedures=low + number_emergency=none,3,12381,17.69
+num_medications=high(21+) + number_emergency=none + number_outpatient=none,3,12373,17.68
+num_lab_procedures=low + number_inpatient=none + race=Caucasian,3,12364,17.67
+diabetesMed=Yes + metformin=Steady + number_inpatient=none,3,12346,17.64
+age=[70-80) + number_inpatient=none + race=Caucasian,3,12301,17.58
+change=No + diabetesMed=No + discharge=Home,3,12278,17.55
+diabetesMed=Yes + diag_2=Other + number_inpatient=none,3,12196,17.43
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none,3,12193,17.42
+discharge=Home + num_lab_procedures=low + number_inpatient=none,3,12191,17.42
+age=[60-70) + number_inpatient=none + number_outpatient=none,3,12140,17.35
+diag_2=Other + number_emergency=none + race=Caucasian,3,12089,17.28
+diag_2=Other + discharge=Home + number_emergency=none,3,12053,17.22
+age=[70-80) + number_outpatient=none + race=Caucasian,3,12052,17.22
+discharge=Home + num_procedures=many(3+) + number_emergency=none,3,12041,17.21
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_emergency=none,3,12029,17.19
+diabetesMed=Yes + diag_2=Other + number_outpatient=none,3,11913,17.02
+diabetesMed=No + number_emergency=none + race=Caucasian,3,11912,17.02
+admission_type=Emergency + diag_2=Other + number_emergency=none,3,11906,17.01
+num_procedures=many(3+) + number_emergency=none + race=Caucasian,3,11883,16.98
+age=[70-80) + discharge=Home + number_emergency=none,3,11818,16.89
+age=[70-80) + diabetesMed=Yes + number_inpatient=none,3,11784,16.84
+admission_type=Elective + number_emergency=none + number_inpatient=none,3,11781,16.84
+diabetesMed=Yes + num_lab_procedures=low + number_emergency=none,3,11746,16.79
+age=[60-70) + discharge=Home + number_emergency=none,3,11745,16.78
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_inpatient=none,3,11720,16.75
+diabetesMed=Yes + num_lab_procedures=low + number_inpatient=none,3,11681,16.69
+diabetesMed=Yes + metformin=Steady + number_outpatient=none,3,11679,16.69
+admission_source=Referral + admission_type=Elective + number_emergency=none,3,11656,16.66
+num_medications=high(21+) + number_inpatient=none + number_outpatient=none,3,11643,16.64
+diag_2=Other + discharge=Home + number_inpatient=none,3,11631,16.62
+age=[70-80) + diabetesMed=Yes + number_outpatient=none,3,11614,16.6
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_outpatient=none,3,11608,16.59
+metformin=Steady + number_emergency=none + number_inpatient=none,3,11583,16.55
+admission_type=Elective + number_emergency=none + number_outpatient=none,3,11578,16.54
+diabetesMed=No + discharge=Home + number_emergency=none,3,11569,16.53
+admission_type=Emergency + diag_2=Other + number_inpatient=none,3,11554,16.51
+diag_2=Other + number_inpatient=none + race=Caucasian,3,11528,16.47
+diabetesMed=Yes + num_procedures=many(3+) + number_emergency=none,3,11527,16.47
+diabetesMed=Yes + num_medications=high(21+) + number_inpatient=none,3,11508,16.44
+discharge=Home + num_procedures=many(3+) + number_inpatient=none,3,11450,16.36
+admission_type=Emergency + diag_2=Other + number_outpatient=none,3,11440,16.35
+age=[60-70) + diabetesMed=Yes + number_emergency=none,3,11383,16.27
+admission_type=Emergency + change=No + diabetesMed=No,3,11366,16.24
+diabetesMed=No + number_inpatient=none + race=Caucasian,3,11312,16.16
+diag_2=Other + discharge=Home + number_outpatient=none,3,11299,16.15
+diabetesMed=Yes + num_medications=high(21+) + number_outpatient=none,3,11288,16.13
+discharge=Home + num_procedures=many(3+) + number_outpatient=none,3,11226,16.04
+num_procedures=many(3+) + number_inpatient=none + race=Caucasian,3,11216,16.03
+num_medications=high(21+) + number_emergency=none + race=Caucasian,3,11170,15.96
+num_lab_procedures=low + number_outpatient=none + race=Caucasian,3,11136,15.91
+discharge=Home + num_lab_procedures=low + number_outpatient=none,3,11130,15.9
+diag_2=Other + number_outpatient=none + race=Caucasian,3,11110,15.88
+admission_source=Referral + admission_type=Elective + number_inpatient=none,3,11104,15.87
+age=[60-70) + discharge=Home + number_inpatient=none,3,11100,15.86
+admission_type=Emergency + age=[70-80) + number_emergency=none,3,11095,15.85
+number_diagnoses=few(<=5) + number_emergency=none + readmitted=NO,3,11086,15.84
+diabetesMed=No + discharge=Home + number_inpatient=none,3,11073,15.82
+diabetesMed=No + number_outpatient=none + race=Caucasian,3,11032,15.76
+metformin=Steady + number_emergency=none + number_outpatient=none,3,11020,15.75
+age=[60-70) + number_emergency=none + race=Caucasian,3,11003,15.72
+admission_type=Elective + number_inpatient=none + number_outpatient=none,3,10996,15.71
+diabetesMed=Yes + num_procedures=many(3+) + number_inpatient=none,3,10981,15.69
+discharge=Transfer + number_emergency=none + number_inpatient=none,3,10971,15.68
+num_procedures=many(3+) + number_outpatient=none + race=Caucasian,3,10971,15.68
+age=[70-80) + discharge=Home + number_inpatient=none,3,10968,15.67
+discharge=Transfer + number_emergency=none + number_outpatient=none,3,10965,15.67
+number_diagnoses=few(<=5) + number_inpatient=none + readmitted=NO,3,10962,15.66
+age=[70-80) + diabetesMed=Yes + race=Caucasian,3,10864,15.52
+num_lab_procedures=low + number_emergency=none + time_in_hospital=short(1-3d),3,10837,15.49
+num_lab_procedures=low + number_inpatient=none + time_in_hospital=short(1-3d),3,10817,15.46
+age=[70-80) + discharge=Home + number_outpatient=none,3,10795,15.43
+change=No + diabetesMed=No + readmitted=NO,3,10782,15.41
+diabetesMed=No + discharge=Home + number_outpatient=none,3,10782,15.41
+age=[60-70) + discharge=Home + number_outpatient=none,3,10777,15.4
+diabetesMed=Yes + num_procedures=many(3+) + number_outpatient=none,3,10763,15.38
+number_diagnoses=few(<=5) + number_outpatient=none + readmitted=NO,3,10727,15.33
+age=[60-70) + diabetesMed=Yes + number_inpatient=none,3,10724,15.32
+admission_source=Referral + admission_type=Elective + number_outpatient=none,3,10711,15.31
+diabetesMed=Yes + discharge=Home + metformin=Steady,3,10698,15.29
+number_diagnoses=few(<=5) + number_emergency=none + race=Caucasian,3,10669,15.25
+metformin=Steady + number_inpatient=none + number_outpatient=none,3,10667,15.24
+number_emergency=none + number_outpatient=none + race=AfricanAmerican,3,10660,15.23
+admission_type=Emergency + diabetesMed=No + number_emergency=none,3,10655,15.23
+diag_3=Diabetes + number_emergency=none + number_inpatient=none,3,10625,15.18
+diabetesMed=Yes + num_lab_procedures=low + number_outpatient=none,3,10590,15.13
+admission_type=Emergency + number_diagnoses=few(<=5) + number_emergency=none,3,10530,15.05
+number_inpatient=none + number_outpatient=none + race=AfricanAmerican,3,10526,15.04
+diag_3=Diabetes + number_emergency=none + number_outpatient=none,3,10496,15.0
+number_emergency=none + number_inpatient=none + race=AfricanAmerican,3,10480,14.98
+age=[60-70) + diabetesMed=Yes + number_outpatient=none,3,10467,14.96
+change=Ch + diabetesMed=Yes + metformin=Steady,3,10457,14.94
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5),3,10450,14.93
+num_medications=high(21+) + number_inpatient=none + race=Caucasian,3,10433,14.91
+admission_type=Emergency + number_diagnoses=few(<=5) + number_outpatient=none,3,10403,14.87
+admission_type=Emergency + age=[70-80) + number_inpatient=none,3,10394,14.85
+admission_type=Elective + number_emergency=none + race=Caucasian,3,10380,14.83
+diabetesMed=No + number_emergency=none + readmitted=NO,3,10371,14.82
+admission_type=Emergency + age=[70-80) + number_outpatient=none,3,10351,14.79
+diabetesMed=Yes + num_medications=high(21+) + race=Caucasian,3,10349,14.79
+age=[50-60) + number_emergency=none + number_inpatient=none,3,10341,14.78
+age=[60-70) + number_inpatient=none + race=Caucasian,3,10321,14.75
+number_diagnoses=few(<=5) + number_inpatient=none + race=Caucasian,3,10294,14.71
+admission_type=Elective + discharge=Home + number_emergency=none,3,10286,14.7
+admission_type=Emergency + number_diagnoses=few(<=5) + number_inpatient=none,3,10284,14.7
+admission_type=Emergency + diabetesMed=No + number_inpatient=none,3,10281,14.69
+discharge=Transfer + number_inpatient=none + number_outpatient=none,3,10255,14.65
+diabetesMed=Yes + metformin=Steady + race=Caucasian,3,10238,14.63
+discharge=Home + num_lab_procedures=low + race=Caucasian,3,10223,14.61
+number_diagnoses=few(<=5) + number_emergency=none + time_in_hospital=short(1-3d),3,10200,14.58
+diabetesMed=Yes + diag_2=Other + discharge=Home,3,10192,14.56
+num_medications=high(21+) + number_outpatient=none + race=Caucasian,3,10176,14.54
+num_lab_procedures=low + number_emergency=none + readmitted=NO,3,10163,14.52
+age=[50-60) + number_emergency=none + number_outpatient=none,3,10162,14.52
+diag_2=Other + number_emergency=none + readmitted=NO,3,10148,14.5
+admission_type=Emergency + diabetesMed=No + number_outpatient=none,3,10117,14.46
+number_diagnoses=few(<=5) + number_inpatient=none + time_in_hospital=short(1-3d),3,10092,14.42
+diabetesMed=No + number_inpatient=none + readmitted=NO,3,10088,14.42
+num_lab_procedures=low + number_inpatient=none + readmitted=NO,3,10084,14.41
+number_diagnoses=few(<=5) + number_outpatient=none + race=Caucasian,3,10080,14.4
+diabetesMed=Yes + diag_2=Other + race=Caucasian,3,10071,14.39
+age=[70-80) + discharge=Home + race=Caucasian,3,10030,14.33
+diabetesMed=Yes + num_lab_procedures=low + race=Caucasian,3,10020,14.32
+admission_type=Emergency + diabetesMed=Yes + diag_2=Other,3,10013,14.31
+discharge=Transfer + number_emergency=none + race=Caucasian,3,10009,14.3
+diag_3=Diabetes + number_inpatient=none + number_outpatient=none,3,9995,14.28
+age=[60-70) + number_outpatient=none + race=Caucasian,3,9962,14.24
+diag_2=Other + number_inpatient=none + readmitted=NO,3,9953,14.22
+diabetesMed=Yes + discharge=Home + num_lab_procedures=low,3,9917,14.17
+discharge=Home + metformin=Steady + number_emergency=none,3,9912,14.16
+admission_source=Referral + admission_type=Elective + discharge=Home,3,9907,14.16
+admission_type=Elective + diabetesMed=Yes + number_emergency=none,3,9824,14.04
+discharge=Home + num_procedures=many(3+) + race=Caucasian,3,9807,14.01
+age=[60-70) + diabetesMed=Yes + discharge=Home,3,9804,14.01
+diabetesMed=No + number_outpatient=none + readmitted=NO,3,9802,14.01
+age=[50-60) + number_inpatient=none + number_outpatient=none,3,9787,13.99
+number_diagnoses=few(<=5) + number_outpatient=none + time_in_hospital=short(1-3d),3,9785,13.98
+admission_type=Elective + discharge=Home + number_inpatient=none,3,9753,13.94
+age=[70-80) + diabetesMed=Yes + discharge=Home,3,9732,13.91
+num_lab_procedures=low + number_outpatient=none + time_in_hospital=short(1-3d),3,9729,13.9
+discharge=Home + num_lab_procedures=low + time_in_hospital=short(1-3d),3,9712,13.88
+discharge=Home + num_medications=high(21+) + number_emergency=none,3,9706,13.87
+change=Ch + metformin=Steady + number_emergency=none,3,9703,13.87
+admission_type=Elective + number_inpatient=none + race=Caucasian,3,9700,13.86
+discharge=Home + metformin=Steady + number_inpatient=none,3,9691,13.85
+admission_source=Referral + admission_type=Elective + race=Caucasian,3,9683,13.84
+diabetesMed=Yes + discharge=Home + num_procedures=many(3+),3,9680,13.83
+diag_2=Other + number_outpatient=none + readmitted=NO,3,9628,13.76
+diag_1=Other + number_emergency=none + number_outpatient=none,3,9624,13.75
+admission_source=EmergencyRoom + admission_type=Emergency + diag_2=Other,3,9597,13.71
+admission_type=Emergency + age=[60-70) + number_emergency=none,3,9594,13.71
+age=[50-60) + discharge=Home + number_emergency=none,3,9590,13.7
+diabetesMed=Yes + discharge=Transfer + number_emergency=none,3,9585,13.7
+discharge=Home + number_diagnoses=few(<=5) + readmitted=NO,3,9565,13.67
+diag_1=Other + number_emergency=none + number_inpatient=none,3,9558,13.66
+change=No + num_lab_procedures=low + number_emergency=none,3,9553,13.65
+metformin=Steady + number_emergency=none + race=Caucasian,3,9552,13.65
+admission_type=Emergency + diag_2=Other + discharge=Home,3,9539,13.63
+admission_type=Elective + number_outpatient=none + race=Caucasian,3,9532,13.62
+num_procedures=many(3+) + number_emergency=none + readmitted=NO,3,9514,13.6
+diabetesMed=Yes + num_procedures=many(3+) + race=Caucasian,3,9506,13.58
+change=Ch + diabetesMed=Yes + num_medications=high(21+),3,9493,13.57
+change=Ch + metformin=Steady + number_inpatient=none,3,9472,13.54
+admission_type=Elective + discharge=Home + number_outpatient=none,3,9471,13.53
+change=No + number_diagnoses=few(<=5) + number_emergency=none,3,9421,13.46
+diag_2=Other + discharge=Home + race=Caucasian,3,9386,13.41
+age=[60-70) + discharge=Home + race=Caucasian,3,9381,13.41
+discharge=Transfer + number_inpatient=none + race=Caucasian,3,9359,13.37
+age=[70-80) + number_emergency=none + readmitted=NO,3,9345,13.35
+age=[70-80) + change=No + number_emergency=none,3,9333,13.34
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes,3,9315,13.31
+age=[50-60) + discharge=Home + number_inpatient=none,3,9293,13.28
+change=No + num_lab_procedures=low + number_inpatient=none,3,9283,13.27
+change=No + diabetesMed=No + time_in_hospital=short(1-3d),3,9278,13.26
+discharge=Home + number_diagnoses=few(<=5) + time_in_hospital=short(1-3d),3,9266,13.24
+admission_type=Elective + diabetesMed=Yes + number_inpatient=none,3,9259,13.23
+diag_3=Diabetes + discharge=Home + number_emergency=none,3,9256,13.23
+discharge=Transfer + number_outpatient=none + race=Caucasian,3,9239,13.2
+admission_source=EmergencyRoom + diag_2=Other + number_emergency=none,3,9216,13.17
+admission_type=Emergency + diag_2=Other + race=Caucasian,3,9215,13.17
+admission_type=Emergency + age=[70-80) + race=Caucasian,3,9210,13.16
+metformin=Steady + number_inpatient=none + race=Caucasian,3,9209,13.16
+num_lab_procedures=low + number_outpatient=none + readmitted=NO,3,9204,13.15
+diabetesMed=No + discharge=Home + race=Caucasian,3,9195,13.14
+num_procedures=many(3+) + number_inpatient=none + readmitted=NO,3,9187,13.13
+admission_type=Emergency + discharge=Home + number_diagnoses=few(<=5),3,9179,13.12
+diabetesMed=Yes + discharge=Home + num_medications=high(21+),3,9176,13.11
+change=No + diabetesMed=No + gender=Female,3,9165,13.1
+admission_type=Emergency + age=[60-70) + number_inpatient=none,3,9153,13.08
+discharge=Home + metformin=Steady + number_outpatient=none,3,9147,13.07
+age=[60-70) + diabetesMed=Yes + race=Caucasian,3,9131,13.05
+discharge=Home + num_medications=high(21+) + number_inpatient=none,3,9118,13.03
+admission_type=Emergency + age=[70-80) + diabetesMed=Yes,3,9113,13.02
+change=No + number_diagnoses=few(<=5) + number_inpatient=none,3,9093,12.99
+medical_specialty=InternalMedicine + number_emergency=none + number_outpatient=none,3,9085,12.98
+change=No + number_diagnoses=few(<=5) + number_outpatient=none,3,9082,12.98
+num_lab_procedures=low + race=Caucasian + time_in_hospital=short(1-3d),3,9078,12.97
+admission_type=Elective + diabetesMed=Yes + number_outpatient=none,3,9059,12.95
+diabetesMed=Yes + discharge=Transfer + number_inpatient=none,3,9058,12.94
+age=[50-60) + discharge=Home + number_outpatient=none,3,9054,12.94
+diabetesMed=Yes + diag_3=Diabetes + number_emergency=none,3,9048,12.93
+diag_2=Other + gender=Female + number_emergency=none,3,9046,12.93
+discharge=Home + number_outpatient=none + race=AfricanAmerican,3,9040,12.92
+age=[80-90) + number_emergency=none + number_inpatient=none,3,9034,12.91
+discharge=Home + number_diagnoses=few(<=5) + race=Caucasian,3,9030,12.9
+discharge=Home + num_medications=high(21+) + number_outpatient=none,3,9023,12.89
+admission_type=Emergency + number_outpatient=none + race=AfricanAmerican,3,9016,12.88
+admission_type=Emergency + age=[60-70) + number_outpatient=none,3,9014,12.88
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady,3,9006,12.87
+admission_type=Emergency + discharge=Transfer + number_emergency=none,3,8995,12.85
+age=[80-90) + number_emergency=none + number_outpatient=none,3,8975,12.83
+discharge=Home + number_emergency=none + race=AfricanAmerican,3,8966,12.81
+change=Ch + metformin=Steady + number_outpatient=none,3,8959,12.8
+discharge=Home + number_inpatient=none + race=AfricanAmerican,3,8955,12.8
+diag_1=Other + number_inpatient=none + number_outpatient=none,3,8934,12.77
+age=[60-70) + number_emergency=none + readmitted=NO,3,8933,12.77
+diabetesMed=Yes + discharge=Transfer + number_outpatient=none,3,8931,12.76
+age=[70-80) + number_inpatient=none + readmitted=NO,3,8917,12.74
+num_procedures=many(3+) + number_outpatient=none + readmitted=NO,3,8902,12.72
+age=[70-80) + gender=Female + number_emergency=none,3,8899,12.72
+diag_3=Diabetes + discharge=Home + number_inpatient=none,3,8876,12.68
+admission_type=Emergency + num_procedures=many(3+) + number_emergency=none,3,8868,12.67
+admission_source=EmergencyRoom + change=No + diabetesMed=No,3,8865,12.67
+admission_type=Emergency + number_emergency=none + race=AfricanAmerican,3,8841,12.63
+diabetesMed=Yes + number_outpatient=none + race=AfricanAmerican,3,8819,12.6
+admission_type=Emergency + number_inpatient=none + race=AfricanAmerican,3,8798,12.57
+diabetesMed=No + number_emergency=none + time_in_hospital=short(1-3d),3,8736,12.48
+age=[50-60) + diabetesMed=Yes + number_emergency=none,3,8723,12.47
+diabetesMed=Yes + number_inpatient=none + race=AfricanAmerican,3,8708,12.44
+age=[80-90) + number_emergency=none + race=Caucasian,3,8707,12.44
+diabetesMed=Yes + number_emergency=none + race=AfricanAmerican,3,8696,12.43
+change=Ch + num_medications=high(21+) + number_emergency=none,3,8693,12.42
+diag_3=Diabetes + number_emergency=none + race=Caucasian,3,8670,12.39
+diag_3=Diabetes + discharge=Home + number_outpatient=none,3,8663,12.38
+diabetesMed=Yes + diag_3=Diabetes + number_inpatient=none,3,8663,12.38
+change=No + num_lab_procedures=low + number_outpatient=none,3,8637,12.34
+gender=Female + num_lab_procedures=low + number_emergency=none,3,8622,12.32
+diabetesMed=No + gender=Female + number_emergency=none,3,8619,12.32
+metformin=Steady + number_outpatient=none + race=Caucasian,3,8598,12.29
+admission_type=Emergency + discharge=Transfer + number_outpatient=none,3,8596,12.28
+age=[60-70) + number_inpatient=none + readmitted=NO,3,8582,12.26
+admission_type=Elective + number_emergency=none + readmitted=NO,3,8559,12.23
+admission_type=Elective + discharge=Home + race=Caucasian,3,8559,12.23
+admission_type=Emergency + num_procedures=many(3+) + number_inpatient=none,3,8544,12.21
+diabetesMed=Yes + number_diagnoses=few(<=5) + readmitted=NO,3,8530,12.19
+admission_type=Emergency + diabetesMed=Yes + number_diagnoses=few(<=5),3,8525,12.18
+diabetesMed=Yes + diag_3=Diabetes + number_outpatient=none,3,8498,12.14
+diabetesMed=No + number_inpatient=none + time_in_hospital=short(1-3d),3,8492,12.14
+gender=Female + number_diagnoses=few(<=5) + number_emergency=none,3,8459,12.09
+admission_type=Emergency + discharge=Transfer + number_inpatient=none,3,8454,12.08
+admission_type=Emergency + num_procedures=many(3+) + number_outpatient=none,3,8449,12.07
+age=[50-60) + diabetesMed=Yes + number_inpatient=none,3,8444,12.07
+change=No + num_procedures=many(3+) + number_emergency=none,3,8398,12.0
+age=[80-90) + number_inpatient=none + number_outpatient=none,3,8386,11.98
+admission_type=Emergency + diabetesMed=No + race=Caucasian,3,8384,11.98
+diag_1=Other + discharge=Home + number_emergency=none,3,8383,11.98
+diabetesMed=Yes + metformin=Steady + readmitted=NO,3,8376,11.97
+admission_type=Emergency + age=[60-70) + discharge=Home,3,8327,11.9
+num_medications=high(21+) + number_diagnoses=many(9+) + number_emergency=none,3,8323,11.89
+diabetesMed=Yes + discharge=Transfer + race=Caucasian,3,8322,11.89
+admission_type=Emergency + metformin=Steady + number_emergency=none,3,8313,11.88
+medical_specialty=InternalMedicine + number_emergency=none + number_inpatient=none,3,8307,11.87
+num_medications=high(21+) + number_emergency=none + readmitted=NO,3,8305,11.87
+age=[50-60) + diabetesMed=Yes + number_outpatient=none,3,8297,11.86
+change=Ch + num_medications=high(21+) + number_inpatient=none,3,8289,11.84
+age=[60-70) + number_outpatient=none + readmitted=NO,3,8284,11.84
+diag_2=Diabetes + number_emergency=none + number_inpatient=none,3,8274,11.82
+admission_type=Elective + diabetesMed=Yes + discharge=Home,3,8272,11.82
+admission_type=Elective + diabetesMed=Yes + race=Caucasian,3,8262,11.81
+diabetesMed=Yes + diag_1=Other + number_emergency=none,3,8236,11.77
+admission_type=Elective + number_inpatient=none + readmitted=NO,3,8232,11.76
+diag_1=Circulatory + num_procedures=many(3+) + number_emergency=none,3,8230,11.76
+diag_3=Diabetes + number_inpatient=none + race=Caucasian,3,8210,11.73
+number_emergency=none + number_outpatient=none + time_in_hospital=long(8d+),3,8207,11.73
+medical_specialty=InternalMedicine + number_inpatient=none + number_outpatient=none,3,8186,11.7
+change=Ch + discharge=Home + metformin=Steady,3,8185,11.7
+admission_type=Emergency + metformin=Steady + number_inpatient=none,3,8170,11.67
+diag_1=Other + number_emergency=none + race=Caucasian,3,8156,11.65
+discharge=Home + num_medications=high(21+) + race=Caucasian,3,8139,11.63
+age=[80-90) + number_inpatient=none + race=Caucasian,3,8133,11.62
+admission_type=Emergency + medical_specialty=InternalMedicine + number_emergency=none,3,8054,11.51
+diag_2=Diabetes + number_emergency=none + number_outpatient=none,3,8052,11.51
+age=[50-60) + diabetesMed=Yes + discharge=Home,3,8047,11.5
+admission_type=Emergency + age=[60-70) + diabetesMed=Yes,3,8047,11.5
+change=Ch + num_medications=high(21+) + number_outpatient=none,3,8045,11.5
+admission_type=Emergency + num_medications=high(21+) + number_emergency=none,3,8031,11.48
+num_medications=high(21+) + number_inpatient=none + readmitted=NO,3,8006,11.44
+admission_type=Elective + number_outpatient=none + readmitted=NO,3,8004,11.44
+admission_source=Referral + admission_type=Elective + readmitted=NO,3,7997,11.43
+diag_3=Diabetes + number_outpatient=none + race=Caucasian,3,7995,11.42
+age=[80-90) + number_outpatient=none + race=Caucasian,3,7987,11.41
+diabetesMed=Yes + num_medications=high(21+) + number_diagnoses=many(9+),3,7964,11.38
+discharge=Home + metformin=Steady + race=Caucasian,3,7927,11.33
+admission_type=Emergency + medical_specialty=InternalMedicine + number_outpatient=none,3,7913,11.31
+metformin=Steady + number_emergency=none + readmitted=NO,3,7897,11.28
+diag_1=Respiratory + number_emergency=none + number_inpatient=none,3,7886,11.27
+diag_1=Other + discharge=Home + number_inpatient=none,3,7883,11.26
+age=[50-60) + number_emergency=none + race=Caucasian,3,7879,11.26
+diag_2=Diabetes + number_inpatient=none + number_outpatient=none,3,7856,11.23
+admission_type=Emergency + metformin=Steady + number_outpatient=none,3,7854,11.22
+num_medications=high(21+) + number_diagnoses=many(9+) + number_inpatient=none,3,7830,11.19
+change=Ch + metformin=Steady + race=Caucasian,3,7801,11.15
+diag_1=Other + discharge=Home + number_outpatient=none,3,7778,11.11
+num_medications=high(21+) + number_outpatient=none + readmitted=NO,3,7769,11.1
+metformin=Steady + number_inpatient=none + readmitted=NO,3,7768,11.1
+diag_1=Respiratory + number_emergency=none + number_outpatient=none,3,7762,11.09
+number_emergency=none + number_inpatient=none + time_in_hospital=long(8d+),3,7744,11.07
+diabetesMed=Yes + diag_1=Other + number_outpatient=none,3,7715,11.02
+diabetesMed=Yes + diag_3=Diabetes + discharge=Home,3,7707,11.01
+diabetesMed=Yes + discharge=Home + race=AfricanAmerican,3,7704,11.01
+admission_type=Emergency + age=[50-60) + number_emergency=none,3,7689,10.99
+diabetesMed=Yes + diag_1=Other + number_inpatient=none,3,7686,10.98
+admission_type=Emergency + discharge=Home + race=AfricanAmerican,3,7667,10.96
+admission_type=Emergency + age=[80-90) + number_emergency=none,3,7645,10.92
+admission_type=Emergency + discharge=Transfer + race=Caucasian,3,7642,10.92
+admission_type=Emergency + diag_1=Other + number_emergency=none,3,7642,10.92
+admission_type=Emergency + diag_3=Diabetes + number_emergency=none,3,7626,10.9
+discharge=Home + medical_specialty=InternalMedicine + number_emergency=none,3,7603,10.86
+age=[80-90) + diabetesMed=Yes + number_emergency=none,3,7566,10.81
+discharge=Transfer + gender=Female + number_emergency=none,3,7556,10.8
+diabetesMed=Yes + medical_specialty=InternalMedicine + number_emergency=none,3,7532,10.76
+age=[50-60) + number_inpatient=none + race=Caucasian,3,7528,10.76
+admission_type=Emergency + diabetesMed=Yes + race=AfricanAmerican,3,7514,10.74
+diag_1=Other + number_outpatient=none + race=Caucasian,3,7510,10.73
+diag_1=Other + number_inpatient=none + race=Caucasian,3,7509,10.73
+admission_type=Emergency + age=[50-60) + number_inpatient=none,3,7505,10.72
+admission_type=Emergency + diabetesMed=Yes + discharge=Transfer,3,7483,10.69
+admission_type=Emergency + age=[50-60) + number_outpatient=none,3,7475,10.68
+diabetesMed=Yes + glipizide=Steady + number_emergency=none,3,7467,10.67
+diag_1=Respiratory + number_inpatient=none + number_outpatient=none,3,7455,10.65
+number_inpatient=none + number_outpatient=none + time_in_hospital=long(8d+),3,7410,10.59
+discharge=Home + medical_specialty=InternalMedicine + number_outpatient=none,3,7407,10.58
+diabetesMed=Yes + medical_specialty=InternalMedicine + number_outpatient=none,3,7404,10.58
+admission_type=Emergency + diag_1=Other + number_outpatient=none,3,7357,10.51
+metformin=Steady + number_outpatient=none + readmitted=NO,3,7351,10.5
+admission_type=Emergency + medical_specialty=InternalMedicine + number_inpatient=none,3,7348,10.5
+admission_type=Emergency + diag_3=Diabetes + number_inpatient=none,3,7345,10.5
+diag_3=Diabetes + number_emergency=none + readmitted=NO,3,7325,10.47
+change=Ch + diabetesMed=Yes + insulin=Down,3,7323,10.46
+age=[50-60) + number_outpatient=none + race=Caucasian,3,7308,10.44
+admission_type=Emergency + diag_3=Diabetes + number_outpatient=none,3,7306,10.44
+diabetesMed=Yes + number_emergency=none + time_in_hospital=long(8d+),3,7303,10.44
+age=[50-60) + number_emergency=none + readmitted=NO,3,7303,10.44
+admission_source=EmergencyRoom + admission_type=Emergency + discharge=Transfer,3,7302,10.43
+diag_2=Diabetes + discharge=Home + number_emergency=none,3,7284,10.41
+admission_type=Emergency + diag_1=Other + number_inpatient=none,3,7284,10.41
+admission_source=EmergencyRoom + admission_type=Emergency + race=AfricanAmerican,3,7263,10.38
+admission_type=Emergency + age=[80-90) + number_inpatient=none,3,7224,10.32
+diabetesMed=Yes + gender=Female + metformin=Steady,3,7220,10.32
+age=[50-60) + number_inpatient=none + readmitted=NO,3,7213,10.31
+age=[50-60) + discharge=Home + race=Caucasian,3,7213,10.31
+admission_type=Emergency + age=[80-90) + number_outpatient=none,3,7212,10.31
+diag_3=Diabetes + number_inpatient=none + readmitted=NO,3,7192,10.28
+admission_type=Elective + discharge=Home + readmitted=NO,3,7183,10.26
+number_inpatient=none + race=AfricanAmerican + readmitted=NO,3,7170,10.25
+diag_3=Diabetes + discharge=Home + race=Caucasian,3,7164,10.24
+diag_2=Diabetes + discharge=Home + number_inpatient=none,3,7157,10.23
+number_outpatient=none + race=AfricanAmerican + readmitted=NO,3,7153,10.22
+admission_type=Emergency + discharge=Home + metformin=Steady,3,7142,10.21
+admission_type=Emergency + age=[50-60) + discharge=Home,3,7130,10.19
+admission_source=EmergencyRoom + discharge=Transfer + number_emergency=none,3,7124,10.18
+number_emergency=none + race=AfricanAmerican + readmitted=NO,3,7123,10.18
+discharge=Transfer + gender=Female + number_inpatient=none,3,7118,10.17
+diabetesMed=Yes + diag_3=Diabetes + race=Caucasian,3,7109,10.16
+discharge=Transfer + gender=Female + number_outpatient=none,3,7106,10.15
+age=[80-90) + diabetesMed=Yes + number_inpatient=none,3,7099,10.14
+diabetesMed=Yes + glipizide=Steady + number_inpatient=none,3,7095,10.14
+admission_type=Elective + change=No + number_emergency=none,3,7092,10.13
+discharge=Transfer + number_diagnoses=many(9+) + number_emergency=none,3,7078,10.11
+admission_source=EmergencyRoom + diabetesMed=Yes + metformin=Steady,3,7067,10.1
+diabetesMed=Yes + diag_2=Diabetes + number_emergency=none,3,7054,10.08
+admission_type=Emergency + diag_1=Respiratory + number_emergency=none,3,7003,10.01
+change=Ch + diabetesMed=Yes + number_emergency=none + number_inpatient=none,4,25735,36.78
+diabetesMed=Yes + insulin=Steady + number_emergency=none + number_outpatient=none,4,17954,25.66
+diabetesMed=Yes + insulin=Steady + number_emergency=none + number_inpatient=none,4,17778,25.4
+change=No + diabetesMed=No + number_emergency=none + number_inpatient=none,4,14296,20.43
+change=No + diabetesMed=No + number_emergency=none + number_outpatient=none,4,14176,20.26
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,13875,19.83
+change=No + diabetesMed=No + number_inpatient=none + number_outpatient=none,4,13462,19.24
+diag_2=Other + number_emergency=none + number_inpatient=none + number_outpatient=none,4,13159,18.8
+diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none,4,12991,18.56
+age=[70-80) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,12959,18.52
+num_lab_procedures=low + number_emergency=none + number_inpatient=none + number_outpatient=none,4,12639,18.06
+num_procedures=many(3+) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,12540,17.92
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none,4,12150,17.36
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none,4,12000,17.15
+change=No + diabetesMed=No + number_emergency=none + race=Caucasian,4,11912,17.02
+age=[70-80) + number_emergency=none + number_inpatient=none + race=Caucasian,4,11695,16.71
+discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none,4,11678,16.69
+age=[60-70) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,11646,16.64
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none,4,11583,16.55
+num_lab_procedures=low + number_emergency=none + number_inpatient=none + race=Caucasian,4,11581,16.55
+change=No + diabetesMed=No + discharge=Home + number_emergency=none,4,11569,16.53
+age=[70-80) + number_emergency=none + number_outpatient=none + race=Caucasian,4,11505,16.44
+discharge=Home + num_lab_procedures=low + number_emergency=none + number_inpatient=none,4,11423,16.32
+change=No + diabetesMed=No + number_inpatient=none + race=Caucasian,4,11312,16.16
+diabetesMed=Yes + diag_2=Other + number_emergency=none + number_inpatient=none,4,11307,16.16
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none,4,11192,15.99
+age=[70-80) + diabetesMed=Yes + number_emergency=none + number_inpatient=none,4,11129,15.9
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none,4,11109,15.87
+diabetesMed=Yes + diag_2=Other + number_emergency=none + number_outpatient=none,4,11075,15.83
+change=No + diabetesMed=No + discharge=Home + number_inpatient=none,4,11073,15.82
+num_medications=high(21+) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,11068,15.82
+change=No + diabetesMed=No + number_outpatient=none + race=Caucasian,4,11032,15.76
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_outpatient=none,4,11020,15.75
+age=[70-80) + diabetesMed=Yes + number_emergency=none + number_outpatient=none,4,11003,15.72
+discharge=Home + num_procedures=many(3+) + number_emergency=none + number_inpatient=none,4,10947,15.64
+diag_2=Other + discharge=Home + number_emergency=none + number_inpatient=none,4,10826,15.47
+diabetesMed=No + number_emergency=none + number_inpatient=none + race=Caucasian,4,10812,15.45
+diabetesMed=Yes + num_lab_procedures=low + number_emergency=none + number_inpatient=none,4,10812,15.45
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none,4,10800,15.43
+change=No + diabetesMed=No + discharge=Home + number_outpatient=none,4,10782,15.41
+num_procedures=many(3+) + number_emergency=none + number_inpatient=none + race=Caucasian,4,10777,15.4
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + number_inpatient=none,4,10756,15.37
+diag_2=Other + number_emergency=none + number_inpatient=none + race=Caucasian,4,10743,15.35
+admission_type=Emergency + diag_2=Other + number_emergency=none + number_inpatient=none,4,10738,15.34
+discharge=Home + num_procedures=many(3+) + number_emergency=none + number_outpatient=none,4,10712,15.31
+diabetesMed=Yes + metformin=Steady + number_inpatient=none + number_outpatient=none,4,10667,15.24
+admission_type=Emergency + change=No + diabetesMed=No + number_emergency=none,4,10655,15.23
+admission_type=Emergency + diag_2=Other + number_emergency=none + number_outpatient=none,4,10643,15.21
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_inpatient=none,4,10624,15.18
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + readmitted=NO,4,10606,15.16
+diabetesMed=Yes + diag_2=Other + number_inpatient=none + number_outpatient=none,4,10601,15.15
+age=[70-80) + number_inpatient=none + number_outpatient=none + race=Caucasian,4,10597,15.14
+diabetesMed=No + number_emergency=none + number_outpatient=none + race=Caucasian,4,10594,15.14
+admission_type=Elective + number_emergency=none + number_inpatient=none + number_outpatient=none,4,10590,15.13
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + number_outpatient=none,4,10561,15.09
+diabetesMed=No + discharge=Home + number_emergency=none + number_inpatient=none,4,10555,15.08
+diag_2=Other + discharge=Home + number_emergency=none + number_outpatient=none,4,10550,15.08
+num_lab_procedures=low + number_emergency=none + number_outpatient=none + race=Caucasian,4,10534,15.05
+age=[60-70) + discharge=Home + number_emergency=none + number_inpatient=none,4,10527,15.04
+num_procedures=many(3+) + number_emergency=none + number_outpatient=none + race=Caucasian,4,10524,15.04
+discharge=Home + num_lab_procedures=low + number_emergency=none + number_outpatient=none,4,10518,15.03
+diabetesMed=Yes + num_procedures=many(3+) + number_emergency=none + number_inpatient=none,4,10457,14.94
+number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none + readmitted=NO,4,10402,14.86
+diag_2=Other + number_emergency=none + number_outpatient=none + race=Caucasian,4,10399,14.86
+age=[70-80) + discharge=Home + number_emergency=none + number_inpatient=none,4,10394,14.85
+change=No + diabetesMed=No + number_emergency=none + readmitted=NO,4,10371,14.82
+diabetesMed=No + discharge=Home + number_emergency=none + number_outpatient=none,4,10311,14.73
+admission_type=Emergency + diag_2=Other + number_inpatient=none + number_outpatient=none,4,10293,14.71
+admission_type=Emergency + change=No + diabetesMed=No + number_inpatient=none,4,10281,14.69
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_outpatient=none,4,10274,14.68
+num_lab_procedures=low + number_inpatient=none + number_outpatient=none + race=Caucasian,4,10274,14.68
+age=[70-80) + discharge=Home + number_emergency=none + number_outpatient=none,4,10267,14.67
+number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none + readmitted=NO,4,10263,14.67
+discharge=Home + num_lab_procedures=low + number_inpatient=none + number_outpatient=none,4,10254,14.65
+age=[60-70) + discharge=Home + number_emergency=none + number_outpatient=none,4,10235,14.63
+diabetesMed=Yes + num_procedures=many(3+) + number_emergency=none + number_outpatient=none,4,10227,14.61
+age=[70-80) + diabetesMed=Yes + number_inpatient=none + number_outpatient=none,4,10214,14.6
+discharge=Home + num_procedures=many(3+) + number_inpatient=none + number_outpatient=none,4,10207,14.59
+age=[70-80) + diabetesMed=Yes + number_emergency=none + race=Caucasian,4,10154,14.51
+metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none,4,10141,14.49
+age=[60-70) + diabetesMed=Yes + number_emergency=none + number_inpatient=none,4,10140,14.49
+num_lab_procedures=low + number_emergency=none + number_inpatient=none + time_in_hospital=short(1-3d),4,10140,14.49
+diag_2=Other + discharge=Home + number_inpatient=none + number_outpatient=none,4,10131,14.48
+admission_type=Emergency + change=No + diabetesMed=No + number_outpatient=none,4,10117,14.46
+change=No + diabetesMed=No + number_inpatient=none + readmitted=NO,4,10088,14.42
+diabetesMed=No + number_inpatient=none + number_outpatient=none + race=Caucasian,4,10042,14.35
+admission_type=Emergency + number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none,4,10014,14.31
+num_procedures=many(3+) + number_inpatient=none + number_outpatient=none + race=Caucasian,4,9963,14.24
+diabetesMed=Yes + num_medications=high(21+) + number_inpatient=none + number_outpatient=none,4,9946,14.21
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_emergency=none,4,9912,14.16
+age=[60-70) + diabetesMed=Yes + number_emergency=none + number_outpatient=none,4,9910,14.16
+diabetesMed=Yes + num_lab_procedures=low + number_emergency=none + number_outpatient=none,4,9902,14.15
+admission_type=Emergency + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none,4,9900,14.15
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + race=Caucasian,4,9896,14.14
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_emergency=none,4,9885,14.13
+diabetesMed=No + discharge=Home + number_inpatient=none + number_outpatient=none,4,9865,14.1
+diag_2=Other + number_inpatient=none + number_outpatient=none + race=Caucasian,4,9862,14.09
+num_medications=high(21+) + number_emergency=none + number_inpatient=none + race=Caucasian,4,9848,14.07
+admission_type=Emergency + age=[70-80) + number_emergency=none + number_inpatient=none,4,9827,14.04
+admission_source=Referral + admission_type=Elective + number_inpatient=none + number_outpatient=none,4,9826,14.04
+age=[60-70) + number_emergency=none + number_inpatient=none + race=Caucasian,4,9823,14.04
+change=No + diabetesMed=No + number_outpatient=none + readmitted=NO,4,9802,14.01
+number_emergency=none + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,4,9797,14.0
+admission_type=Emergency + age=[70-80) + number_emergency=none + number_outpatient=none,4,9792,13.99
+admission_type=Emergency + number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none,4,9779,13.97
+diabetesMed=Yes + num_procedures=many(3+) + number_inpatient=none + number_outpatient=none,4,9761,13.95
+diabetesMed=No + number_emergency=none + number_inpatient=none + readmitted=NO,4,9759,13.95
+admission_type=Emergency + diabetesMed=No + number_emergency=none + number_inpatient=none,4,9754,13.94
+diabetesMed=Yes + num_lab_procedures=low + number_inpatient=none + number_outpatient=none,4,9727,13.9
+number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none + race=Caucasian,4,9718,13.89
+change=Ch + diabetesMed=Yes + metformin=Steady + number_emergency=none,4,9703,13.87
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_inpatient=none,4,9691,13.85
+age=[60-70) + discharge=Home + number_inpatient=none + number_outpatient=none,4,9675,13.83
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none,4,9651,13.79
+discharge=Transfer + number_emergency=none + number_inpatient=none + number_outpatient=none,4,9646,13.78
+admission_type=Emergency + diabetesMed=No + number_emergency=none + number_outpatient=none,4,9642,13.78
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + time_in_hospital=short(1-3d),4,9617,13.74
+num_medications=high(21+) + number_emergency=none + number_outpatient=none + race=Caucasian,4,9616,13.74
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + race=Caucasian,4,9575,13.68
+diag_3=Diabetes + number_emergency=none + number_inpatient=none + number_outpatient=none,4,9568,13.67
+num_lab_procedures=low + number_emergency=none + number_inpatient=none + readmitted=NO,4,9568,13.67
+diabetesMed=Yes + metformin=Steady + number_emergency=none + race=Caucasian,4,9552,13.65
+discharge=Home + num_lab_procedures=low + number_emergency=none + race=Caucasian,4,9550,13.65
+age=[70-80) + discharge=Home + number_inpatient=none + number_outpatient=none,4,9525,13.61
+diabetesMed=No + number_emergency=none + number_outpatient=none + readmitted=NO,4,9513,13.59
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_outpatient=none,4,9509,13.59
+age=[60-70) + number_emergency=none + number_outpatient=none + race=Caucasian,4,9500,13.58
+change=Ch + diabetesMed=Yes + metformin=Steady + number_inpatient=none,4,9472,13.54
+age=[70-80) + discharge=Home + number_emergency=none + race=Caucasian,4,9406,13.44
+diag_2=Other + number_emergency=none + number_inpatient=none + readmitted=NO,4,9398,13.43
+number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none + race=Caucasian,4,9364,13.38
+admission_source=Referral + admission_type=Elective + discharge=Home + number_emergency=none,4,9361,13.38
+discharge=Home + num_lab_procedures=low + number_inpatient=none + race=Caucasian,4,9358,13.37
+age=[70-80) + diabetesMed=Yes + number_inpatient=none + race=Caucasian,4,9349,13.36
+number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none + time_in_hospital=short(1-3d),4,9346,13.36
+age=[60-70) + diabetesMed=Yes + number_inpatient=none + number_outpatient=none,4,9338,13.34
+admission_type=Elective + number_emergency=none + number_inpatient=none + race=Caucasian,4,9311,13.31
+diabetesMed=Yes + diag_2=Other + discharge=Home + number_emergency=none,4,9299,13.29
+discharge=Home + num_procedures=many(3+) + number_emergency=none + race=Caucasian,4,9296,13.28
+age=[50-60) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,9291,13.28
+admission_type=Emergency + diabetesMed=No + number_inpatient=none + number_outpatient=none,4,9289,13.27
+admission_type=Elective + discharge=Home + number_emergency=none + number_inpatient=none,4,9279,13.26
+diabetesMed=No + number_inpatient=none + number_outpatient=none + readmitted=NO,4,9243,13.21
+admission_source=Referral + admission_type=Elective + number_emergency=none + race=Caucasian,4,9237,13.2
+diabetesMed=Yes + num_lab_procedures=low + number_emergency=none + race=Caucasian,4,9235,13.2
+number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none + time_in_hospital=short(1-3d),4,9226,13.18
+diabetesMed=Yes + diag_2=Other + number_emergency=none + race=Caucasian,4,9220,13.18
+diabetesMed=Yes + metformin=Steady + number_inpatient=none + race=Caucasian,4,9209,13.16
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + readmitted=NO,4,9200,13.15
+num_lab_procedures=low + number_emergency=none + number_outpatient=none + time_in_hospital=short(1-3d),4,9199,13.15
+change=No + diabetesMed=No + discharge=Home + race=Caucasian,4,9195,13.14
+admission_type=Emergency + age=[70-80) + number_inpatient=none + number_outpatient=none,4,9189,13.13
+admission_type=Elective + number_emergency=none + number_outpatient=none + race=Caucasian,4,9186,13.13
+age=[60-70) + diabetesMed=Yes + discharge=Home + number_emergency=none,4,9150,13.08
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_outpatient=none,4,9147,13.07
+diabetesMed=Yes + discharge=Home + num_lab_procedures=low + number_emergency=none,4,9147,13.07
+diabetesMed=Yes + num_lab_procedures=low + number_inpatient=none + race=Caucasian,4,9144,13.07
+diag_2=Other + number_emergency=none + number_outpatient=none + readmitted=NO,4,9133,13.05
+age=[70-80) + diabetesMed=Yes + number_outpatient=none + race=Caucasian,4,9131,13.05
+admission_type=Emergency + diabetesMed=Yes + diag_2=Other + number_emergency=none,4,9126,13.04
+discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none + readmitted=NO,4,9118,13.03
+num_lab_procedures=low + number_inpatient=none + number_outpatient=none + time_in_hospital=short(1-3d),4,9083,12.98
+discharge=Home + metformin=Steady + number_emergency=none + number_inpatient=none,4,9081,12.98
+diabetesMed=Yes + discharge=Home + num_procedures=many(3+) + number_emergency=none,4,9078,12.97
+age=[70-80) + diabetesMed=Yes + discharge=Home + number_emergency=none,4,9069,12.96
+discharge=Home + num_lab_procedures=low + number_emergency=none + time_in_hospital=short(1-3d),4,9050,12.93
+admission_type=Elective + discharge=Home + number_emergency=none + number_outpatient=none,4,9042,12.92
+diabetesMed=Yes + discharge=Home + num_lab_procedures=low + number_inpatient=none,4,9038,12.92
+discharge=Home + num_lab_procedures=low + number_inpatient=none + time_in_hospital=short(1-3d),4,9031,12.91
+diabetesMed=Yes + num_procedures=many(3+) + number_emergency=none + race=Caucasian,4,8969,12.82
+num_medications=high(21+) + number_inpatient=none + number_outpatient=none + race=Caucasian,4,8962,12.81
+change=Ch + diabetesMed=Yes + metformin=Steady + number_outpatient=none,4,8959,12.8
+diabetesMed=Yes + num_medications=high(21+) + number_inpatient=none + race=Caucasian,4,8942,12.78
+admission_source=Referral + admission_type=Elective + discharge=Home + number_inpatient=none,4,8929,12.76
+num_procedures=many(3+) + number_emergency=none + number_inpatient=none + readmitted=NO,4,8909,12.73
+age=[60-70) + number_inpatient=none + number_outpatient=none + race=Caucasian,4,8904,12.72
+change=Ch + metformin=Steady + number_emergency=none + number_inpatient=none,4,8877,12.69
+discharge=Home + number_diagnoses=few(<=5) + number_outpatient=none + readmitted=NO,4,8873,12.68
+change=No + num_lab_procedures=low + number_emergency=none + number_inpatient=none,4,8832,12.62
+change=No + number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none,4,8824,12.61
+change=No + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none,4,8820,12.6
+age=[60-70) + discharge=Home + number_emergency=none + race=Caucasian,4,8816,12.6
+num_lab_procedures=low + number_emergency=none + number_outpatient=none + readmitted=NO,4,8793,12.57
+admission_type=Elective + diabetesMed=Yes + number_emergency=none + number_inpatient=none,4,8792,12.56
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_emergency=none,4,8786,12.56
+discharge=Home + num_procedures=many(3+) + number_inpatient=none + race=Caucasian,4,8764,12.52
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + time_in_hospital=short(1-3d),4,8752,12.51
+admission_type=Emergency + discharge=Home + number_diagnoses=few(<=5) + number_emergency=none,4,8747,12.5
+change=No + diabetesMed=No + number_emergency=none + time_in_hospital=short(1-3d),4,8736,12.48
+discharge=Transfer + number_emergency=none + number_inpatient=none + race=Caucasian,4,8723,12.47
+admission_source=Referral + admission_type=Elective + number_inpatient=none + race=Caucasian,4,8720,12.46
+age=[50-60) + discharge=Home + number_emergency=none + number_inpatient=none,4,8704,12.44
+diabetesMed=Yes + num_medications=high(21+) + number_outpatient=none + race=Caucasian,4,8704,12.44
+change=Ch + diabetesMed=Yes + num_medications=high(21+) + number_emergency=none,4,8693,12.42
+diabetesMed=No + discharge=Home + number_emergency=none + race=Caucasian,4,8686,12.41
+metformin=Steady + number_emergency=none + number_inpatient=none + race=Caucasian,4,8682,12.41
+discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none + time_in_hospital=short(1-3d),4,8679,12.4
+num_lab_procedures=low + number_inpatient=none + number_outpatient=none + readmitted=NO,4,8657,12.37
+admission_type=Emergency + age=[60-70) + number_emergency=none + number_inpatient=none,4,8647,12.36
+num_procedures=many(3+) + number_emergency=none + number_outpatient=none + readmitted=NO,4,8644,12.35
+diabetesMed=Yes + discharge=Home + num_procedures=many(3+) + number_inpatient=none,4,8643,12.35
+discharge=Transfer + number_emergency=none + number_outpatient=none + race=Caucasian,4,8634,12.34
+admission_type=Elective + number_inpatient=none + number_outpatient=none + race=Caucasian,4,8634,12.34
+admission_type=Elective + diabetesMed=Yes + number_emergency=none + number_outpatient=none,4,8632,12.34
+admission_type=Emergency + discharge=Home + number_diagnoses=few(<=5) + number_outpatient=none,4,8626,12.33
+discharge=Home + metformin=Steady + number_emergency=none + number_outpatient=none,4,8625,12.33
+change=No + diabetesMed=No + gender=Female + number_emergency=none,4,8619,12.32
+admission_type=Elective + discharge=Home + number_inpatient=none + number_outpatient=none,4,8616,12.31
+age=[60-70) + diabetesMed=Yes + discharge=Home + number_inpatient=none,4,8616,12.31
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + race=Caucasian,4,8609,12.3
+diabetesMed=Yes + metformin=Steady + number_outpatient=none + race=Caucasian,4,8598,12.29
+admission_type=Emergency + discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none,4,8576,12.26
+age=[60-70) + diabetesMed=Yes + number_emergency=none + race=Caucasian,4,8552,12.22
+discharge=Home + num_medications=high(21+) + number_emergency=none + number_inpatient=none,4,8550,12.22
+admission_source=Referral + admission_type=Elective + discharge=Home + number_outpatient=none,4,8549,12.22
+discharge=Home + num_procedures=many(3+) + number_outpatient=none + race=Caucasian,4,8546,12.21
+admission_type=Emergency + age=[60-70) + number_emergency=none + number_outpatient=none,4,8507,12.16
+change=No + number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none,4,8501,12.15
+age=[50-60) + discharge=Home + number_emergency=none + number_outpatient=none,4,8493,12.14
+change=No + diabetesMed=No + number_inpatient=none + time_in_hospital=short(1-3d),4,8492,12.14
+diabetesMed=Yes + num_procedures=many(3+) + number_inpatient=none + race=Caucasian,4,8460,12.09
+diabetesMed=Yes + discharge=Home + num_procedures=many(3+) + number_outpatient=none,4,8459,12.09
+discharge=Home + num_medications=high(21+) + number_emergency=none + number_outpatient=none,4,8457,12.09
+change=Ch + metformin=Steady + number_emergency=none + number_outpatient=none,4,8435,12.05
+admission_source=Referral + admission_type=Elective + number_outpatient=none + race=Caucasian,4,8414,12.02
+diabetesMed=Yes + discharge=Home + num_medications=high(21+) + number_emergency=none,4,8410,12.02
+diag_1=Other + number_emergency=none + number_inpatient=none + number_outpatient=none,4,8398,12.0
+diabetesMed=Yes + discharge=Transfer + number_emergency=none + number_inpatient=none,4,8385,11.98
+admission_type=Emergency + change=No + diabetesMed=No + race=Caucasian,4,8384,11.98
+diag_3=Diabetes + discharge=Home + number_emergency=none + number_inpatient=none,4,8383,11.98
+age=[60-70) + diabetesMed=Yes + discharge=Home + number_outpatient=none,4,8382,11.98
+discharge=Home + number_diagnoses=few(<=5) + number_outpatient=none + time_in_hospital=short(1-3d),4,8382,11.98
+discharge=Home + metformin=Steady + number_inpatient=none + number_outpatient=none,4,8356,11.94
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_inpatient=none,4,8355,11.94
+num_procedures=many(3+) + number_inpatient=none + number_outpatient=none + readmitted=NO,4,8354,11.94
+admission_type=Emergency + number_emergency=none + number_outpatient=none + race=AfricanAmerican,4,8318,11.89
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady + number_emergency=none,4,8313,11.88
+discharge=Home + number_emergency=none + number_outpatient=none + race=AfricanAmerican,4,8300,11.86
+change=Ch + diabetesMed=Yes + num_medications=high(21+) + number_inpatient=none,4,8289,11.84
+diabetesMed=Yes + discharge=Transfer + number_emergency=none + number_outpatient=none,4,8282,11.83
+age=[60-70) + number_emergency=none + number_inpatient=none + readmitted=NO,4,8271,11.82
+age=[60-70) + discharge=Home + number_inpatient=none + race=Caucasian,4,8264,11.81
+diabetesMed=Yes + num_procedures=many(3+) + number_outpatient=none + race=Caucasian,4,8264,11.81
+discharge=Home + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,4,8249,11.79
+admission_type=Emergency + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,4,8245,11.78
+discharge=Home + number_emergency=none + number_inpatient=none + race=AfricanAmerican,4,8213,11.74
+diag_3=Diabetes + discharge=Home + number_emergency=none + number_outpatient=none,4,8210,11.73
+age=[50-60) + discharge=Home + number_inpatient=none + number_outpatient=none,4,8202,11.72
+change=Ch + diabetesMed=Yes + discharge=Home + metformin=Steady,4,8185,11.7
+change=Ch + metformin=Steady + number_inpatient=none + number_outpatient=none,4,8175,11.68
+admission_type=Elective + diabetesMed=Yes + number_inpatient=none + number_outpatient=none,4,8172,11.68
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady + number_inpatient=none,4,8170,11.67
+diabetesMed=Yes + diag_3=Diabetes + number_emergency=none + number_inpatient=none,4,8162,11.66
+metformin=Steady + number_emergency=none + number_outpatient=none + race=Caucasian,4,8154,11.65
+admission_type=Elective + discharge=Home + number_emergency=none + race=Caucasian,4,8118,11.6
+admission_type=Emergency + num_procedures=many(3+) + number_emergency=none + number_inpatient=none,4,8116,11.6
+admission_type=Emergency + age=[60-70) + number_inpatient=none + number_outpatient=none,4,8112,11.59
+admission_type=Emergency + number_emergency=none + number_inpatient=none + race=AfricanAmerican,4,8107,11.58
+diabetesMed=Yes + number_emergency=none + number_outpatient=none + race=AfricanAmerican,4,8061,11.52
+change=Ch + diabetesMed=Yes + num_medications=high(21+) + number_outpatient=none,4,8045,11.5
+discharge=Transfer + number_inpatient=none + number_outpatient=none + race=Caucasian,4,8038,11.49
+diabetesMed=Yes + diag_3=Diabetes + number_emergency=none + number_outpatient=none,4,8034,11.48
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_outpatient=none,4,8032,11.48
+diabetesMed=Yes + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,4,8024,11.47
+age=[60-70) + number_emergency=none + number_outpatient=none + readmitted=NO,4,8016,11.45
+age=[60-70) + diabetesMed=Yes + number_inpatient=none + race=Caucasian,4,7986,11.41
+admission_type=Emergency + discharge=Transfer + number_emergency=none + number_outpatient=none,4,7985,11.41
+admission_type=Elective + number_emergency=none + number_inpatient=none + readmitted=NO,4,7952,11.36
+diabetesMed=Yes + number_emergency=none + number_inpatient=none + race=AfricanAmerican,4,7949,11.36
+age=[80-90) + number_emergency=none + number_inpatient=none + number_outpatient=none,4,7946,11.35
+discharge=Home + num_medications=high(21+) + number_inpatient=none + number_outpatient=none,4,7944,11.35
+age=[60-70) + discharge=Home + number_outpatient=none + race=Caucasian,4,7936,11.34
+diabetesMed=Yes + discharge=Home + metformin=Steady + race=Caucasian,4,7927,11.33
+diabetesMed=Yes + discharge=Home + num_medications=high(21+) + number_inpatient=none,4,7898,11.29
+diabetesMed=Yes + metformin=Steady + number_emergency=none + readmitted=NO,4,7897,11.28
+age=[50-60) + diabetesMed=Yes + number_emergency=none + number_inpatient=none,4,7883,11.26
+admission_type=Emergency + discharge=Transfer + number_emergency=none + number_inpatient=none,4,7861,11.23
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady + number_outpatient=none,4,7854,11.22
+diag_3=Diabetes + discharge=Home + number_inpatient=none + number_outpatient=none,4,7851,11.22
+admission_type=Elective + diabetesMed=Yes + number_emergency=none + race=Caucasian,4,7834,11.19
+diabetesMed=Yes + discharge=Home + num_medications=high(21+) + number_outpatient=none,4,7824,11.18
+diag_3=Diabetes + number_emergency=none + number_inpatient=none + race=Caucasian,4,7812,11.16
+metformin=Steady + number_inpatient=none + number_outpatient=none + race=Caucasian,4,7810,11.16
+change=Ch + diabetesMed=Yes + metformin=Steady + race=Caucasian,4,7801,11.15
+diabetesMed=Yes + discharge=Transfer + number_inpatient=none + number_outpatient=none,4,7794,11.14
+medical_specialty=InternalMedicine + number_emergency=none + number_inpatient=none + number_outpatient=none,4,7784,11.12
+diabetesMed=Yes + metformin=Steady + number_inpatient=none + readmitted=NO,4,7768,11.1
+admission_type=Elective + number_emergency=none + number_outpatient=none + readmitted=NO,4,7758,11.09
+admission_type=Elective + diabetesMed=Yes + discharge=Home + number_emergency=none,4,7756,11.08
+admission_source=Referral + admission_type=Elective + discharge=Home + race=Caucasian,4,7752,11.08
+age=[50-60) + diabetesMed=Yes + number_emergency=none + number_outpatient=none,4,7751,11.08
+change=Ch + num_medications=high(21+) + number_emergency=none + number_inpatient=none,4,7725,11.04
+admission_source=Referral + admission_type=Elective + number_emergency=none + readmitted=NO,4,7682,10.98
+diabetesMed=Yes + diag_3=Diabetes + number_inpatient=none + number_outpatient=none,4,7651,10.93
+diabetesMed=Yes + discharge=Transfer + number_emergency=none + race=Caucasian,4,7635,10.91
+admission_type=Emergency + metformin=Steady + number_emergency=none + number_inpatient=none,4,7630,10.9
+diag_3=Diabetes + number_emergency=none + number_outpatient=none + race=Caucasian,4,7630,10.9
+age=[80-90) + number_emergency=none + number_inpatient=none + race=Caucasian,4,7612,10.88
+admission_type=Elective + discharge=Home + number_inpatient=none + race=Caucasian,4,7599,10.86
+change=Ch + discharge=Home + metformin=Steady + number_emergency=none,4,7578,10.83
+age=[80-90) + number_emergency=none + number_outpatient=none + race=Caucasian,4,7518,10.74
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + discharge=Home,4,7500,10.72
+admission_type=Emergency + discharge=Transfer + number_inpatient=none + number_outpatient=none,4,7490,10.7
+age=[50-60) + diabetesMed=Yes + number_inpatient=none + number_outpatient=none,4,7472,10.68
+admission_type=Elective + number_inpatient=none + number_outpatient=none + readmitted=NO,4,7466,10.67
+diag_2=Diabetes + number_emergency=none + number_inpatient=none + number_outpatient=none,4,7451,10.65
+admission_source=Referral + admission_type=Elective + number_inpatient=none + readmitted=NO,4,7423,10.61
+admission_type=Emergency + medical_specialty=InternalMedicine + number_emergency=none + number_outpatient=none,4,7421,10.6
+change=Ch + discharge=Home + metformin=Steady + number_inpatient=none,4,7414,10.59
+admission_type=Elective + discharge=Home + number_outpatient=none + race=Caucasian,4,7391,10.56
+discharge=Home + metformin=Steady + number_emergency=none + race=Caucasian,4,7382,10.55
+age=[50-60) + diabetesMed=Yes + discharge=Home + number_emergency=none,4,7379,10.54
+metformin=Steady + number_emergency=none + number_inpatient=none + readmitted=NO,4,7374,10.54
+admission_type=Emergency + metformin=Steady + number_emergency=none + number_outpatient=none,4,7369,10.53
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + race=Caucasian,4,7352,10.51
+diabetesMed=Yes + metformin=Steady + number_outpatient=none + readmitted=NO,4,7351,10.5
+admission_type=Elective + diabetesMed=Yes + discharge=Home + number_inpatient=none,4,7329,10.47
+admission_type=Elective + diabetesMed=Yes + number_inpatient=none + race=Caucasian,4,7286,10.41
+diag_1=Other + discharge=Home + number_emergency=none + number_inpatient=none,4,7283,10.41
+change=Ch + metformin=Steady + number_emergency=none + race=Caucasian,4,7274,10.39
+diag_1=Other + discharge=Home + number_emergency=none + number_outpatient=none,4,7221,10.32
+diag_3=Diabetes + number_inpatient=none + number_outpatient=none + race=Caucasian,4,7205,10.3
+admission_type=Emergency + metformin=Steady + number_inpatient=none + number_outpatient=none,4,7190,10.27
+diabetesMed=Yes + discharge=Transfer + number_inpatient=none + race=Caucasian,4,7173,10.25
+diabetesMed=Yes + diag_3=Diabetes + discharge=Home + number_emergency=none,4,7162,10.23
+age=[50-60) + diabetesMed=Yes + discharge=Home + number_inpatient=none,4,7155,10.22
+admission_type=Elective + diabetesMed=Yes + number_outpatient=none + race=Caucasian,4,7153,10.22
+admission_type=Emergency + diabetesMed=Yes + discharge=Home + metformin=Steady,4,7142,10.21
+discharge=Home + metformin=Steady + number_inpatient=none + race=Caucasian,4,7140,10.2
+admission_source=Referral + admission_type=Elective + number_outpatient=none + readmitted=NO,4,7131,10.19
+admission_type=Elective + diabetesMed=Yes + discharge=Home + number_outpatient=none,4,7116,10.17
+diabetesMed=Yes + diag_1=Other + number_emergency=none + number_outpatient=none,4,7108,10.16
+age=[50-60) + number_emergency=none + number_inpatient=none + race=Caucasian,4,7104,10.15
+number_emergency=none + number_inpatient=none + number_outpatient=none + time_in_hospital=long(8d+),4,7092,10.13
+admission_type=Emergency + discharge=Home + number_outpatient=none + race=AfricanAmerican,4,7079,10.12
+diabetesMed=Yes + diag_1=Other + number_emergency=none + number_inpatient=none,4,7059,10.09
+diag_1=Respiratory + number_emergency=none + number_inpatient=none + number_outpatient=none,4,7057,10.08
+metformin=Steady + number_emergency=none + number_outpatient=none + readmitted=NO,4,7025,10.04
+change=Ch + metformin=Steady + number_inpatient=none + race=Caucasian,4,7024,10.04
+admission_type=Emergency + discharge=Transfer + number_emergency=none + race=Caucasian,4,7016,10.03
+change=Ch + discharge=Home + metformin=Steady + number_outpatient=none,4,7008,10.01
+admission_type=Emergency + age=[50-60) + number_emergency=none + number_inpatient=none,4,7008,10.01
+change=No + diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none,5,12991,18.56
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none,5,11250,16.08
+change=No + diabetesMed=No + number_emergency=none + number_inpatient=none + race=Caucasian,5,10812,15.45
+change=No + diabetesMed=No + number_emergency=none + number_outpatient=none + race=Caucasian,5,10594,15.14
+change=No + diabetesMed=No + discharge=Home + number_emergency=none + number_inpatient=none,5,10555,15.08
+diabetesMed=Yes + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none,5,10385,14.84
+change=No + diabetesMed=No + discharge=Home + number_emergency=none + number_outpatient=none,5,10311,14.73
+age=[70-80) + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,10201,14.58
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none,5,10141,14.49
+change=No + diabetesMed=No + number_inpatient=none + number_outpatient=none + race=Caucasian,5,10042,14.35
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none + readmitted=NO,5,9978,14.26
+diabetesMed=Yes + diag_2=Other + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9961,14.23
+change=No + diabetesMed=No + discharge=Home + number_inpatient=none + number_outpatient=none,5,9865,14.1
+discharge=Home + num_procedures=many(3+) + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9852,14.08
+num_lab_procedures=low + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,9771,13.96
+age=[70-80) + diabetesMed=Yes + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9763,13.95
+change=No + diabetesMed=No + number_emergency=none + number_inpatient=none + readmitted=NO,5,9759,13.95
+admission_type=Emergency + change=No + diabetesMed=No + number_emergency=none + number_inpatient=none,5,9754,13.94
+discharge=Home + num_lab_procedures=low + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9750,13.93
+diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,9711,13.88
+admission_type=Emergency + diag_2=Other + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9686,13.84
+num_procedures=many(3+) + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,9656,13.8
+admission_type=Emergency + change=No + diabetesMed=No + number_emergency=none + number_outpatient=none,5,9642,13.78
+diag_2=Other + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9568,13.67
+change=No + diabetesMed=No + number_emergency=none + number_outpatient=none + readmitted=NO,5,9513,13.59
+diabetesMed=No + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9509,13.59
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9480,13.55
+admission_type=Emergency + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9467,13.53
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9423,13.47
+diabetesMed=Yes + num_procedures=many(3+) + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9380,13.4
+diag_2=Other + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,9327,13.33
+admission_type=Emergency + change=No + diabetesMed=No + number_inpatient=none + number_outpatient=none,5,9289,13.27
+age=[60-70) + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9283,13.27
+change=No + diabetesMed=No + number_inpatient=none + number_outpatient=none + readmitted=NO,5,9243,13.21
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none,5,9195,13.14
+diabetesMed=Yes + num_lab_procedures=low + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9150,13.08
+age=[70-80) + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,9137,13.06
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none,5,9083,12.98
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_emergency=none + number_inpatient=none,5,9081,12.98
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,9063,12.95
+diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none + readmitted=NO,5,9005,12.87
+age=[60-70) + diabetesMed=Yes + number_emergency=none + number_inpatient=none + number_outpatient=none,5,8925,12.75
+admission_type=Emergency + diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none,5,8919,12.75
+change=Ch + diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none,5,8877,12.69
+number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none + time_in_hospital=short(1-3d),5,8853,12.65
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none,5,8843,12.64
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + readmitted=NO,5,8803,12.58
+discharge=Home + num_lab_procedures=low + number_emergency=none + number_inpatient=none + race=Caucasian,5,8802,12.58
+change=No + diabetesMed=No + discharge=Home + number_emergency=none + race=Caucasian,5,8686,12.41
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none + race=Caucasian,5,8682,12.41
+num_lab_procedures=low + number_emergency=none + number_inpatient=none + number_outpatient=none + time_in_hospital=short(1-3d),5,8643,12.35
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_emergency=none + number_outpatient=none,5,8625,12.33
+discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_outpatient=none + readmitted=NO,5,8590,12.28
+num_medications=high(21+) + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,8578,12.26
+age=[60-70) + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,8575,12.25
+admission_source=Referral + admission_type=Elective + discharge=Home + number_emergency=none + number_inpatient=none,5,8515,12.17
+discharge=Home + number_diagnoses=few(<=5) + number_inpatient=none + number_outpatient=none + readmitted=NO,5,8491,12.13
+change=Ch + diabetesMed=Yes + metformin=Steady + number_emergency=none + number_outpatient=none,5,8435,12.05
+discharge=Home + num_procedures=many(3+) + number_emergency=none + number_inpatient=none + race=Caucasian,5,8428,12.04
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + number_inpatient=none + race=Caucasian,5,8421,12.03
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_inpatient=none + race=Caucasian,5,8384,11.98
+admission_type=Elective + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,8361,11.95
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_inpatient=none + number_outpatient=none,5,8356,11.94
+admission_type=Elective + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,8272,11.82
+diabetesMed=Yes + discharge=Home + num_procedures=many(3+) + number_emergency=none + number_inpatient=none,5,8235,11.77
+diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + number_outpatient=none + race=Caucasian,5,8209,11.73
+discharge=Home + num_procedures=many(3+) + number_emergency=none + number_outpatient=none + race=Caucasian,5,8207,11.73
+admission_source=Referral + admission_type=Elective + discharge=Home + number_emergency=none + number_outpatient=none,5,8180,11.69
+change=Ch + diabetesMed=Yes + metformin=Steady + number_inpatient=none + number_outpatient=none,5,8175,11.68
+num_procedures=many(3+) + number_emergency=none + number_inpatient=none + number_outpatient=none + readmitted=NO,5,8159,11.66
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_outpatient=none + race=Caucasian,5,8154,11.65
+age=[60-70) + diabetesMed=Yes + discharge=Home + number_emergency=none + number_inpatient=none,5,8144,11.64
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_outpatient=none + race=Caucasian,5,8121,11.6
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_emergency=none + number_inpatient=none,5,7951,11.36
+discharge=Home + metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7944,11.35
+age=[60-70) + diabetesMed=Yes + discharge=Home + number_emergency=none + number_outpatient=none,5,7938,11.34
+age=[60-70) + discharge=Home + number_emergency=none + number_inpatient=none + race=Caucasian,5,7870,11.25
+admission_source=Referral + admission_type=Elective + discharge=Home + number_inpatient=none + number_outpatient=none,5,7830,11.19
+admission_type=Elective + diabetesMed=Yes + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7825,11.18
+diabetesMed=Yes + metformin=Steady + number_inpatient=none + number_outpatient=none + race=Caucasian,5,7810,11.16
+age=[50-60) + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7775,11.11
+change=Ch + metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7759,11.09
+change=Ch + diabetesMed=Yes + num_medications=high(21+) + number_emergency=none + number_inpatient=none,5,7725,11.04
+admission_source=Referral + admission_type=Elective + number_inpatient=none + number_outpatient=none + race=Caucasian,5,7702,11.01
+admission_type=Emergency + number_emergency=none + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,5,7677,10.97
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_emergency=none + number_outpatient=none,5,7666,10.95
+discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,5,7653,10.94
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none,5,7630,10.9
+discharge=Transfer + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,7580,10.83
+change=Ch + diabetesMed=Yes + discharge=Home + metformin=Steady + number_emergency=none,5,7578,10.83
+diag_3=Diabetes + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7495,10.71
+metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,5,7461,10.66
+change=Ch + diabetesMed=Yes + discharge=Home + metformin=Steady + number_inpatient=none,5,7414,10.59
+diabetesMed=Yes + number_emergency=none + number_inpatient=none + number_outpatient=none + race=AfricanAmerican,5,7408,10.59
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_emergency=none + race=Caucasian,5,7382,10.55
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none + readmitted=NO,5,7374,10.54
+admission_source=Referral + admission_type=Elective + discharge=Home + number_emergency=none + race=Caucasian,5,7370,10.53
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady + number_emergency=none + number_outpatient=none,5,7369,10.53
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_inpatient=none + number_outpatient=none,5,7318,10.46
+diabetesMed=Yes + diag_3=Diabetes + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7293,10.42
+diabetesMed=Yes + discharge=Transfer + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7290,10.42
+change=Ch + diabetesMed=Yes + metformin=Steady + number_emergency=none + race=Caucasian,5,7274,10.39
+admission_type=Elective + number_emergency=none + number_inpatient=none + number_outpatient=none + readmitted=NO,5,7267,10.38
+admission_type=Elective + discharge=Home + number_emergency=none + number_inpatient=none + race=Caucasian,5,7266,10.38
+admission_type=Emergency + diabetesMed=Yes + metformin=Steady + number_inpatient=none + number_outpatient=none,5,7190,10.27
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_inpatient=none + readmitted=NO,5,7174,10.25
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_inpatient=none + race=Caucasian,5,7140,10.2
+admission_type=Elective + discharge=Home + number_emergency=none + number_outpatient=none + race=Caucasian,5,7104,10.15
+age=[50-60) + diabetesMed=Yes + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7065,10.1
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + discharge=Home + number_emergency=none,5,7046,10.07
+admission_type=Emergency + discharge=Transfer + number_emergency=none + number_inpatient=none + number_outpatient=none,5,7029,10.04
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_outpatient=none + readmitted=NO,5,7025,10.04
+change=Ch + diabetesMed=Yes + metformin=Steady + number_inpatient=none + race=Caucasian,5,7024,10.04
+change=Ch + diabetesMed=Yes + discharge=Home + metformin=Steady + number_outpatient=none,5,7008,10.01
+change=No + diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,6,9711,13.88
+change=No + diabetesMed=No + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,6,9509,13.59
+change=No + diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none + readmitted=NO,6,9005,12.87
+admission_type=Emergency + change=No + diabetesMed=No + number_emergency=none + number_inpatient=none + number_outpatient=none,6,8919,12.75
+diabetesMed=Yes + discharge=Home + number_diagnoses=few(<=5) + number_emergency=none + number_inpatient=none + number_outpatient=none,6,8488,12.13
+diabetesMed=Yes + discharge=Home + metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none,6,7944,11.35
+change=Ch + diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none,6,7759,11.09
+admission_source=Referral + admission_type=Elective + discharge=Home + number_emergency=none + number_inpatient=none + number_outpatient=none,6,7537,10.77
+admission_source=Referral + admission_type=Elective + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,6,7471,10.68
+diabetesMed=Yes + metformin=Steady + number_emergency=none + number_inpatient=none + number_outpatient=none + race=Caucasian,6,7461,10.66
+admission_source=Referral + admission_type=Elective + diabetesMed=Yes + number_emergency=none + number_inpatient=none + number_outpatient=none,6,7022,10.03
