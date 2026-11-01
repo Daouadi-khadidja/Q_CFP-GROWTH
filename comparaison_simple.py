@@ -23,7 +23,7 @@ DOSSIER = os.path.dirname(os.path.abspath(__file__))
 #    (les valeurs intermédiaires de LS et la liste des beta sont modifiables)
 # ---------------------------------------------------------------------
 ap = argparse.ArgumentParser()
-ap.add_argument("--fichier", default=os.path.join(DOSSIER, "groceries2.csv"))
+ap.add_argument("--fichier", default=os.path.join(DOSSIER, "Data", "groceries2.csv"))
 ap.add_argument("--ls-list", default="0.05,0.04,0.03,0.025,0.02,0.015", help="valeurs de LS (fractions)")
 ap.add_argument("--betas", default="0.1,0.2,0.3,0.5,0.7,0.9", help="valeurs de beta testées")
 ap.add_argument("--beta", type=float, default=0.5, help="beta utilisé quand il ne varie pas")

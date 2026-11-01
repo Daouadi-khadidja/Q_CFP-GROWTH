@@ -1,0 +1,68 @@
+DONNÉES : 9835 tickets, 169 produits (rares, support < 5 % : 141)
+RÉGLAGES : LS = [5.0, 4.0, 3.0, 2.5, 2.0, 1.5] | beta = [0.1, 0.2, 0.3, 0.5, 0.7, 0.9] | beta fixe = 0.5 | LS fixe = 1.5 % | médiane de 3 exécutions
+
+=== PARTIE 1 : même seuil unique pour les deux (comparaison équitable) ===
+seuil    | Apriori (s | candidats)  | CFP-growth (s | motifs)    | mêmes itemsets
+5 %      |   1.55 s |    547 cand. |   0.14 s |     31 motifs | True
+4 %      |   1.19 s |    668 cand. |   0.14 s |     41 motifs | True
+3 %      |   1.70 s |   1124 cand. |   0.16 s |     63 motifs | True
+2.5 %    |   2.47 s |   1623 cand. |   0.18 s |     88 motifs | True
+2 %      |   2.95 s |   1948 cand. |   0.23 s |    122 motifs | True
+1.5 %    |   4.54 s |   2955 cand. |   0.27 s |    180 motifs | True
+
+=== PARTIE 2 : temps selon la taille de la base (seuil 1.5 %) ===
+N =  1000 : Apriori 0.48 s | CFP-growth 0.04 s | rapport x12.9
+N =  2500 : Apriori 0.90 s | CFP-growth 0.07 s | rapport x13.8
+N =  5000 : Apriori 2.19 s | CFP-growth 0.14 s | rapport x15.2
+N =  7500 : Apriori 3.36 s | CFP-growth 0.23 s | rapport x14.9
+N =  9835 : Apriori 4.81 s | CFP-growth 0.21 s | rapport x22.4
+
+=== PARTIE 3 : LS varie (beta = 0.5) ===
+LS      | Apriori (s | motifs | cand.) | CFP-growth (s | motifs)  | motifs avec produit rare (Apriori | CFP)
+5 %     |   1.03 s      31       547 |   0.16 s      28       | 0 | 0
+4 %     |   0.84 s      41       668 |   0.17 s      32       | 4 | 4
+3 %     |   1.66 s      63      1124 |   0.12 s      44       | 16 | 16
+2.5 %   |   2.02 s      88      1623 |   0.15 s      54       | 26 | 26
+2 %     |   2.66 s     122      1948 |   0.19 s      59       | 32 | 31
+1.5 %   |   4.99 s     180      2955 |   0.21 s      73       | 53 | 45
+
+=== PARTIE 4 : beta varie (LS = 1.5 %, Apriori : minsup = LS) ===
+Apriori (ne dépend pas de beta) : 4.04 s, 180 itemsets
+beta   | CFP (s)   | itemsets  | motifs MIN-fréquents   | avec produit rare
+0.1    |   0.22 s | 179       | 180                    | 53
+0.2    |   0.23 s | 163       | 180                    | 53
+0.3    |   0.29 s | 120       | 180                    | 53
+0.5    |   0.55 s | 73        | 180                    | 45
+0.7    |   0.40 s | 73        | 180                    | 45
+0.9    |   0.45 s | 73        | 180                    | 45
+
+Compression du MIS-tree selon beta (LS = 1.5 %) :
+   beta 0.1 : 38368 produits dans les tickets -> 19670 nœuds (÷ 2.0)
+   beta 0.2 : 38368 produits dans les tickets -> 18164 nœuds (÷ 2.1)
+   beta 0.3 : 38368 produits dans les tickets -> 17959 nœuds (÷ 2.1)
+   beta 0.5 : 38368 produits dans les tickets -> 17916 nœuds (÷ 2.1)
+   beta 0.7 : 38368 produits dans les tickets -> 17904 nœuds (÷ 2.1)
+   beta 0.9 : 38368 produits dans les tickets -> 17901 nœuds (÷ 2.1)
+
+=== PARTIE 5 : choix automatique de beta (LS=1.5 %, budget=2000 itemsets, cible=95 % de lift>1) ===
+valeurs de beta données par le client : [0.1, 0.2, 0.3, 0.5, 0.7, 0.9]
+beta   | itemsets  | paires  | paires lift>1
+0.1    | 179       | 101     | 95.0 % <-- choisi
+0.2    | 163       | 89      | 96.6 % 
+0.3    | 120       | 47      | 100.0 % 
+0.5    | 73        | 0       | - 
+0.7    | 73        | 0       | - 
+0.9    | 73        | 0       | - 
+
+=== PARTIE 6 : Apriori (minsup = LS = 1.5 %) contre CFP-growth (LS, beta = 0.1) ===
+Apriori : 180 itemsets, 4.04 s
+CFP-growth (beta = 0.1) : 179 itemsets, 0.33 s
+en commun : 179 | seulement Apriori : 1 | seulement CFP-growth : 0
+itemsets avec un produit rare (support < 5 %) : Apriori 53 | CFP-growth 53
+
+=== COMPARAISON DES DEUX ALGORITHMES (seuil unique 1.5 % pour les deux) ===
+Itemsets fréquents trouvés                           Apriori 180 | CFP-growth 180
+Candidats testés (Apriori) ou motifs fréquents (CFP) Apriori 2955 | CFP-growth 180
+Passages sur la base (un par niveau, ou 2 pour CFP)  Apriori 3 | CFP-growth 2
+Temps d'exécution (s)                                Apriori 4.54 | CFP-growth 0.27
+Mémoire utilisée, pic (Mo)                           Apriori 4.4 | CFP-growth 11.0
