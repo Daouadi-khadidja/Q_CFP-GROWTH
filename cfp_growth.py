@@ -138,8 +138,9 @@ def cfp_growth_seuils(tickets, seuils, mis_tri=None):
     MIN = min(seuils[p] for p in nb)
     gardes = [p for p in nb if nb[p] >= MIN]
 
-    # Étape 3 : ordre des produits = MIS décroissant (à égalité : ordre alphabétique)
-    ordre = sorted(gardes, key=lambda p: (-mis_tri[p], p))
+    # Étape 3 : ordre des produits = MIS décroissant (à égalité : support décroissant, puis ordre alphabétique)
+    #           (à MIS égal, les produits les plus fréquents en haut : l'arbre est plus petit)
+    ordre = sorted(gardes, key=lambda p: (-mis_tri[p], -nb[p], p))
     rang = {produit: position for position, produit in enumerate(ordre)}
 
     # Étape 4 : construire l'arbre (deuxième passage sur les données)
