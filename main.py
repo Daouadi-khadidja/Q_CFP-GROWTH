@@ -16,7 +16,7 @@ LS = 0.10                    # support minimum le plus bas (10 % des patients)
 BETAS = (0.2, 0.5, 0.8)      # beta croissants : produits faibles, moyens, forts
 
 CONFIANCE_MIN = 0.6          # confiance minimale des règles
-LIFT_MIN = 0.0               # lift minimal des règles
+LIFT_MIN = 1.0               # lift minimal des règles
 CONCLUSION_MAX = 1           # nombre max d'items dans la conclusion (0 = sans limite)
 CONCLUSION_CONTIENT = ""     # filtre : la conclusion doit contenir ce mot
 
