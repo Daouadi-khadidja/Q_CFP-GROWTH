@@ -239,8 +239,8 @@ Medication not changed  ET  Other (additional diagnosis),2,10721,15.32
 Discharged home  ET  Metformin dose unchanged,2,10698,15.29
 Middle-aged (40-59)  ET  Short stay (1-3 days),2,10672,15.25
 Discharged home  ET  Many medications (21+),2,10569,15.1
-Medication changed  ET  Metformin dose unchanged,2,10457,14.94
 Diabetes medication prescribed  ET  Discharged to another facility,2,10457,14.94
+Medication changed  ET  Metformin dose unchanged,2,10457,14.94
 Diabetes medication prescribed  ET  Elective admission,2,10430,14.9
 No previous outpatient visits  ET  Other (primary diagnosis),2,10351,14.79
 No previous inpatient visits  ET  Other (primary diagnosis),2,10318,14.74
@@ -818,8 +818,8 @@ Diabetes medication prescribed  ET  Insulin dose decreased  ET  Medication chang
 Diabetes (additional diagnosis)  ET  Emergency admission  ET  No previous outpatient visits,3,7306,10.44
 Diabetes medication prescribed  ET  Long stay (8+ days)  ET  No previous emergency visits,3,7303,10.44
 Admitted from emergency room  ET  Discharged to another facility  ET  Emergency admission,3,7302,10.43
-Emergency admission  ET  No previous inpatient visits  ET  Other (primary diagnosis),3,7284,10.41
 Diabetes (secondary diagnosis)  ET  Discharged home  ET  No previous emergency visits,3,7284,10.41
+Emergency admission  ET  No previous inpatient visits  ET  Other (primary diagnosis),3,7284,10.41
 Admitted from emergency room  ET  Elderly (80+)  ET  Emergency admission,3,7281,10.4
 Admitted from emergency room  ET  AfricanAmerican  ET  Emergency admission,3,7263,10.38
 Elderly (80+)  ET  Medication not changed  ET  No previous emergency visits,3,7224,10.32
@@ -841,8 +841,8 @@ Elective admission  ET  No previous emergency visits  ET  Senior (60-79),3,7097,
 Diabetes medication prescribed  ET  Glipizide dose unchanged  ET  No previous inpatient visits,3,7095,10.14
 Elective admission  ET  Medication not changed  ET  No previous emergency visits,3,7092,10.13
 Discharged to another facility  ET  Many diagnoses (9+)  ET  No previous emergency visits,3,7078,10.11
-Admitted from emergency room  ET  Diabetes medication prescribed  ET  Metformin dose unchanged,3,7067,10.1
 Diabetes medication prescribed  ET  Elderly (80+)  ET  Emergency admission,3,7067,10.1
+Admitted from emergency room  ET  Diabetes medication prescribed  ET  Metformin dose unchanged,3,7067,10.1
 Elderly (80+)  ET  Female  ET  No previous inpatient visits,3,7066,10.1
 Diabetes (secondary diagnosis)  ET  Diabetes medication prescribed  ET  No previous emergency visits,3,7054,10.08
 Elderly (80+)  ET  Female  ET  No previous outpatient visits,3,7011,10.02
@@ -1107,8 +1107,8 @@ Discharged home  ET  Few diagnoses (up to 5)  ET  No previous inpatient visits  
 Few lab tests (up to 30)  ET  No previous inpatient visits  ET  No previous outpatient visits  ET  Not readmitted,4,8657,12.37
 Many procedures (3+)  ET  No previous emergency visits  ET  No previous outpatient visits  ET  Not readmitted,4,8644,12.35
 Diabetes medication prescribed  ET  Discharged home  ET  Many procedures (3+)  ET  No previous inpatient visits,4,8643,12.35
-Caucasian  ET  Elective admission  ET  No previous inpatient visits  ET  No previous outpatient visits,4,8634,12.34
 Caucasian  ET  Discharged to another facility  ET  No previous emergency visits  ET  No previous outpatient visits,4,8634,12.34
+Caucasian  ET  Elective admission  ET  No previous inpatient visits  ET  No previous outpatient visits,4,8634,12.34
 Diabetes medication prescribed  ET  Elective admission  ET  No previous emergency visits  ET  No previous outpatient visits,4,8632,12.34
 Discharged home  ET  Emergency admission  ET  Few diagnoses (up to 5)  ET  No previous outpatient visits,4,8626,12.33
 Discharged home  ET  Metformin dose unchanged  ET  No previous emergency visits  ET  No previous outpatient visits,4,8625,12.33
@@ -1189,8 +1189,8 @@ Many medications (21+)  ET  Medication changed  ET  No previous emergency visits
 Admitted by referral  ET  Elective admission  ET  No previous emergency visits  ET  Not readmitted,4,7682,10.98
 Diabetes (additional diagnosis)  ET  Diabetes medication prescribed  ET  No previous inpatient visits  ET  No previous outpatient visits,4,7651,10.93
 Caucasian  ET  Diabetes medication prescribed  ET  Discharged to another facility  ET  No previous emergency visits,4,7635,10.91
-Emergency admission  ET  Metformin dose unchanged  ET  No previous emergency visits  ET  No previous inpatient visits,4,7630,10.9
 Caucasian  ET  Diabetes (additional diagnosis)  ET  No previous emergency visits  ET  No previous outpatient visits,4,7630,10.9
+Emergency admission  ET  Metformin dose unchanged  ET  No previous emergency visits  ET  No previous inpatient visits,4,7630,10.9
 Caucasian  ET  Discharged home  ET  Elective admission  ET  No previous inpatient visits,4,7599,10.86
 Diabetes medication prescribed  ET  Elderly (80+)  ET  No previous emergency visits  ET  No previous inpatient visits,4,7587,10.84
 Discharged home  ET  Medication changed  ET  Metformin dose unchanged  ET  No previous emergency visits,4,7578,10.83

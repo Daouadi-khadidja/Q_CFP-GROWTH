@@ -1,53 +1,39 @@
-# =====================================================================
-#  APRIORI ORIGINAL (comme dans le cours, sans aucune amélioration)
-#
-#  - un seul seuil MinSup pour tous les produits
-#  - recherche par niveau : produits seuls, puis paires, puis trios...
-#  - le support de chaque candidat se calcule en relisant tous les tickets
-#
-#  Utilisation :
-#      resultat = apriori_original(tickets, 0.4)
-#      tickets : liste de tickets, un ticket = liste de produits
-#      minsup  : seuil en fraction (0.4 = 40 % des tickets)
-# =====================================================================
+# Apriori original (cours) : un seul MinSup, recherche par niveau, support recalculé en relisant les tickets.
 import math
 
 
 def apriori_original(tickets, minsup):
+    """Apriori classique ; minsup en fraction (0.4 = 40 % des tickets)."""
     N = len(tickets)
-    seuil = math.ceil(round(minsup * N, 9))        # nombre minimum de tickets
+    seuil = math.ceil(round(minsup * N, 9))
     tickets_ens = [set(t) for t in tickets]
 
-    # Étape 1 : les candidats de taille 1 sont tous les produits
+    # Étape 1 : les candidats de taille 1 sont tous les produits.
     produits = sorted(set().union(*tickets_ens))
     candidats = [(p,) for p in produits]
 
-    frequents = {}                 # {groupe : nombre de tickets} tous niveaux confondus
-    candidats_par_niveau = {}      # {k : liste des candidats testés au niveau k}
-    frequents_par_niveau = {}      # {k : liste des groupes fréquents du niveau k}
+    frequents = {}
+    candidats_par_niveau = {}
+    frequents_par_niveau = {}
     k = 1
 
-    # Tant qu'il reste des candidats
     while len(candidats) > 0:
         candidats_par_niveau[k] = list(candidats)
 
-        # Étape 2 : calculer le support de chaque candidat (on relit les tickets)
-        # Étape 3 : garder seulement ceux dont le support est >= MinSup
+        # Étapes 2 et 3 : compter le support de chaque candidat et garder ceux >= MinSup.
         frequents_k = []
         for groupe in candidats:
             ens = set(groupe)
             compteur = 0
             for ticket in tickets_ens:
-                if ens <= ticket:                  # le ticket contient tout le groupe
+                if ens <= ticket:
                     compteur += 1
             if compteur >= seuil:
                 frequents[groupe] = compteur
                 frequents_k.append(groupe)
         frequents_par_niveau[k] = list(frequents_k)
 
-        # Étape 4 : construire les candidats du niveau suivant
-        #   a) jointure : on colle deux groupes qui ont le même début
-        #   b) élagage  : tous les sous-groupes du candidat doivent être fréquents
+        # Étape 4 : candidats du niveau suivant par jointure puis élagage des sous-groupes non fréquents.
         frequents_k.sort()
         fréquents_ensemble = set(frequents_k)
         debuts = {}
@@ -75,13 +61,11 @@ def apriori_original(tickets, minsup):
             "frequents_par_niveau": frequents_par_niveau}
 
 
-# ---------------------------------------------------------------------
-#  Exemple : les 5 tickets du cours MIS (Pain, Lait, Thé, Oeufs)
-# ---------------------------------------------------------------------
+# Exemple : les 5 tickets du cours MIS avec MinSup = 40 %.
 if __name__ == "__main__":
     tickets = [["Pain", "Lait", "Thé"], ["Pain", "Lait"], ["Pain", "Oeufs"],
                ["Lait", "Thé"], ["Pain", "Lait", "Thé"]]
-    res = apriori_original(tickets, 0.4)          # MinSup = 40 %
+    res = apriori_original(tickets, 0.4)
     for k in res["candidats"]:
         print("Niveau", k, "- candidats :", res["candidats"][k])
         print("          fréquents :", res["frequents_par_niveau"][k])

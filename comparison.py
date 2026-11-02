@@ -1,22 +1,4 @@
-# =====================================================================
-#  COMPARISON.PY  -  compare Apriori et CFP-Growth (MIS par quartiles)
-#
-#  POUR LANCER :   python comparison.py
-#  POUR CHANGER LES RÉGLAGES : modifier les valeurs juste en dessous (RÉGLAGES), puis relancer.
-#
-#  Sommaire du fichier (dans l'ordre de lecture) :
-#     1. Load the dataset                -> charger_donnees
-#     2. Compare Apriori and CFP-Growth  -> apriori_original, comparer_meme_seuil, tester_taille_base,
-#                                           comparer_apriori_quartiles, verifier_et_mesurer
-#     3. Test different LS values        -> tester_valeurs_ls
-#     4. Test different beta values      -> tester_valeurs_beta
-#     5. Measure time and memory         -> chrono, pic_memoire
-#     6. Generate graphs and reports     -> Rapport, style, etiquettes
-#     7. Programme principal             -> main  (l'ordre des étapes est là)
-#
-#  Un "beta" est ici un triplet (beta_faible, beta_moyen, beta_fort) :
-#  CFP-Growth calcule le MIS de chaque produit avec le beta de sa catégorie (quartiles).
-# =====================================================================
+# Compare Apriori et CFP-Growth (MIS par quartiles) : temps, mémoire, itemsets, graphes (python comparison.py).
 import math
 import os
 import statistics
@@ -24,32 +6,29 @@ import time
 import tracemalloc
 
 import matplotlib
-matplotlib.use("Agg")                     # dessiner dans des fichiers, sans ouvrir de fenêtre
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
 from cfp_growth import cfp_growth, cfp_growth_seuils, compter_supports
-from main import lire_tickets             # même lecture de données que main.py
+from main import lire_tickets
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 
-# =====================================================================
-#  RÉGLAGES  (les seules lignes à modifier)
-# =====================================================================
+# RÉGLAGES : les seules valeurs à modifier avant de relancer.
 FICHIER = os.path.join(DOSSIER, "Data", "diabetic_data_apriori.csv")
 
-# Le diabète est très dense (environ 22 items par patient) : il faut des LS assez grands.
-LS_LIST = [0.5, 0.4, 0.3, 0.25, 0.2]         # valeurs de LS testées (du plus grand au plus petit)
-LS_FIXE = 0.2                                # LS utilisé quand il ne varie pas (doit être dans LS_LIST)
+LS_LIST = [0.5, 0.4, 0.3, 0.25, 0.2]         # valeurs de LS testées (base dense : LS assez grands)
+LS_FIXE = 0.2                                # LS utilisé quand il ne varie pas (dans LS_LIST)
 TAILLES = [5000, 10000, 20000, 40000]        # tailles de base testées (la base complète s'ajoute)
-RARE = 0.3                                   # un item est "rare" si son support < 30 %
+RARE = 0.3                                   # un item est rare si son support < 30 %
 
-BETAS = (0.2, 0.5, 0.8)                      # beta utilisé quand il ne varie pas (faible, moyen, fort)
-BETAS_LISTE = [(0.1, 0.3, 0.5),              # les beta testés dans "Test different beta values"
+BETAS = (0.2, 0.5, 0.8)                      # beta (faible, moyen, fort) quand il ne varie pas
+BETAS_LISTE = [(0.1, 0.3, 0.5),              # beta testés dans la partie 4
                (0.2, 0.5, 0.8),
                (0.3, 0.5, 0.7),
                (0.5, 0.7, 0.9)]
-REPETITIONS = 3                              # chaque mesure de temps est répétée 3 fois (on garde la médiane)
+REPETITIONS = 3                              # chaque temps est la médiane de 3 exécutions
 
 DOSSIER_SORTIE = os.path.join(DOSSIER, "resultats_comparaison")
 
@@ -58,15 +37,12 @@ BLEU, VERT, GRIS, ORANGE = "#2878d6", "#2e9f6e", "#9b9a94", "#e8742f"
 LARGEUR_BARRE = 0.38
 
 
-# =====================================================================
-#  1. LOAD THE DATASET
-# =====================================================================
+# 1. Charge les tickets et repère les produits rares.
 def charger_donnees(rapport):
-    """Lit le fichier. Renvoie (tickets, produits rares)."""
     tickets = lire_tickets(FICHIER)
     N = len(tickets)
     nb_prod = compter_supports(tickets)
-    rares = {p for p in nb_prod if nb_prod[p] < RARE * N}      # produits rares (support faible)
+    rares = {p for p in nb_prod if nb_prod[p] < RARE * N}
     rapport.ecrire("DONNÉES : %d tickets, %d produits (rares, support < %g %% : %d)"
                    % (N, len(nb_prod), 100 * RARE, len(rares)))
     rapport.ecrire("RÉGLAGES : LS = %s | beta = %s | LS fixe = %g %% | médiane de %d exécutions"
@@ -74,50 +50,39 @@ def charger_donnees(rapport):
     return tickets, rares
 
 
-# =====================================================================
-#  2. COMPARE APRIORI AND CFP-GROWTH
-# =====================================================================
-
-# ---------------------------------------------------------------------
-#  Apriori original (comme dans le cours, sans aucune amélioration)
-#   - un seul seuil MinSup pour tous les produits
-#   - recherche par niveau : produits seuls, puis paires, puis trios...
-#   - le support de chaque candidat se calcule en relisant tous les tickets
-# ---------------------------------------------------------------------
+# 2. Comparaison Apriori / CFP-Growth.
 def apriori_original(tickets, minsup):
-    """minsup : seuil en fraction (0.4 = 40 % des tickets)."""
+    """Apriori du cours : un seul seuil, recherche par niveau, supports recalculés en relisant les tickets."""
     N = len(tickets)
-    seuil = math.ceil(round(minsup * N, 9))        # nombre minimum de tickets
+    seuil = math.ceil(round(minsup * N, 9))
     tickets_ens = [set(t) for t in tickets]
 
-    # Étape 1 : les candidats de taille 1 sont tous les produits
+    # Étape 1 : les candidats de taille 1 sont tous les produits.
     produits = sorted(set().union(*tickets_ens))
     candidats = [(p,) for p in produits]
 
-    frequents = {}                 # {groupe : nombre de tickets} tous niveaux confondus
-    candidats_par_niveau = {}      # {k : liste des candidats testés au niveau k}
-    frequents_par_niveau = {}      # {k : liste des groupes fréquents du niveau k}
+    frequents = {}
+    candidats_par_niveau = {}
+    frequents_par_niveau = {}
     k = 1
 
     while len(candidats) > 0:
         candidats_par_niveau[k] = list(candidats)
 
-        # Étapes 2 et 3 : support de chaque candidat (on relit les tickets), on garde >= MinSup
+        # Étapes 2 et 3 : compter le support de chaque candidat et garder ceux >= MinSup.
         frequents_k = []
         for groupe in candidats:
             ens = set(groupe)
             compteur = 0
             for ticket in tickets_ens:
-                if ens <= ticket:                  # le ticket contient tout le groupe
+                if ens <= ticket:
                     compteur += 1
             if compteur >= seuil:
                 frequents[groupe] = compteur
                 frequents_k.append(groupe)
         frequents_par_niveau[k] = list(frequents_k)
 
-        # Étape 4 : candidats du niveau suivant
-        #   a) jointure : on colle deux groupes qui ont le même début
-        #   b) élagage  : tous les sous-groupes du candidat doivent être fréquents
+        # Étape 4 : candidats du niveau suivant par jointure puis élagage.
         frequents_k.sort()
         frequents_ensemble = set(frequents_k)
         debuts = {}
@@ -146,7 +111,7 @@ def apriori_original(tickets, minsup):
 
 
 def seuil_unique(tickets, minsup):
-    """Le même seuil (en nombre de tickets) pour tous les produits : c'est ce que fait Apriori."""
+    """Même seuil (en nombre de tickets) pour tous les produits, comme Apriori."""
     s = math.ceil(round(minsup * len(tickets), 9))
     return {p: s for t in tickets for p in t}
 
@@ -157,20 +122,19 @@ def avec_rare(frequents, rares):
 
 
 def etiquette_beta(betas):
-    """(0.2, 0.5, 0.8) -> '0.2/0.5/0.8'"""
+    """(0.2, 0.5, 0.8) devient '0.2/0.5/0.8'."""
     return "/".join("%g" % b for b in betas)
 
 
 def ligne_pour(lignes, ls):
-    """Retrouve dans les résultats de la partie 1 la ligne qui correspond à ce LS."""
+    """Retrouve dans les résultats de la partie 1 la ligne de ce LS."""
     for ligne in lignes:
         if ligne["ls"] == ls:
             return ligne
 
 
 def comparer_meme_seuil(tickets, rapport):
-    """PARTIE 1 : Apriori et CFP-Growth avec le MÊME seuil unique (comparaison équitable).
-    Ils doivent trouver exactement les mêmes itemsets. Renvoie la liste des résultats."""
+    """PARTIE 1 : Apriori et CFP-Growth avec le même seuil unique, ils doivent trouver les mêmes itemsets."""
     rapport.ecrire("\n=== PARTIE 1 : même seuil unique pour les deux (comparaison équitable) ===")
     rapport.ecrire("%-8s | %-24s | %-26s | mêmes itemsets" % ("seuil", "Apriori (s | candidats)", "CFP-growth (s | motifs)"))
     lignes = []
@@ -184,7 +148,7 @@ def comparer_meme_seuil(tickets, rapport):
         rapport.ecrire("%-8s | %6.2f s | %6d cand. | %6.2f s | %6d motifs | %s"
                        % ("%g %%" % (100 * ls), ta, nca, tc, nce, meme))
 
-    # Graphe 1 : temps selon le seuil
+    # Graphe 1 : temps selon le seuil.
     fig, ax = plt.subplots(figsize=(7, 4), facecolor=FOND); style(ax)
     x = range(len(lignes))
     ax.bar([i - LARGEUR_BARRE / 2 for i in x], [r["ta"] for r in lignes], LARGEUR_BARRE, color=BLEU, label="Apriori original")
@@ -194,7 +158,7 @@ def comparer_meme_seuil(tickets, rapport):
     ax.set_title("1. Temps selon le seuil (même seuil pour les deux)", loc="left", fontsize=10)
     rapport.sauver_figure(fig, "1_temps_selon_seuil.png")
 
-    # Graphe 2 : candidats par niveau (au seuil LS_FIXE)
+    # Graphe 2 : candidats par niveau au seuil LS_FIXE.
     ref = ligne_pour(lignes, LS_FIXE)
     niv = sorted(set(ref["a"]["candidats"]) | set(ref["c"]["enumeres_par_niveau"]))
     fig, ax = plt.subplots(figsize=(7, 4), facecolor=FOND); style(ax)
@@ -210,7 +174,7 @@ def comparer_meme_seuil(tickets, rapport):
 
 
 def tester_taille_base(tickets, rapport):
-    """PARTIE 2 : temps selon la taille de la base (LS fixe, même seuil unique pour les deux)."""
+    """PARTIE 2 : temps selon la taille de la base, avec LS fixe et le même seuil pour les deux."""
     rapport.ecrire("\n=== PARTIE 2 : temps selon la taille de la base (seuil %g %%) ===" % (100 * LS_FIXE))
     ns, ta_l, tc_l = [], [], []
     for n in [t for t in TAILLES if t < len(tickets)] + [len(tickets)]:
@@ -232,7 +196,7 @@ def comparer_apriori_quartiles(tickets, rares, rapport, lignes):
     """PARTIE 5 : Apriori (un seuil pour tous) contre CFP-Growth (un MIS par produit, quartiles)."""
     rapport.ecrire("\n=== PARTIE 5 : Apriori (minsup = LS = %g %%) contre CFP-growth (LS, beta = %s) ==="
                    % (100 * LS_FIXE, etiquette_beta(BETAS)))
-    ref = ligne_pour(lignes, LS_FIXE)                  # Apriori déjà calculé en partie 1
+    ref = ligne_pour(lignes, LS_FIXE)
     c, tc = chrono(lambda: cfp_growth(tickets, LS_FIXE, BETAS))
     fa, fc = set(ref["a"]["frequents"]), set(c["frequents"])
     rapport.ecrire("Apriori : %d itemsets, %.2f s" % (len(fa), ref["ta"]))
@@ -242,7 +206,7 @@ def comparer_apriori_quartiles(tickets, rares, rapport, lignes):
     rapport.ecrire("itemsets avec un produit rare (support < %g %%) : Apriori %d | CFP-growth %d"
                    % (100 * RARE, avec_rare(fa, rares), avec_rare(fc, rares)))
 
-    # Graphe 8 : itemsets en commun et différents, par taille
+    # Graphe 8 : itemsets en commun et différents, par taille.
     niv = sorted({len(g) for g in fa | fc})
     comm = [sum(1 for g in fa & fc if len(g) == k) for k in niv]
     sa = [sum(1 for g in fa - fc if len(g) == k) for k in niv]
@@ -259,11 +223,11 @@ def comparer_apriori_quartiles(tickets, rares, rapport, lignes):
 
 
 def verifier_et_mesurer(tickets, rapport, lignes):
-    """PARTIE 6 : vérification (mêmes itemsets avec le même seuil) + comparaison globale temps / mémoire."""
+    """PARTIE 6 : vérifie que les deux trouvent les mêmes itemsets et compare temps et mémoire."""
     ref = ligne_pour(lignes, LS_FIXE)
     a, c = ref["a"]["frequents"], ref["c"]["frequents"]
 
-    # Graphe 9 : vérification
+    # Graphe 9 : vérification des itemsets par niveau.
     niv = sorted({len(g) for g in a} | {len(g) for g in c})
     na = [sum(1 for g in a if len(g) == k) for k in niv]
     nc = [sum(1 for g in c if len(g) == k) for k in niv]
@@ -279,7 +243,7 @@ def verifier_et_mesurer(tickets, rapport, lignes):
                  % (len(tickets), "OUI" if identiques else "NON", len(a)), loc="left", fontsize=10)
     rapport.sauver_figure(fig, "9_verification_cfp.png")
 
-    # Graphe 10 : comparaison globale (temps ET mémoire)
+    # Graphe 10 : comparaison globale (temps et mémoire).
     mem_a = pic_memoire(lambda: apriori_original(tickets, LS_FIXE))
     mem_c = pic_memoire(lambda: cfp_growth_seuils(tickets, seuil_unique(tickets, LS_FIXE)))
     valeurs = {
@@ -311,17 +275,14 @@ def verifier_et_mesurer(tickets, rapport, lignes):
     rapport.sauver_figure(fig, "10_comparaison_deux_algorithmes.png")
 
 
-# =====================================================================
-#  3. TEST DIFFERENT LS VALUES
-#     Apriori : minsup = LS      |      CFP-Growth : MIS par quartiles (beta fixé)
-# =====================================================================
+# 3. PARTIE 3 : LS varie, Apriori avec minsup = LS contre CFP-Growth avec MIS par quartiles (beta fixé).
 def tester_valeurs_ls(tickets, rares, rapport, lignes):
     rapport.ecrire("\n=== PARTIE 3 : LS varie (beta = %s) ===" % etiquette_beta(BETAS))
     rapport.ecrire("%-7s | %-28s | %-24s | %s" % ("LS", "Apriori (s | motifs | cand.)", "CFP-growth (s | motifs)",
                                                   "motifs avec produit rare (Apriori | CFP)"))
     E = []
     for ls in LS_LIST:
-        ligne = ligne_pour(lignes, ls)                 # Apriori (minsup = LS) déjà calculé en partie 1
+        ligne = ligne_pour(lignes, ls)
         a, ta = ligne["a"], ligne["ta"]
         c, tc = chrono(lambda: cfp_growth(tickets, ls, BETAS))
         cand = sum(len(v) for v in a["candidats"].values())
@@ -334,7 +295,7 @@ def tester_valeurs_ls(tickets, rares, rapport, lignes):
     xs = [100 * e["ls"] for e in E]
     nom_cfp = "CFP-growth (β = %s)" % etiquette_beta(BETAS)
 
-    # Graphe 4 : temps selon LS
+    # Graphe 4 : temps selon LS.
     fig, ax = plt.subplots(figsize=(7, 4), facecolor=FOND); style(ax)
     ax.plot(xs, [e["ta"] for e in E], "o-", color=BLEU, label="Apriori (minsup = LS)")
     ax.plot(xs, [e["tc"] for e in E], "s-", color=VERT, label=nom_cfp)
@@ -342,7 +303,7 @@ def tester_valeurs_ls(tickets, rares, rapport, lignes):
     ax.set_title("4. Temps selon LS", loc="left", fontsize=10)
     rapport.sauver_figure(fig, "4_temps_selon_LS.png")
 
-    # Graphe 5 : motifs et candidats selon LS
+    # Graphe 5 : motifs et candidats selon LS.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4), facecolor=FOND); style(ax1); style(ax2)
     ax1.plot(xs, [e["ma"] for e in E], "o-", color=BLEU, label="Apriori")
     ax1.plot(xs, [e["mc"] for e in E], "s-", color=VERT, label=nom_cfp)
@@ -357,13 +318,10 @@ def tester_valeurs_ls(tickets, rares, rapport, lignes):
     rapport.sauver_figure(fig, "5_motifs_et_candidats_selon_LS.png")
 
 
-# =====================================================================
-#  4. TEST DIFFERENT BETA VALUES
-#     LS fixe. Chaque "beta" testé est un triplet (faible / moyen / fort).
-# =====================================================================
+# 4. PARTIE 4 : LS fixe, beta varie (chaque beta est un triplet faible / moyen / fort).
 def tester_valeurs_beta(tickets, rares, rapport, lignes):
     rapport.ecrire("\n=== PARTIE 4 : beta varie (LS = %g %%, Apriori : minsup = LS) ===" % (100 * LS_FIXE))
-    ref = ligne_pour(lignes, LS_FIXE)                  # Apriori déjà calculé en partie 1
+    ref = ligne_pour(lignes, LS_FIXE)
     ta_fix, nb_apriori = ref["ta"], len(ref["a"]["frequents"])
     rapport.ecrire("Apriori (ne dépend pas de beta) : %.2f s, %d itemsets" % (ta_fix, nb_apriori))
     rapport.ecrire("%-14s | %-9s | %-9s | %-22s | %s" % ("beta (f/m/F)", "CFP (s)", "itemsets", "motifs MIN-fréquents", "avec produit rare"))
@@ -379,7 +337,7 @@ def tester_valeurs_beta(tickets, rares, rapport, lignes):
     noms = [etiquette_beta(e["betas"]) for e in E]
     x = list(range(len(E)))
 
-    # Graphe 6 : influence de beta
+    # Graphe 6 : influence de beta.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4), facecolor=FOND); style(ax1); style(ax2)
     ax1.plot(x, [e["tc"] for e in E], "s-", color=VERT, label="CFP-growth")
     ax1.axhline(ta_fix, color=BLEU, ls="--", label="Apriori (indépendant de β)")
@@ -396,7 +354,7 @@ def tester_valeurs_beta(tickets, rares, rapport, lignes):
     fig.tight_layout(rect=(0, 0, 1, 0.94))
     rapport.sauver_figure(fig, "6_influence_beta.png")
 
-    # Graphe 7 : compression du MIS-tree selon beta
+    # Graphe 7 : compression du MIS-tree selon beta.
     rapport.ecrire("\nCompression du MIS-tree selon beta (LS = %g %%) :" % (100 * LS_FIXE))
     for e in E:
         rapport.ecrire("   beta %s : %d produits dans les tickets -> %d nœuds (÷ %.1f)"
@@ -416,11 +374,9 @@ def tester_valeurs_beta(tickets, rares, rapport, lignes):
     rapport.sauver_figure(fig, "7_compression_arbre.png")
 
 
-# =====================================================================
-#  5. MEASURE TIME AND MEMORY
-# =====================================================================
+# 5. Mesure du temps (médiane de plusieurs exécutions) et de la mémoire (pic).
 def chrono(f):
-    """Exécute f plusieurs fois (REPETITIONS), renvoie (dernier résultat, temps médian en secondes)."""
+    """Exécute f plusieurs fois et renvoie (dernier résultat, temps médian en secondes)."""
     temps = []
     for _ in range(max(1, REPETITIONS)):
         debut = time.perf_counter()
@@ -438,16 +394,12 @@ def pic_memoire(f):
     return pic
 
 
-# =====================================================================
-#  6. GENERATE GRAPHS AND REPORTS
-# =====================================================================
+# 6. Rapport : garde le texte et les graphes puis les enregistre en PNG, PDF et fichier texte.
 class Rapport:
-    """Garde le texte et les graphes, puis les enregistre : PNG, un PDF, un fichier texte."""
-
     def __init__(self, dossier):
         self.dossier = dossier
-        self.lignes = []                   # texte du rapport
-        self.figures = []                  # graphes, dans l'ordre
+        self.lignes = []
+        self.figures = []
         os.makedirs(dossier, exist_ok=True)
 
     def ecrire(self, txt=""):
@@ -485,23 +437,21 @@ def etiquettes(ax, barres, fmt="%d"):
                 ha="center", va="bottom", fontsize=9)
 
 
-# =====================================================================
-#  7. PROGRAMME PRINCIPAL : l'ordre des étapes
-# =====================================================================
+# 7. Programme principal : l'ordre des étapes.
 def main():
     if LS_FIXE not in LS_LIST:
         raise SystemExit("Erreur dans les RÉGLAGES : LS_FIXE (%g) doit être l'une des valeurs de LS_LIST." % LS_FIXE)
 
     rapport = Rapport(DOSSIER_SORTIE)
 
-    tickets, rares = charger_donnees(rapport)                         # Load the dataset
-    lignes = comparer_meme_seuil(tickets, rapport)                    # Compare (même seuil)
-    tester_taille_base(tickets, rapport)                              # Compare (taille de la base)
-    tester_valeurs_ls(tickets, rares, rapport, lignes)                # Test different LS values
-    tester_valeurs_beta(tickets, rares, rapport, lignes)              # Test different beta values
-    comparer_apriori_quartiles(tickets, rares, rapport, lignes)       # Compare (Apriori / quartiles)
-    verifier_et_mesurer(tickets, rapport, lignes)                     # Measure time and memory
-    rapport.enregistrer()                                             # Graphs and reports
+    tickets, rares = charger_donnees(rapport)
+    lignes = comparer_meme_seuil(tickets, rapport)
+    tester_taille_base(tickets, rapport)
+    tester_valeurs_ls(tickets, rares, rapport, lignes)
+    tester_valeurs_beta(tickets, rares, rapport, lignes)
+    comparer_apriori_quartiles(tickets, rares, rapport, lignes)
+    verifier_et_mesurer(tickets, rapport, lignes)
+    rapport.enregistrer()
 
 
 if __name__ == "__main__":
