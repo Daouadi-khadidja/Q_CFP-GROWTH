@@ -1,4 +1,4 @@
-# Compare Apriori et CFP-Growth (MIS par quartiles) : temps, mémoire, itemsets, graphes (python comparison.py).
+# Compare Apriori et CFP-Growth (MIS automatique, beta par formule) : temps, mémoire, itemsets, graphes (python comparison.py).
 import math
 import os
 import statistics
@@ -10,24 +10,20 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-from cfp_growth import cfp_growth, cfp_growth_seuils, compter_supports
+from cfp_growth import calculer_ls_auto, cfp_growth, cfp_growth_seuils, compter_supports, quantile_interpolation
 from main import lire_tickets
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 
 # RÉGLAGES : les seules valeurs à modifier avant de relancer.
-FICHIER = os.path.join(DOSSIER, "Data", "diabetic_data_apriori.csv")
+FICHIER = os.path.join(DOSSIER, "Data", "Lim_solar_data_net.csv")
 
-LS_LIST = [0.5, 0.4, 0.3, 0.25, 0.2]         # valeurs de LS testées (base dense : LS assez grands)
-LS_FIXE = 0.2                                # LS utilisé quand il ne varie pas (dans LS_LIST)
-TAILLES = [5000, 10000, 20000, 40000]        # tailles de base testées (la base complète s'ajoute)
+LS_LIST = [0.5, 0.4, 0.3, 0.2, 0.1]          # valeurs de LS testées (base dense : LS assez grands)
+LS_FIXE = None                               # None = LS automatique max(1/racine(N), Q3/N), ajouté à LS_LIST au chargement
+NIVEAUX_LS = [0.5, 0.75, 0.9]                # niveaux testés pour le quantile de LS (0.75 = Q3, choisi)
+TAILLES = [1000, 2500, 5000, 7500]           # tailles de base testées (la base complète s'ajoute)
 RARE = 0.3                                   # un item est rare si son support < 30 %
 
-BETAS = (0.2, 0.5, 0.8)                      # beta (faible, moyen, fort) quand il ne varie pas
-BETAS_LISTE = [(0.1, 0.3, 0.5),              # beta testés dans la partie 4
-               (0.2, 0.5, 0.8),
-               (0.3, 0.5, 0.7),
-               (0.5, 0.7, 0.9)]
 REPETITIONS = 3                              # chaque temps est la médiane de 3 exécutions
 
 DOSSIER_SORTIE = os.path.join(DOSSIER, "resultats_comparaison")
@@ -39,14 +35,18 @@ LARGEUR_BARRE = 0.38
 
 # 1. Charge les tickets et repère les produits rares.
 def charger_donnees(rapport):
+    global LS_FIXE, LS_LIST
     tickets = lire_tickets(FICHIER)
     N = len(tickets)
     nb_prod = compter_supports(tickets)
+    if LS_FIXE is None:
+        LS_FIXE = calculer_ls_auto(nb_prod, N)
+    LS_LIST = sorted(set(LS_LIST + [LS_FIXE]), reverse=True)
     rares = {p for p in nb_prod if nb_prod[p] < RARE * N}
     rapport.ecrire("DONNÉES : %d tickets, %d produits (rares, support < %g %% : %d)"
                    % (N, len(nb_prod), 100 * RARE, len(rares)))
-    rapport.ecrire("RÉGLAGES : LS = %s | beta = %s | LS fixe = %g %% | médiane de %d exécutions"
-                   % ([round(100 * x, 2) for x in LS_LIST], etiquette_beta(BETAS), 100 * LS_FIXE, REPETITIONS))
+    rapport.ecrire("RÉGLAGES : LS = %s | beta automatique (formule) | LS automatique = %.2f %% | médiane de %d exécutions"
+                   % ([round(100 * x, 2) for x in LS_LIST], 100 * LS_FIXE, REPETITIONS))
     return tickets, rares
 
 
@@ -123,7 +123,7 @@ def avec_rare(frequents, rares):
 
 def etiquette_beta(betas):
     """(0.2, 0.5, 0.8) devient '0.2/0.5/0.8'."""
-    return "/".join("%g" % b for b in betas)
+    return "/".join(b if isinstance(b, str) else "%g" % b for b in betas)
 
 
 def ligne_pour(lignes, ls):
@@ -194,13 +194,13 @@ def tester_taille_base(tickets, rapport):
 
 def comparer_apriori_quartiles(tickets, rares, rapport, lignes):
     """PARTIE 5 : Apriori (un seuil pour tous) contre CFP-Growth (un MIS par produit, quartiles)."""
-    rapport.ecrire("\n=== PARTIE 5 : Apriori (minsup = LS = %g %%) contre CFP-growth (LS, beta = %s) ==="
-                   % (100 * LS_FIXE, etiquette_beta(BETAS)))
+    rapport.ecrire("\n=== PARTIE 5 : Apriori (minsup = LS = %g %%) contre CFP-growth (LS, beta automatique) ==="
+                   % (100 * LS_FIXE))
     ref = ligne_pour(lignes, LS_FIXE)
-    c, tc = chrono(lambda: cfp_growth(tickets, LS_FIXE, BETAS))
+    c, tc = chrono(lambda: cfp_growth(tickets, LS_FIXE))
     fa, fc = set(ref["a"]["frequents"]), set(c["frequents"])
     rapport.ecrire("Apriori : %d itemsets, %.2f s" % (len(fa), ref["ta"]))
-    rapport.ecrire("CFP-growth (beta = %s) : %d itemsets, %.2f s" % (etiquette_beta(BETAS), len(fc), tc))
+    rapport.ecrire("CFP-growth (beta auto = %s) : %d itemsets, %.2f s" % (etiquette_beta(["%.3f" % b for b in c["betas"]]), len(fc), tc))
     rapport.ecrire("en commun : %d | seulement Apriori : %d | seulement CFP-growth : %d"
                    % (len(fa & fc), len(fa - fc), len(fc - fa)))
     rapport.ecrire("itemsets avec un produit rare (support < %g %%) : Apriori %d | CFP-growth %d"
@@ -217,8 +217,7 @@ def comparer_apriori_quartiles(tickets, rares, rapport, lignes):
     ax.bar(range(len(niv)), sm, bottom=[x + y for x, y in zip(comm, sa)], color=VERT, label="seulement CFP-growth")
     ax.set_xticks(range(len(niv))); ax.set_xticklabels(["taille %d" % k for k in niv])
     ax.set_ylabel("itemsets fréquents"); ax.legend(frameon=False, fontsize=8)
-    ax.set_title("8. Itemsets : Apriori (1 seuil) contre CFP-growth (quartiles, β = %s)" % etiquette_beta(BETAS),
-                 loc="left", fontsize=9)
+    ax.set_title("8. Itemsets : Apriori (1 seuil) contre CFP-growth (MIS automatique)", loc="left", fontsize=9)
     rapport.sauver_figure(fig, "8_itemsets_communs_et_differents.png")
 
 
@@ -275,16 +274,16 @@ def verifier_et_mesurer(tickets, rapport, lignes):
     rapport.sauver_figure(fig, "10_comparaison_deux_algorithmes.png")
 
 
-# 3. PARTIE 3 : LS varie, Apriori avec minsup = LS contre CFP-Growth avec MIS par quartiles (beta fixé).
+# 3. PARTIE 3 : LS varie, Apriori avec minsup = LS contre CFP-Growth avec MIS automatique.
 def tester_valeurs_ls(tickets, rares, rapport, lignes):
-    rapport.ecrire("\n=== PARTIE 3 : LS varie (beta = %s) ===" % etiquette_beta(BETAS))
+    rapport.ecrire("\n=== PARTIE 3 : LS varie (beta automatique) ===")
     rapport.ecrire("%-7s | %-28s | %-24s | %s" % ("LS", "Apriori (s | motifs | cand.)", "CFP-growth (s | motifs)",
                                                   "motifs avec produit rare (Apriori | CFP)"))
     E = []
     for ls in LS_LIST:
         ligne = ligne_pour(lignes, ls)
         a, ta = ligne["a"], ligne["ta"]
-        c, tc = chrono(lambda: cfp_growth(tickets, ls, BETAS))
+        c, tc = chrono(lambda: cfp_growth(tickets, ls))
         cand = sum(len(v) for v in a["candidats"].values())
         e = dict(ls=ls, ta=ta, tc=tc, ma=len(a["frequents"]), mc=len(c["frequents"]), cand=cand,
                  ra=avec_rare(a["frequents"], rares), rc=avec_rare(c["frequents"], rares))
@@ -293,7 +292,7 @@ def tester_valeurs_ls(tickets, rares, rapport, lignes):
                        % ("%g %%" % (100 * ls), ta, e["ma"], cand, tc, e["mc"], e["ra"], e["rc"]))
 
     xs = [100 * e["ls"] for e in E]
-    nom_cfp = "CFP-growth (β = %s)" % etiquette_beta(BETAS)
+    nom_cfp = "CFP-growth (β automatique)"
 
     # Graphe 4 : temps selon LS.
     fig, ax = plt.subplots(figsize=(7, 4), facecolor=FOND); style(ax)
@@ -318,47 +317,42 @@ def tester_valeurs_ls(tickets, rares, rapport, lignes):
     rapport.sauver_figure(fig, "5_motifs_et_candidats_selon_LS.png")
 
 
-# 4. PARTIE 4 : LS fixe, beta varie (chaque beta est un triplet faible / moyen / fort).
-def tester_valeurs_beta(tickets, rares, rapport, lignes):
-    rapport.ecrire("\n=== PARTIE 4 : beta varie (LS = %g %%, Apriori : minsup = LS) ===" % (100 * LS_FIXE))
-    ref = ligne_pour(lignes, LS_FIXE)
-    ta_fix, nb_apriori = ref["ta"], len(ref["a"]["frequents"])
-    rapport.ecrire("Apriori (ne dépend pas de beta) : %.2f s, %d itemsets" % (ta_fix, nb_apriori))
-    rapport.ecrire("%-14s | %-9s | %-9s | %-22s | %s" % ("beta (f/m/F)", "CFP (s)", "itemsets", "motifs MIN-fréquents", "avec produit rare"))
-
+# 4. PARTIE 4 : beta calculés par la formule pour chaque LS (plus aucun beta choisi à la main).
+def tester_betas_auto(tickets, rares, rapport, lignes):
+    rapport.ecrire("\n=== PARTIE 4 : beta calculés automatiquement selon LS ===")
+    rapport.ecrire("%-7s | %-20s | %-9s | %-9s | %-9s | %s" % ("LS", "beta f/m/F", "CFP (s)", "itemsets", "Apriori", "motifs MIN-fréquents"))
     E = []
-    for betas in BETAS_LISTE:
-        c, tc = chrono(lambda: cfp_growth(tickets, LS_FIXE, betas))
-        e = dict(betas=betas, tc=tc, mc=len(c["frequents"]), enum=sum(c["enumeres_par_niveau"].values()),
-                 rc=avec_rare(c["frequents"], rares), occ=c["occurrences"], noeuds=c["noeuds_arbre"])
+    for ls in LS_LIST:
+        c, tc = chrono(lambda: cfp_growth(tickets, ls))
+        e = dict(ls=ls, betas=c["betas"], tc=tc, mc=len(c["frequents"]), ma=len(ligne_pour(lignes, ls)["a"]["frequents"]),
+                 enum=sum(c["enumeres_par_niveau"].values()), occ=c["occurrences"], noeuds=c["noeuds_arbre"])
         E.append(e)
-        rapport.ecrire("%-14s | %6.2f s | %-9d | %-22d | %d" % (etiquette_beta(betas), tc, e["mc"], e["enum"], e["rc"]))
+        rapport.ecrire("%-7s | %-20s | %6.2f s | %-9d | %-9d | %d"
+                       % ("%g %%" % (100 * ls), etiquette_beta(["%.3f" % b for b in e["betas"]]), tc, e["mc"], e["ma"], e["enum"]))
 
-    noms = [etiquette_beta(e["betas"]) for e in E]
-    x = list(range(len(E)))
+    xs = [100 * e["ls"] for e in E]
 
-    # Graphe 6 : influence de beta.
+    # Graphe 6 : beta calculés et itemsets retournés.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4), facecolor=FOND); style(ax1); style(ax2)
-    ax1.plot(x, [e["tc"] for e in E], "s-", color=VERT, label="CFP-growth")
-    ax1.axhline(ta_fix, color=BLEU, ls="--", label="Apriori (indépendant de β)")
-    ax1.set_xlabel("β (faible / moyen / fort)"); ax1.set_ylabel("temps (s)"); ax1.legend(frameon=False)
-    ax1.set_xticks(x); ax1.set_xticklabels(noms, rotation=20, fontsize=8)
-    ax1.set_title("(a) Temps selon β", loc="left", fontsize=10)
-    ax2.plot(x, [e["mc"] for e in E], "s-", color=VERT, label="CFP-growth : itemsets retournés")
-    ax2.plot(x, [e["enum"] for e in E], "d--", color=ORANGE, label="CFP-growth : motifs MIN-fréquents explorés")
-    ax2.axhline(nb_apriori, color=BLEU, ls="--", label="Apriori (minsup = LS)")
-    ax2.set_xlabel("β (faible / moyen / fort)"); ax2.set_ylabel("nombre d'itemsets"); ax2.legend(frameon=False, fontsize=8)
-    ax2.set_xticks(x); ax2.set_xticklabels(noms, rotation=20, fontsize=8)
-    ax2.set_title("(b) Itemsets selon β", loc="left", fontsize=10)
-    fig.suptitle("6. Influence de β (LS = %g %%)" % (100 * LS_FIXE), x=0.01, ha="left", fontweight="bold", fontsize=11)
+    for i, (nom, couleur) in enumerate((("β faible", GRIS), ("β moyen", ORANGE), ("β fort", VERT))):
+        ax1.plot(xs, [e["betas"][i] for e in E], "o-", color=couleur, label=nom)
+    ax1.plot(xs, [e["ls"] for e in E], "k--", lw=1, label="LS (plancher de β)")
+    ax1.set_xlabel("LS (%)"); ax1.set_ylabel("β calculé"); ax1.invert_xaxis(); ax1.legend(frameon=False, fontsize=8)
+    ax1.set_title("(a) β calculés par la formule", loc="left", fontsize=10)
+    ax2.plot(xs, [e["ma"] for e in E], "o-", color=BLEU, label="Apriori (minsup = LS)")
+    ax2.plot(xs, [e["mc"] for e in E], "s--", color=VERT, label="CFP-growth (β automatique)")
+    ax2.set_xlabel("LS (%)"); ax2.set_ylabel("itemsets fréquents"); ax2.invert_xaxis(); ax2.legend(frameon=False, fontsize=8)
+    ax2.set_title("(b) Itemsets retournés", loc="left", fontsize=10)
+    fig.suptitle("6. Bêta automatiques et itemsets selon LS", x=0.01, ha="left", fontweight="bold", fontsize=11)
     fig.tight_layout(rect=(0, 0, 1, 0.94))
-    rapport.sauver_figure(fig, "6_influence_beta.png")
+    rapport.sauver_figure(fig, "6_beta_automatique.png")
 
-    # Graphe 7 : compression du MIS-tree selon beta.
-    rapport.ecrire("\nCompression du MIS-tree selon beta (LS = %g %%) :" % (100 * LS_FIXE))
+    # Graphe 7 : compression du MIS-tree selon LS.
+    rapport.ecrire("\nCompression du MIS-tree selon LS :")
     for e in E:
-        rapport.ecrire("   beta %s : %d produits dans les tickets -> %d nœuds (÷ %.1f)"
-                       % (etiquette_beta(e["betas"]), e["occ"], e["noeuds"], e["occ"] / max(e["noeuds"], 1)))
+        rapport.ecrire("   LS %g %% : %d produits dans les tickets -> %d nœuds (÷ %.1f)"
+                       % (100 * e["ls"], e["occ"], e["noeuds"], e["occ"] / max(e["noeuds"], 1)))
+    x = list(range(len(E)))
     fig, ax = plt.subplots(figsize=(8, 4.5), facecolor=FOND); style(ax)
     b1 = ax.bar([i - LARGEUR_BARRE / 2 for i in x], [e["occ"] for e in E], LARGEUR_BARRE, color=GRIS, label="Produits dans les tickets")
     b2 = ax.bar([i + LARGEUR_BARRE / 2 for i in x], [e["noeuds"] for e in E], LARGEUR_BARRE, color=VERT, label="Nœuds du MIS-tree")
@@ -367,11 +361,46 @@ def tester_valeurs_beta(tickets, rares, rapport, lignes):
     for i, e in enumerate(E):
         ax.text(i, haut * 1.08, "÷ %.1f" % (e["occ"] / max(e["noeuds"], 1)), ha="center", color=VERT, fontweight="bold")
     ax.set_ylim(0, haut * 1.2)
-    ax.set_xticks(x); ax.set_xticklabels(["β = %s" % n for n in noms], fontsize=8)
+    ax.set_xticks(x); ax.set_xticklabels(["LS = %g %%" % (100 * e["ls"]) for e in E], fontsize=8)
     ax.set_ylabel("Nombre"); ax.legend(frameon=False, loc="upper left", ncol=2, bbox_to_anchor=(0, 1.1))
     ax.set_title("7. Le MIS-tree compresse la base\n(produits à stocker dans les tickets, après filtrage par MIN, contre nœuds de l'arbre)",
                  loc="left", fontsize=10)
     rapport.sauver_figure(fig, "7_compression_arbre.png")
+
+
+# 4b. PARTIE 6 : sensibilité au niveau du quantile utilisé pour LS = max(1/racine(N), Q(S)/N).
+def tester_niveaux_ls(tickets, rapport):
+    N = len(tickets)
+    S = list(compter_supports(tickets).values())
+    plancher = 1 / math.sqrt(N)
+    rapport.ecrire("\n=== PARTIE 6 : LS selon le quantile choisi (plancher 1/racine(N) = %.2f %%) ===" % (100 * plancher))
+    rapport.ecrire("%-12s | %-8s | %-9s | %-9s | %-10s | %s" % ("quantile", "LS", "itemsets", "Apriori (s)", "CFP (s)", "candidats Apriori"))
+    E = []
+    for p in NIVEAUX_LS:
+        ls = max(plancher, quantile_interpolation(S, p) / N)
+        a, ta = chrono(lambda: apriori_original(tickets, ls))
+        c, tc = chrono(lambda: cfp_growth(tickets, ls))
+        nom = "P%d%s" % (round(100 * p), " (Q3)" if p == 0.75 else (" (méd.)" if p == 0.5 else ""))
+        e = dict(nom=nom, ls=ls, n=len(c["frequents"]), ta=ta, tc=tc)
+        E.append(e)
+        rapport.ecrire("%-12s | %5.2f %%  | %-9d | %9.2f   | %8.2f   | %d"
+                       % (nom, 100 * ls, e["n"], ta, tc, sum(len(v) for v in a["candidats"].values())))
+
+    x = list(range(len(E)))
+    etiq = ["%s\nLS = %.1f %%" % (e["nom"], 100 * e["ls"]) for e in E]
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.5), facecolor=FOND); style(ax1); style(ax2)
+    b = ax1.bar(x, [e["n"] for e in E], 0.5, color=VERT)
+    etiquettes(ax1, b)
+    ax1.set_xticks(x); ax1.set_xticklabels(etiq, fontsize=8); ax1.set_ylabel("itemsets fréquents")
+    ax1.set_title("(a) Itemsets selon le quantile de LS", loc="left", fontsize=10)
+    b1 = ax2.bar([i - LARGEUR_BARRE / 2 for i in x], [e["ta"] for e in E], LARGEUR_BARRE, color=BLEU, label="Apriori")
+    b2 = ax2.bar([i + LARGEUR_BARRE / 2 for i in x], [e["tc"] for e in E], LARGEUR_BARRE, color=VERT, label="CFP-growth")
+    etiquettes(ax2, b1, "%.2f"); etiquettes(ax2, b2, "%.2f")
+    ax2.set_xticks(x); ax2.set_xticklabels(etiq, fontsize=8); ax2.set_ylabel("temps (s)"); ax2.legend(frameon=False)
+    ax2.set_title("(b) Temps d'exécution", loc="left", fontsize=10)
+    fig.suptitle("11. Sensibilité au quantile de LS (Q3 = P75 choisi)", x=0.01, ha="left", fontweight="bold", fontsize=11)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    rapport.sauver_figure(fig, "11_sensibilite_niveau_ls.png")
 
 
 # 5. Mesure du temps (médiane de plusieurs exécutions) et de la mémoire (pic).
@@ -439,17 +468,15 @@ def etiquettes(ax, barres, fmt="%d"):
 
 # 7. Programme principal : l'ordre des étapes.
 def main():
-    if LS_FIXE not in LS_LIST:
-        raise SystemExit("Erreur dans les RÉGLAGES : LS_FIXE (%g) doit être l'une des valeurs de LS_LIST." % LS_FIXE)
-
     rapport = Rapport(DOSSIER_SORTIE)
 
     tickets, rares = charger_donnees(rapport)
     lignes = comparer_meme_seuil(tickets, rapport)
     tester_taille_base(tickets, rapport)
     tester_valeurs_ls(tickets, rares, rapport, lignes)
-    tester_valeurs_beta(tickets, rares, rapport, lignes)
+    tester_betas_auto(tickets, rares, rapport, lignes)
     comparer_apriori_quartiles(tickets, rares, rapport, lignes)
+    tester_niveaux_ls(tickets, rapport)
     verifier_et_mesurer(tickets, rapport, lignes)
     rapport.enregistrer()
 

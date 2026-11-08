@@ -1,19 +1,18 @@
-# Lance CFP-Growth sur le dataset diabète puis génère les règles SI ... ALORS ... (python main.py).
+# Lance CFP-Growth sur le dataset solaire puis génère les règles SI ... ALORS ... (python main.py).
 import csv
 import os
 import time
 from itertools import combinations
 
-from cfp_growth import cfp_growth
+from cfp_growth import calculer_ls_auto, cfp_growth, compter_supports
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 
 # RÉGLAGES : les seules valeurs à modifier avant de relancer.
-FICHIER = os.path.join(DOSSIER, "Data", "diabetic_data_apriori.csv")   # dataset
-DOSSIER_SORTIE = os.path.join(DOSSIER, "resultats_diabete")            # dossier des résultats
+FICHIER = os.path.join(DOSSIER, "Data", "Lim_solar_data_net.csv")      # dataset
+DOSSIER_SORTIE = os.path.join(DOSSIER, "resultats_solaire")            # dossier des résultats
 
-LS = 0.10                    # support minimum le plus bas (10 % des patients)
-BETAS = (0.2, 0.5, 0.8)      # beta croissants : produits faibles, moyens, forts
+LS = None                   # None = LS calculé automatiquement : max(1/racine(N), Q3/N) ; sinon une fraction (0.10 = 10 %)
 
 CONFIANCE_MIN = 0.6          # confiance minimale des règles
 LIFT_MIN = 1.0               # lift minimal des règles
@@ -24,33 +23,44 @@ SEPARATEUR = "  ET  "        # séparateur entre items
 MAX_LIGNES_ECRAN = 15        # lignes affichées à l'écran
 
 
-# 1. Lit le tableau 0/1 : un patient = un ticket = la liste des colonnes à 1.
+# 1. Lit le fichier : une ligne = un ticket = la liste de ses items.
+#    Colonne 0/1 -> item = nom de la colonne. Colonne avec des tranches -> item = "colonne=tranche".
+def nettoyer(valeur):
+    """Enlève les guillemets et antislashs laissés par l'export Weka : '\\'(1.2-3.4]\\'' devient (1.2-3.4]."""
+    return valeur.replace("\\", "").replace("'", "").strip()
+
+
 def lire_tickets(fichier):
     tickets = []
-    with open(fichier, encoding="utf-8") as f:
+    with open(fichier, encoding="utf-8-sig") as f:
         lecteur = csv.reader(f)
-        noms = next(lecteur)
+        noms = [nettoyer(n) for n in next(lecteur)]
         for valeurs in lecteur:
-            ticket = sorted(noms[i] for i, v in enumerate(valeurs) if v in ("1", "True"))
+            ticket = []
+            for nom, v in zip(noms, valeurs):
+                v = nettoyer(v)
+                if v in ("0", "False", ""):
+                    continue
+                ticket.append(nom if v in ("1", "True") else "%s=%s" % (nom, v))
             if ticket:
-                tickets.append(ticket)
+                tickets.append(sorted(ticket))
     return tickets
 
 
 # 2. Lance CFP-Growth (MIS par quartiles) et affiche un résumé.
-def lancer_cfp_growth(tickets):
+def lancer_cfp_growth(tickets, ls):
     debut = time.perf_counter()
-    res = cfp_growth(tickets, LS, BETAS)
+    res = cfp_growth(tickets, ls)
     duree = time.perf_counter() - debut
 
     N = len(tickets)
-    q1, q2 = res["coupures"]
+    q1, q3 = res["coupures"]
     noms = ("faible", "moyenne", "forte")
-    print("Quartiles : Q1 = %.0f patients (%.1f %%), Q2 = %.0f patients (%.1f %%)"
-          % (q1, 100 * q1 / N, q2, 100 * q2 / N))
+    print("Quartiles : Q1 = %.0f lignes (%.1f %%), Q3 = %.0f lignes (%.1f %%)"
+          % (q1, 100 * q1 / N, q3, 100 * q3 / N))
     for categorie in range(3):
         n = sum(1 for c in res["categories"].values() if c == categorie)
-        print("   catégorie %-8s : %3d items, beta = %g" % (noms[categorie], n, BETAS[categorie]))
+        print("   catégorie %-8s : %3d items, beta = %.3f" % (noms[categorie], n, res["betas"][categorie]))
     print("Itemsets fréquents : %d (%.1f s)" % (len(res["frequents"]), duree))
     return res["frequents"]
 
@@ -98,7 +108,7 @@ def generer_regles(frequents, N, bitsets):
                 if lift < LIFT_MIN:
                     continue
                 regles.append({"si": SEPARATEUR.join(gauche), "alors": SEPARATEUR.join(conclusion),
-                               "nb_patients": sup, "support_%": round(100 * sup / N, 2),
+                               "nb_lignes": sup, "support_%": round(100 * sup / N, 2),
                                "confiance_%": round(100 * confiance, 1), "lift": round(lift, 2)})
     regles.sort(key=lambda r: (-r["lift"], -r["confiance_%"]))
     return regles
@@ -106,18 +116,18 @@ def generer_regles(frequents, N, bitsets):
 
 # 4. Sauvegarde en tableaux : colonne = (clé du dictionnaire, titre affiché, est-ce un nombre ?).
 COLONNES_ITEMSETS = [("itemset", "Itemset", False), ("taille", "Taille", True),
-                     ("nb_patients", "Nb patients", True), ("support_%", "Support (%)", True)]
+                     ("nb_lignes", "Nb lignes", True), ("support_%", "Support (%)", True)]
 
 COLONNES_REGLES = [("si", "SI (conditions)", False), ("alors", "ALORS (conclusion)", False),
-                   ("nb_patients", "Nb patients", True), ("support_%", "Support (%)", True),
+                   ("nb_lignes", "Nb lignes", True), ("support_%", "Support (%)", True),
                    ("confiance_%", "Confiance (%)", True), ("lift", "Lift", True)]
 
 
 def construire_itemsets(frequents, N):
     """Lignes du tableau des itemsets, triées par taille puis par fréquence décroissante."""
-    lignes = [{"itemset": SEPARATEUR.join(g), "taille": len(g), "nb_patients": s, "support_%": round(100 * s / N, 2)}
+    lignes = [{"itemset": SEPARATEUR.join(g), "taille": len(g), "nb_lignes": s, "support_%": round(100 * s / N, 2)}
               for g, s in frequents.items()]
-    return sorted(lignes, key=lambda l: (l["taille"], -l["nb_patients"]))
+    return sorted(lignes, key=lambda l: (l["taille"], -l["nb_lignes"]))
 
 
 def tableau_texte(titre, colonnes, lignes, max_lignes=None, largeur_texte=None):
@@ -159,11 +169,13 @@ def main():
     tickets = lire_tickets(FICHIER)
     N = len(tickets)
     nb_items = len({p for t in tickets for p in t})
-    print("Données : %d patients, %d items, %.1f items par patient en moyenne"
+    print("Données : %d lignes, %d items, %.1f items par ligne en moyenne"
           % (N, nb_items, sum(len(t) for t in tickets) / N))
-    print("LS = %g, beta = %s\n" % (LS, BETAS))
+    ls = LS if LS is not None else calculer_ls_auto(compter_supports(tickets), N)
+    print("LS = %.2f %% (%s), beta calculés automatiquement par formule\n"
+          % (100 * ls, "choisi à la main" if LS is not None else "calculé : max(1/racine(N), Q3/N)"))
 
-    frequents = lancer_cfp_growth(tickets)
+    frequents = lancer_cfp_growth(tickets, ls)
 
     regles = generer_regles(frequents, N, preparer_bitsets(tickets))
 

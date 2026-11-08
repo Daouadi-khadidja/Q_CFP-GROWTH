@@ -1,8 +1,6 @@
-# CFP-Growth (MIS par quartiles) : itemsets fréquents avec un seuil différent par produit (MIS = max(LS x N, beta x Sup)).
+# CFP-Growth (MIS automatique) : itemsets fréquents avec un seuil différent par produit (MIS = max(LS x N, beta x Sup), beta par formule).
 import math
 from collections import defaultdict
-
-import numpy as np
 
 
 # 1. Noeud : une case de l'arbre (produit, compteur, parent, enfants).
@@ -150,39 +148,71 @@ def compter_supports(tickets):
     return dict(nb)
 
 
-# 5. MIS par quartiles : catégorie faible / moyenne / forte selon Q1 et Q2, un beta par catégorie.
+# 5. MIS automatique : quartiles (méthode B, interpolation linéaire) puis beta calculé par formule.
+def quantile_interpolation(valeurs, p):
+    """Quantile par interpolation linéaire : position P = 1 + (n-1) x p (en partant de 1), puis
+    interpolation entre les deux valeurs voisines si P n'est pas entier."""
+    v = sorted(valeurs)
+    n = len(v)
+    pos = 1 + (n - 1) * p
+    i = int(math.floor(pos))
+    reste = pos - i
+    if i >= n:
+        return float(v[-1])
+    return v[i - 1] + reste * (v[i] - v[i - 1])
+
+
 def categories_quartiles(nb, niveaux=(0.25, 0.75)):
     """Renvoie (coupures, catégorie de chaque produit) avec 0 = faible, 1 = moyenne, 2 = forte."""
     supports = list(nb.values())
-    coupures = [float(np.percentile(supports, 100 * p)) for p in niveaux]
+    coupures = [quantile_interpolation(supports, p) for p in niveaux]
     categories = {}
     for produit in nb:
         categories[produit] = sum(1 for coupure in coupures if nb[produit] >= coupure)
     return coupures, categories
 
 
-def calculer_mis_quartiles(nb, N, ls, betas=(0.2, 0.5, 0.8), niveaux=(0.25, 0.75)):
-    """MIS de chaque produit en nombre de tickets : max(LS x N, beta de sa catégorie x support)."""
-    if len(betas) != len(niveaux) + 1:
-        raise ValueError("il faut un beta de plus que de niveaux (3 beta pour Q1 et Q2)")
-    if any(betas[i] > betas[i + 1] for i in range(len(betas) - 1)):
-        raise ValueError("les beta doivent être en ordre croissant")
-    if not all(0 < b <= 1 for b in betas):
-        raise ValueError("chaque beta doit être dans ]0, 1]")
+def calculer_betas(nb, ls, niveaux=(0.25, 0.75)):
+    """Beta automatique : beta = LS + (1 - LS) x (s - s_min) / (s_max - s_min), avec
+    s = Q1 (faible), (Q1 + Q3) / 2 (moyen), Q3 (fort). Renvoie (betas, coupures)."""
+    supports = list(nb.values())
+    smin, smax = min(supports), max(supports)
+    q1, q3 = [quantile_interpolation(supports, p) for p in niveaux]
+    etendue = smax - smin
+    betas = []
+    for s in (q1, (q1 + q3) / 2, q3):
+        x = 0.0 if etendue == 0 else (s - smin) / etendue   # évite la division par 0
+        betas.append(ls + (1 - ls) * x)
+    return tuple(betas), [q1, q3]
 
+
+def calculer_ls_auto(nb, N, niveau=0.75):
+    """LS automatique = max(1 / racine(N), Q3(supports) / N), en fraction des tickets.
+    1/racine(N) : plancher (en dessous, un support ne se distingue pas du hasard).
+    Q3 : troisième quartile des supports des produits (même méthode d'interpolation que pour beta)."""
+    q3 = quantile_interpolation(list(nb.values()), niveau)
+    return max(1 / math.sqrt(N), q3 / N)
+
+
+def calculer_mis_quartiles(nb, N, ls, niveaux=(0.25, 0.75)):
+    """MIS de chaque produit en nombre de tickets : max(LS x N, beta de sa catégorie x support)."""
+    betas, _ = calculer_betas(nb, ls, niveaux)
     coupures, categories = categories_quartiles(nb, niveaux)
     mis = {}
     for produit in nb:
         beta = betas[categories[produit]]
         mis[produit] = max(round(ls * N, 9), round(beta * nb[produit], 9))
-    return mis, categories, coupures
+    return mis, categories, coupures, betas
 
 
-def cfp_growth(tickets, ls, betas=(0.2, 0.5, 0.8), niveaux=(0.25, 0.75)):
-    """Fonction principale : CFP-Growth avec MIS par quartiles (ls = plancher en fraction, 3 beta croissants)."""
+def cfp_growth(tickets, ls=None, niveaux=(0.25, 0.75)):
+    """Fonction principale : CFP-Growth avec MIS automatique (beta par formule).
+    ls = plancher en fraction ; s'il n'est pas donné, il est calculé par calculer_ls_auto."""
     N = len(tickets)
     nb = compter_supports(tickets)
-    mis, categories, coupures = calculer_mis_quartiles(nb, N, ls, betas, niveaux)
+    if ls is None:
+        ls = calculer_ls_auto(nb, N)
+    mis, categories, coupures, betas = calculer_mis_quartiles(nb, N, ls, niveaux)
     seuils = {p: math.ceil(mis[p]) for p in nb}
 
     res = cfp_growth_seuils(tickets, seuils, mis_tri=mis)
@@ -191,5 +221,6 @@ def cfp_growth(tickets, ls, betas=(0.2, 0.5, 0.8), niveaux=(0.25, 0.75)):
     res["seuils"] = seuils
     res["categories"] = categories
     res["coupures"] = coupures
-    res["betas"] = tuple(betas)
+    res["betas"] = betas
+    res["ls"] = ls
     return res
