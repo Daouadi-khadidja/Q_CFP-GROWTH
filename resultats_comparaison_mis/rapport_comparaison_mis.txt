@@ -6,43 +6,40 @@ MIS calculés : LS = 12.47 %, MIS entre 12,5–23,3 % | MIS aléatoires d'origin
 1145 itemsets, 9503 règles, 0.3 s, 9 Mo
 
 --- MIS aléatoires 12–60 %, graine 42 ---
-567 itemsets, 5106 règles, 0.7 s, 13 Mo
+567 itemsets, 5106 règles, 0.4 s, 13 Mo
 
 --- MIS aléatoires 12–60 %, graine 1 ---
-277 itemsets, 2290 règles, 0.7 s
+277 itemsets, 2290 règles, 0.2 s
 
 --- MIS aléatoires 12–60 %, graine 2 ---
-501 itemsets, 3948 règles, 0.5 s
+501 itemsets, 3948 règles, 0.2 s
 
 --- MIS aléatoires 12–60 %, graine 3 ---
-395 itemsets, 3673 règles, 0.8 s
+395 itemsets, 3673 règles, 0.3 s
 
 --- MIS aléatoires 12–60 %, graine 4 ---
-531 itemsets, 4168 règles, 1.0 s
+531 itemsets, 4168 règles, 0.4 s
 
 --- MIS aléatoires 12,5–23,3 %, graine 42 ---
-832 itemsets, 7316 règles, 0.7 s, 12 Mo
+832 itemsets, 7316 règles, 0.3 s, 12 Mo
 
 --- MIS aléatoires 12,5–23,3 %, graine 1 ---
-616 itemsets, 4903 règles, 0.5 s
+616 itemsets, 4903 règles, 0.2 s
 
 --- MIS aléatoires 12,5–23,3 %, graine 2 ---
-787 itemsets, 6573 règles, 0.6 s
+787 itemsets, 6573 règles, 0.2 s
 
 --- MIS aléatoires 12,5–23,3 %, graine 3 ---
-671 itemsets, 5654 règles, 1.1 s
+671 itemsets, 5654 règles, 0.4 s
 
 --- MIS aléatoires 12,5–23,3 %, graine 4 ---
-753 itemsets, 5799 règles, 1.0 s
+753 itemsets, 5799 règles, 0.3 s
 
-=== TABLEAU : moyenne des tirages de chaque version ===
-version                              nb          itemsets            règles        conf. moy.         lift moy.        % conf>=90       % lift>=1.5   % concl. classe % item moins fréq.         temps (s)
-Q-CFP-Growth (MIS calculés 12,5–23,3 %)    1              1145              9503             0.906              1.76              62.1              22.1               0.3              79.9               0.3
-MIS aléatoires 12–60 %                5               454              3837             0.899              1.35              59.3              12.9               0.0              49.8               0.7
-MIS aléatoires même plage que les MIS calculés    5               732              6049             0.899              1.46              58.3              16.5               0.0              67.9               0.8
-Mémoire maximale (1er tirage) Q-CFP-Growth (MIS calculés 12,5–23,3 %) : 9 Mo
-Mémoire maximale (1er tirage) MIS aléatoires 12–60 %             : 13 Mo
-Mémoire maximale (1er tirage) MIS aléatoires même plage que les MIS calculés : 12 Mo
+=== TABLEAU COMPARAISON (Format Table 5.1 du rapport) ===
+Version                            Tirages        Nb itemsets          Nb règles          Temps (s)       Mémoire (Mo)         Conf. moy.          Lift moy.   Règles conf>=0.9   Règles lift>=1.5   Règles item rare
+Q-CFP-Growth (MIS calculés 12,5–23,3 %)    1               1145               9503               0.34                9.4              0.906               1.76               5906               2099               7596
+MIS aléatoires 12–60 %                5                454               3837               0.30               12.9              0.899               1.35               2268                507               2021
+MIS aléatoires même plage que les MIS calculés    5                732               6049               0.28               11.8              0.899               1.46               3542               1005               4143
 
 === À NOMBRE ÉGAL : les 2290 meilleures règles (par lift) de chaque tirage ===
 Q-CFP-Growth (MIS calculés 12,5–23,3 %) confiance moy. = 84.9 % | lift moy. = 3.86
@@ -52,19 +49,3 @@ MIS aléatoires même plage que les MIS calculés confiance moy. = 85.7 % | lift
 === RECOUVREMENT : règles du MIS calculé retrouvées dans les autres versions (moyenne) ===
 MIS aléatoires 12–60 %             : 3836 en commun | 5667 seulement calculé | 1 seulement cette version
 MIS aléatoires même plage que les MIS calculés : 6049 en commun | 3454 seulement calculé | 0 seulement cette version
-
-=== 5 MEILLEURES RÈGLES (par lift) ===
-
-MIS calculés :
-   SI If=(46.668723-inf)  ET  Vabc=(140.72443-inf)  ET  Vf=(49.96129-50.058188]  ET  label=F4L  ALORS Iabc=(0.400001-0.500001]  ET  Vpv=(66.625977-77.566528] | support 0.1293 | confiance 0.998 | lift 7.62
-   SI Vabc=(140.72443-inf)  ET  Vf=(49.96129-50.058188]  ET  label=F4L  ALORS Iabc=(0.400001-0.500001]  ET  If=(46.668723-inf)  ET  Vpv=(66.625977-77.566528] | support 0.1293 | confiance 0.998 | lift 7.62
-   SI Vabc=(140.72443-inf)  ET  Vf=(49.96129-50.058188]  ET  label=F4L  ALORS Iabc=(0.400001-0.500001]  ET  Vpv=(66.625977-77.566528] | support 0.1293 | confiance 0.998 | lift 7.62
-   SI Iabc=(0.400001-0.500001]  ET  If=(46.668723-inf)  ET  Vpv=(66.625977-77.566528]  ALORS Vabc=(140.72443-inf)  ET  Vf=(49.96129-50.058188]  ET  label=F4L | support 0.1293 | confiance 0.987 | lift 7.62
-   SI Iabc=(0.400001-0.500001]  ET  Vpv=(66.625977-77.566528]  ALORS If=(46.668723-inf)  ET  Vabc=(140.72443-inf)  ET  Vf=(49.96129-50.058188]  ET  label=F4L | support 0.1293 | confiance 0.987 | lift 7.62
-
-MIS aléatoires 12–60 %, graine 42 :
-   SI Iabc=(0.400001-0.500001]  ET  If=(46.668723-inf)  ET  ib=(0.443115-0.577393]  ALORS Vabc=(140.72443-inf)  ET  Vdc=(136.875-149.501953]  ET  vb=(-inf--128.64502] | support 0.1341 | confiance 0.983 | lift 3.37
-   SI Iabc=(0.400001-0.500001]  ET  ib=(0.443115-0.577393]  ALORS If=(46.668723-inf)  ET  Vabc=(140.72443-inf)  ET  Vdc=(136.875-149.501953]  ET  vb=(-inf--128.64502] | support 0.1341 | confiance 0.983 | lift 3.37
-   SI Iabc=(0.400001-0.500001]  ET  If=(46.668723-inf)  ET  Vabc=(140.72443-inf)  ET  ib=(0.443115-0.577393]  ALORS Vdc=(136.875-149.501953]  ET  vb=(-inf--128.64502] | support 0.1341 | confiance 0.983 | lift 3.37
-   SI Iabc=(0.400001-0.500001]  ET  Vabc=(140.72443-inf)  ET  ib=(0.443115-0.577393]  ALORS If=(46.668723-inf)  ET  Vdc=(136.875-149.501953]  ET  vb=(-inf--128.64502] | support 0.1341 | confiance 0.983 | lift 3.37
-   SI Iabc=(0.400001-0.500001]  ET  If=(46.668723-inf)  ET  ib=(0.443115-0.577393]  ALORS Vdc=(136.875-149.501953]  ET  vb=(-inf--128.64502] | support 0.1341 | confiance 0.983 | lift 3.37

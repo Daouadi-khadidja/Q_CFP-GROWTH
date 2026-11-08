@@ -46,7 +46,7 @@ K_REGLES = None                    # None = K automatique (plus petit nombre de 
 RARE = 0.30                        # item "moins fréquent" si son support < 30 %
 CONF_FORTE = 0.9                   # règle "très sûre" si confiance >= 90 %
 LIFT_FORT = 1.5                    # règle "très informative" si lift >= 1,5
-PREFIXE_CLASSE = "label="          # règles qui concluent sur la classe (label=F0L, F1L...)
+
 
 FOND = "#fdfcfa"
 VERT, GRIS, ORANGE = "#2e9f6e", "#9b9a94", "#e08a2c"
@@ -97,25 +97,38 @@ def evaluer(nom, fichier_mis, tickets, bitsets, N, rares, rapport, mesurer_memoi
         return any(i in rares for i in (r["si"].split(SEPARATEUR) + r["alors"].split(SEPARATEUR)))
 
     m = {
-        "nom": nom,
-        "itemsets": len(frequents),
-        "regles": n,
-        "conf_moy": moy(confs), "lift_moy": moy(lifts),
-        "pct_sures": pct(sum(1 for c in confs if c >= CONF_FORTE)),
-        "pct_lift_fort": pct(sum(1 for l in lifts if l >= LIFT_FORT)),
-        "pct_classe": pct(sum(1 for r in regles if r["alors"].startswith(PREFIXE_CLASSE))),
-        "pct_rares": pct(sum(1 for r in regles if avec_rare(r))),
-        "temps": temps, "memoire": memoire,
-        "confs": confs, "lifts": lifts,
-        "cles": {(frozenset(r["si"].split(SEPARATEUR)), r["alors"]) for r in regles},
-        "top": regles[:5],
-    }
+    "nom": nom,
+    "itemsets": len(frequents),
+    "regles": n,
+    "conf_moy": moy(confs),
+    "lift_moy": moy(lifts),
+
+    # Critères de comparaison
+    "nb_sures": sum(1 for c in confs if c >= CONF_FORTE),
+    "nb_lift_fort": sum(1 for l in lifts if l >= LIFT_FORT),
+    "nb_rares": sum(1 for r in regles if avec_rare(r)),
+
+    # Parts en pourcentage
+    "pct_sures": pct(sum(1 for c in confs if c >= CONF_FORTE)),
+    "pct_lift_fort": pct(sum(1 for l in lifts if l >= LIFT_FORT)),
+    "pct_rares": pct(sum(1 for r in regles if avec_rare(r))),
+
+    "temps": temps,
+    "memoire": memoire,
+    "confs": confs,
+    "lifts": lifts,
+    "cles": {
+        (frozenset(r["si"].split(SEPARATEUR)), r["alors"])
+        for r in regles
+    },
+    "top": regles[:5],
+}
     rapport.ecrire("%d itemsets, %d règles, %.1f s%s"
                    % (m["itemsets"], n, temps, (", %.0f Mo" % memoire) if memoire is not None else ""))
     return m
 
 
-# 3. Rapport : garde le texte et les graphes puis les enregistre.
+# 2. Rapport : garde le texte et les graphes puis les enregistre.
 class Rapport:
     def __init__(self, dossier):
         self.dossier = dossier
@@ -141,7 +154,7 @@ class Rapport:
               % (self.dossier, len(self.figures)))
 
 
-# 4. Outils de dessin : un style simple, des barres avec la valeur écrite dessus, un point noir par tirage.
+# 3. Outils de dessin : un style simple, des barres avec la valeur écrite dessus, un point noir par tirage.
 def style(ax):
     ax.set_facecolor(FOND)
     for cote in ("top", "right"):
@@ -191,7 +204,7 @@ NOTE_LECTURE = ("Lecture : chaque barre est la moyenne de la version ; chaque po
                 "aléatoire (une graine). Vert = notre méthode.")
 
 
-# 5. Programme principal.
+# 4. Programme principal.
 def main():
     rapport = Rapport(DOSSIER_SORTIE)
 
@@ -258,23 +271,25 @@ def main():
         return
     calcule = next((g for g in groupes if g["cle"] == "calcule"), None)
 
-    # b) Tableau récapitulatif (moyenne des tirages de chaque version).
-    rapport.ecrire("\n=== TABLEAU : moyenne des tirages de chaque version ===")
-    colonnes = [("itemsets", "itemsets", "%.0f"), ("regles", "règles", "%.0f"),
-                ("conf_moy", "conf. moy.", "%.3f"), ("lift_moy", "lift moy.", "%.2f"),
-                ("pct_sures", "%% conf>=%g" % (100 * CONF_FORTE), "%.1f"), ("pct_lift_fort", "%% lift>=%g" % LIFT_FORT, "%.1f"),
-                ("pct_classe", "% concl. classe", "%.1f"), ("pct_rares", "% item moins fréq.", "%.1f"),
-                ("temps", "temps (s)", "%.1f")]
-    rapport.ecrire("%-34s %4s " % ("version", "nb") + " ".join("%17s" % c[1] for c in colonnes))
+    # b) Tableau récapitulatif (incorporant exactement la structure de la Table 5.1).
+    rapport.ecrire("\n=== TABLEAU COMPARAISON (Format Table 5.1 du rapport) ===")
+    colonnes_51 = [
+    ("itemsets", "Nb itemsets", "%.0f"),
+    ("regles", "Nb règles", "%.0f"),
+    ("temps", "Temps (s)", "%.2f"),
+    ("memoire", "Mémoire (Mo)", "%.1f"),
+    ("conf_moy", "Conf. moy.", "%.3f"),
+    ("lift_moy", "Lift moy.", "%.2f"),
+    ("nb_sures", "Règles conf>=0.9", "%.0f"),
+    ("nb_lift_fort", "Règles lift>=1.5", "%.0f"),
+    ("nb_rares", "Règles item rare", "%.0f"),
+   ]
+    rapport.ecrire("%-34s %4s " % ("Version", "Tirages") + " ".join("%18s" % c[1] for c in colonnes_51))
     for g in groupes:
         rapport.ecrire("%-34s %4d " % (g["nom"].replace("\n", " "), len(g["runs"]))
-                       + " ".join("%17s" % (c[2] % statistics.mean(r[c[0]] for r in g["runs"])) for c in colonnes))
-    for g in groupes:
-        mems = [r["memoire"] for r in g["runs"] if r["memoire"] is not None]
-        if mems:
-            rapport.ecrire("Mémoire maximale (1er tirage) %-34s : %.0f Mo" % (g["nom"].replace("\n", " "), mems[0]))
+                       + " ".join("%18s" % (c[2] % statistics.mean(r[c[0]] for r in g["runs"] if r[c[0]] is not None)) for c in colonnes_51))
 
-    # c) K meilleures règles : même nombre de règles pour toutes les versions (comparaison équitable).
+    # c) K meilleures règles : même nombre de règles pour toutes les versions.
     toutes = [r for g in groupes for r in g["runs"]]
     K = K_REGLES if K_REGLES else min(r["regles"] for r in toutes)
     for r in toutes:
@@ -283,7 +298,7 @@ def main():
         r["topk_conf"] = 100 * statistics.mean(r["confs"][:haut]) if haut else 0.0
     if 0 < K < 10:
         rapport.ecrire("\nATTENTION : K = %d seulement (une version produit très peu de règles) : la comparaison à nombre "
-                       "égal est peu fiable. Mets K_REGLES = 20 ou 50 en haut du fichier pour la rendre plus parlante." % K)
+                       "égal est peu fiable." % K)
     if K > 0:
         rapport.ecrire("\n=== À NOMBRE ÉGAL : les %d meilleures règles (par lift) de chaque tirage ===" % K)
         for g in groupes:
@@ -291,7 +306,7 @@ def main():
                            % (g["nom"].replace("\n", " "), statistics.mean(r["topk_conf"] for r in g["runs"]),
                               statistics.mean(r["topk_lift"] for r in g["runs"])))
 
-    # d) Recouvrement avec les règles du MIS calculé, et meilleures règles.
+    # d) Recouvrement avec les règles du MIS calculé.
     if calcule is not None:
         ref = calcule["runs"][0]
         rapport.ecrire("\n=== RECOUVREMENT : règles du MIS calculé retrouvées dans les autres versions (moyenne) ===")
@@ -302,17 +317,11 @@ def main():
             rapport.ecrire("%-34s : %.0f en commun | %.0f seulement calculé | %.0f seulement cette version"
                            % (g["nom"].replace("\n", " "), communs, len(ref["cles"]) - communs,
                               statistics.mean(len(r["cles"] - ref["cles"]) for r in g["runs"])))
-        rapport.ecrire("\n=== 5 MEILLEURES RÈGLES (par lift) ===")
-        for r in (ref, groupes[1]["runs"][0]):
-            rapport.ecrire("\n%s :" % r["nom"])
-            for reg in r["top"]:
-                rapport.ecrire("   SI %s  ALORS %s | support %.4f | confiance %.3f | lift %.2f"
-                               % (reg["si"], reg["alors"], reg["support"], reg["confiance"], reg["lift"]))
 
     # e) GRAPHIQUES -----------------------------------------------------------------------------------------
 
-    # Graphique 0 : les seuils item par item. C'est LE graphique qui explique pourquoi les versions diffèrent.
-    items = sorted(nb, key=lambda p: nb[p])                     # du moins fréquent au plus fréquent
+    # Graphique 0 : les seuils item par item.
+    items = sorted(nb, key=lambda p: nb[p])
     x = list(range(1, len(items) + 1))
     support_pct = [100 * nb[p] / N for p in items]
     mis_calc_pct = [100 * m["mis"][p] for p in items]
@@ -343,31 +352,42 @@ def main():
     titre_et_note(fig, "1. Combien d'itemsets et de règles chaque version trouve-t-elle ?", NOTE_LECTURE)
     rapport.sauver_figure(fig, "1_itemsets_et_regles.png")
 
-    # Graphique 2 : qualité des K meilleures règles (même nombre pour tout le monde).
+    # Graphique 2 : qualité des K meilleures règles.
     if K > 0:
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5.2), facecolor=FOND)
         barres(ax1, groupes, "topk_conf", "%.0f %%", "(a) Confiance moyenne", ylabel="confiance (%)", pourcentage=True)
         barres(ax2, groupes, "topk_lift", "%.2f", "(b) Lift moyen", ylabel="lift (pointillé = 1 : pas de lien)", ligne=1)
         titre_et_note(fig, "2. Qualité des %d meilleures règles de chaque version (même nombre pour toutes)" % K,
                       NOTE_LECTURE + " On compare le même nombre de règles (les meilleures par lift) pour ne pas "
-                      "favoriser la version qui en produit le plus."
-                      + (" K est petit : à interpréter avec prudence." if K < 10 else ""))
+                      "favoriser la version qui en produit le plus.")
         rapport.sauver_figure(fig, "2_confiance_et_lift.png")
-    else:
-        rapport.ecrire("\nGraphique 2 non tracé : une version n'a aucune règle (K = 0).")
 
-    # Graphique 3 : quelle part des règles est intéressante ? (en %, pour comparer des versions de tailles différentes)
-    criteres = [("pct_sures", "… très sûres\n(confiance ≥ %s %%)" % fr(100 * CONF_FORTE)),
-                ("pct_lift_fort", "… très informatives\n(lift ≥ %s)" % fr(LIFT_FORT)),
-                ("pct_classe", "… qui prédisent la classe\n(conclusion %s…)" % PREFIXE_CLASSE),
-                ("pct_rares", "… avec un item moins fréquent\n(support < %s %%)" % fr(100 * RARE))]
-    fig, axes = plt.subplots(1, 4, figsize=(14, 5.2), facecolor=FOND)
+        # Graphique 3 : quelle part des règles est intéressante ?
+    criteres = [
+        ("pct_sures", "… très sûres\n(confiance ≥ %s %%)" % fr(100 * CONF_FORTE)),
+        ("pct_lift_fort", "… très informatives\n(lift ≥ %s)" % fr(LIFT_FORT)),
+        ("pct_rares", "… avec un item moins fréquent\n(support < %s %%)" % fr(100 * RARE))
+    ]
+
+    fig, axes = plt.subplots(1, 3, figsize=(12, 5.2), facecolor=FOND)
+
     for ax, (cle, titre) in zip(axes, criteres):
-        barres(ax, groupes, cle, "%.0f %%", "Part de règles " + titre, pourcentage=True, court=True)
+        barres(
+            ax, groupes, cle, "%.0f %%",
+            "Part de règles " + titre,
+            pourcentage=True,
+            court=True
+        )
+
     axes[0].set_ylabel("part des règles de la version (%)")
-    titre_et_note(fig, "3. Quelle part des règles est intéressante ?",
-                  NOTE_LECTURE + " Les parts sont en % des règles de chaque version, pour comparer des versions qui "
-                  "ne produisent pas le même nombre de règles.")
+
+    titre_et_note(
+        fig,
+        "3. Quelle part des règles est intéressante ?",
+        NOTE_LECTURE + " Les parts sont en % des règles de chaque version, pour comparer des versions qui "
+        "ne produisent pas le même nombre de règles."
+    )
+
     rapport.sauver_figure(fig, "3_regles_interessantes.png")
 
     rapport.enregistrer()
