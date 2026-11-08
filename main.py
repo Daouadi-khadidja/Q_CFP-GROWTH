@@ -21,7 +21,7 @@ LS = None                    # None = LS automatique : max(1/racine(N), Q3/N) ; 
 
 CONFIANCE_MIN = 0.6          # confiance minimale des règles
 LIFT_MIN = 1.0               # lift minimal des règles
-CONCLUSION_MAX = 1           # nombre max d'items dans la conclusion (0 = sans limite)
+CONCLUSION_MAX = 0          # nombre max d'items dans la conclusion (0 = sans limite)
 CONCLUSION_CONTIENT = ""     # filtre : la conclusion doit contenir ce mot
 
 SEPARATEUR = "  ET  "        # séparateur entre items
