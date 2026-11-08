@@ -1,18 +1,23 @@
-# Lance CFP-Growth sur le dataset solaire puis génère les règles SI ... ALORS ... (python main.py).
+# Chef d'orchestre (python main.py) :
+#   1. lit le dataset solaire             2. mis.py calcule les MIS et écrit mis.txt
+#   3. cfp_growth.py lit mis.txt          4. regles.py génère les règles, puis on sauvegarde tout.
+# Avant la première fois : lancer python nettoyer.py (il crée Data/Lim_solar_data_net.csv).
 import csv
 import os
 import time
-from itertools import combinations
 
-from cfp_growth import calculer_ls_auto, cfp_growth, compter_supports
+from cfp_growth import cfp_growth
+from mis import NOMS_CATEGORIES, calculer_ls_auto, calculer_mis, compter_supports, ecrire_mis_txt
+from regles import generer_regles, preparer_bitsets
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 
 # RÉGLAGES : les seules valeurs à modifier avant de relancer.
-FICHIER = os.path.join(DOSSIER, "Data", "Lim_solar_data_net.csv")      # dataset
+FICHIER = os.path.join(DOSSIER, "Data", "Lim_solar_data_net.csv")      # dataset solaire nettoyé
 DOSSIER_SORTIE = os.path.join(DOSSIER, "resultats_solaire")            # dossier des résultats
+FICHIER_MIS = os.path.join(DOSSIER_SORTIE, "mis.txt")                  # fichier écrit par mis.py, lu par cfp_growth.py
 
-LS = None                   # None = LS calculé automatiquement : max(1/racine(N), Q3/N) ; sinon une fraction (0.10 = 10 %)
+LS = None                    # None = LS automatique : max(1/racine(N), Q3/N) ; sinon une fraction (0.10 = 10 %)
 
 CONFIANCE_MIN = 0.6          # confiance minimale des règles
 LIFT_MIN = 1.0               # lift minimal des règles
@@ -47,80 +52,34 @@ def lire_tickets(fichier):
     return tickets
 
 
-# 2. Lance CFP-Growth (MIS par quartiles) et affiche un résumé.
-def lancer_cfp_growth(tickets, ls):
+# 2. Lance CFP-Growth (il lit mis.txt) et affiche un résumé.
+def lancer_cfp_growth(tickets, m):
     debut = time.perf_counter()
-    res = cfp_growth(tickets, ls)
+    res = cfp_growth(tickets, FICHIER_MIS)
     duree = time.perf_counter() - debut
 
     N = len(tickets)
-    q1, q3 = res["coupures"]
-    noms = ("faible", "moyenne", "forte")
+    q1, q3 = m["coupures"]
     print("Quartiles : Q1 = %.0f lignes (%.1f %%), Q3 = %.0f lignes (%.1f %%)"
           % (q1, 100 * q1 / N, q3, 100 * q3 / N))
     for categorie in range(3):
-        n = sum(1 for c in res["categories"].values() if c == categorie)
-        print("   catégorie %-8s : %3d items, beta = %.3f" % (noms[categorie], n, res["betas"][categorie]))
+        n = sum(1 for c in m["categories"].values() if c == categorie)
+        print("   catégorie %-8s : %3d items, beta = %.3f" % (NOMS_CATEGORIES[categorie], n, m["betas"][categorie]))
     print("Itemsets fréquents : %d (%.1f s)" % (len(res["frequents"]), duree))
     return res["frequents"]
 
 
-# 3. Règles d'association : support = Sup(G+C)/N, confiance = Sup(G+C)/Sup(G), lift = confiance / (Sup(C)/N).
-def preparer_bitsets(tickets):
-    """Chaque item devient un grand entier binaire (1 bit par ticket) pour compter vite."""
-    bits = {}
-    for i, ticket in enumerate(tickets):
-        for item in set(ticket):
-            bits[item] = bits.get(item, 0) | (1 << i)
-    return bits
-
-
-def calculer_support(items, bitsets, deja_calcule):
-    """Nombre de tickets contenant tous les items (résultats mis en cache)."""
-    cle = tuple(sorted(items))
-    if cle not in deja_calcule:
-        nombre = bitsets[cle[0]]
-        for item in cle[1:]:
-            nombre &= bitsets[item]
-        deja_calcule[cle] = nombre.bit_count()
-    return deja_calcule[cle]
-
-
-def generer_regles(frequents, N, bitsets):
-    """Fabrique les règles SI ... ALORS ... qui respectent confiance, lift et conclusion, triées par lift."""
-    deja_calcule = dict(frequents)
-    mot = CONCLUSION_CONTIENT.lower()
-    regles = []
-    for groupe, sup in frequents.items():
-        taille = len(groupe)
-        if taille < 2:
-            continue
-        limite = taille - 1 if CONCLUSION_MAX == 0 else min(CONCLUSION_MAX, taille - 1)
-        for k in range(1, limite + 1):
-            for conclusion in combinations(groupe, k):
-                if mot and not all(mot in c.lower() for c in conclusion):
-                    continue
-                gauche = [i for i in groupe if i not in conclusion]
-                confiance = sup / calculer_support(gauche, bitsets, deja_calcule)
-                if confiance < CONFIANCE_MIN:
-                    continue
-                lift = confiance / (calculer_support(conclusion, bitsets, deja_calcule) / N)
-                if lift < LIFT_MIN:
-                    continue
-                regles.append({"si": SEPARATEUR.join(gauche), "alors": SEPARATEUR.join(conclusion),
-                               "nb_lignes": sup, "support_%": round(100 * sup / N, 2),
-                               "confiance_%": round(100 * confiance, 1), "lift": round(lift, 2)})
-    regles.sort(key=lambda r: (-r["lift"], -r["confiance_%"]))
-    return regles
-
-
-# 4. Sauvegarde en tableaux : colonne = (clé du dictionnaire, titre affiché, est-ce un nombre ?).
+# 3. Sauvegarde en tableaux : colonne = (clé du dictionnaire, titre affiché, est-ce un nombre ?).
 COLONNES_ITEMSETS = [("itemset", "Itemset", False), ("taille", "Taille", True),
                      ("nb_lignes", "Nb lignes", True), ("support_%", "Support (%)", True)]
 
-COLONNES_REGLES = [("si", "SI (conditions)", False), ("alors", "ALORS (conclusion)", False),
-                   ("nb_lignes", "Nb lignes", True), ("support_%", "Support (%)", True),
-                   ("confiance_%", "Confiance (%)", True), ("lift", "Lift", True)]
+COLONNES_REGLES = [
+    ("si", "SI (conditions)", False),
+    ("alors", "ALORS (conclusion)", False),
+    ("support", "Support relatif", True),
+    ("confiance", "Confiance", True),
+    ("lift", "Lift", True)
+]
 
 
 def construire_itemsets(frequents, N):
@@ -162,29 +121,45 @@ def sauver(nom, titre, colonnes, lignes):
     print("\n" + tableau_texte(titre, colonnes, lignes, MAX_LIGNES_ECRAN, largeur_texte=48))
 
 
-# Programme principal : lire les données, CFP-Growth, règles, sauvegarde.
+# 4. Programme principal.
 def main():
     os.makedirs(DOSSIER_SORTIE, exist_ok=True)
 
+    if not os.path.exists(FICHIER):
+        print("Fichier introuvable :", FICHIER)
+        print("Lance d'abord : python nettoyer.py")
+        return
+
+    # a) Lire les données.
     tickets = lire_tickets(FICHIER)
     N = len(tickets)
     nb_items = len({p for t in tickets for p in t})
     print("Données : %d lignes, %d items, %.1f items par ligne en moyenne"
           % (N, nb_items, sum(len(t) for t in tickets) / N))
     ls = LS if LS is not None else calculer_ls_auto(compter_supports(tickets), N)
-    print("LS = %.2f %% (%s), beta calculés automatiquement par formule\n"
+    print("LS = %.2f %% (%s)\n"
           % (100 * ls, "choisi à la main" if LS is not None else "calculé : max(1/racine(N), Q3/N)"))
 
-    frequents = lancer_cfp_growth(tickets, ls)
+    # b) mis.py calcule les MIS et les écrit dans mis.txt.
+    m = calculer_mis(tickets, ls)
+    ecrire_mis_txt(m, FICHIER_MIS)
+    print("MIS écrits dans :", FICHIER_MIS, "\n")
 
-    regles = generer_regles(frequents, N, preparer_bitsets(tickets))
+    # c) cfp_growth.py lit mis.txt et trouve les itemsets fréquents.
+    frequents = lancer_cfp_growth(tickets, m)
+
+    # d) Règles d'association.
+    regles = generer_regles(frequents, N, preparer_bitsets(tickets),
+                            confiance_min=CONFIANCE_MIN, lift_min=LIFT_MIN,
+                            conclusion_max=CONCLUSION_MAX, conclusion_contient=CONCLUSION_CONTIENT,
+                            separateur=SEPARATEUR)
 
     sauver("regles", "RÈGLES D'ASSOCIATION  (confiance >= %g%%, triées par lift)  -  %d règles"
            % (100 * CONFIANCE_MIN, len(regles)), COLONNES_REGLES, regles)
     sauver("itemsets", "ITEMSETS FRÉQUENTS  -  %d itemsets" % len(frequents),
            COLONNES_ITEMSETS, construire_itemsets(frequents, N))
 
-    print("\nFichiers enregistrés dans :", DOSSIER_SORTIE, "(regles.txt, itemsets.txt, + .csv)")
+    print("\nFichiers enregistrés dans :", DOSSIER_SORTIE, "(mis.txt, regles.txt, itemsets.txt, + .csv)")
 
 
 if __name__ == "__main__":

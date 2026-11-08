@@ -6,8 +6,8 @@ from collections import Counter
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
 
 # RÉGLAGES : les seules valeurs à modifier avant de relancer.
-FICHIER_ENTREE = os.path.join(DOSSIER, "Data", "Lim_solar_data_cleaned.csv")
-FICHIER_SORTIE = os.path.join(DOSSIER, "Data", "Lim_solar_data_net.csv")
+FICHIER_ENTREE = os.path.join(DOSSIER, "../Data", "Lim_solar_data_cleaned.csv")
+FICHIER_SORTIE = os.path.join(DOSSIER, "../Data", "Lim_solar_data_net.csv")
 
 COLONNES_A_RETIRER = ["Time"]      # colonnes qui ne sont pas des mesures (index de temps)
 SEUIL_CONSTANT = None             # None = on garde les colonnes presque constantes ; 0.80 = on retire celles dont une tranche couvre plus de 80 % des lignes

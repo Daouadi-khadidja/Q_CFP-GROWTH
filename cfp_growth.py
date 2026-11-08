@@ -1,6 +1,13 @@
-# CFP-Growth (MIS automatique) : itemsets fréquents avec un seuil différent par produit (MIS = max(LS x N, beta x Sup), beta par formule).
-import math
+# CFP-Growth : trouve les itemsets fréquents avec un seuil (MIS) différent par produit.
+# Les MIS ne sont PAS calculés ici : ils sont lus dans le fichier mis.txt écrit par mis.py.
 from collections import defaultdict
+
+from mis import compter_supports, lire_mis_txt
+
+
+# 0. Garde-fou facultatif : levée quand le nombre de groupes énumérés dépasse `limite_motifs` (explosion mémoire).
+class TropDeMotifs(Exception):
+    pass
 
 
 # 1. Noeud : une case de l'arbre (produit, compteur, parent, enfants).
@@ -51,6 +58,8 @@ def fouiller_arbre(entete, rang, suffixe, seuil_min, resultats, stats):
             support += n.compte
         groupe = suffixe + (item,)
         resultats[frozenset(groupe)] = support
+        if stats.get("limite") and len(resultats) > stats["limite"]:
+            raise TropDeMotifs(len(resultats))
 
         # b) Base conditionnelle : les chemins qui montent vers la racine.
         base = []
@@ -79,16 +88,17 @@ def fouiller_arbre(entete, rang, suffixe, seuil_min, resultats, stats):
         fouiller_arbre(petit_entete, rang, groupe, seuil_min, resultats, stats)
 
 
-# CFP-Growth quand le seuil (MIS en nombre de tickets) de chaque produit est déjà connu.
-def cfp_growth_seuils(tickets, seuils, mis_tri=None):
+# 4. CFP-Growth quand le seuil (en nombre de tickets) de chaque produit est déjà connu.
+def cfp_growth_seuils(tickets, seuils, mis_tri=None, limite_motifs=None):
+    """seuils = {produit: nombre minimum de tickets}. mis_tri = valeurs utilisées pour ordonner les produits."""
     tickets_ens = [set(t) for t in tickets]
     if mis_tri is None:
         mis_tri = seuils
 
-    # Étape 1 : support de chaque produit (premier passage).
+    # Étape 1 : support de chaque produit (premier passage sur les tickets).
     nb = compter_supports(tickets_ens)
 
-    # Étape 2 : MIN = plus petit seuil, un produit sous MIN ne sera jamais fréquent.
+    # Étape 2 : MIN = plus petit seuil. Un produit sous MIN ne sera jamais fréquent.
     MIN = min(seuils[p] for p in nb)
     gardes = [p for p in nb if nb[p] >= MIN]
 
@@ -99,7 +109,7 @@ def cfp_growth_seuils(tickets, seuils, mis_tri=None):
     # Étape 4 : construire l'arbre (deuxième passage).
     racine = Noeud(None, None)
     entete = defaultdict(list)
-    stats = {"noeuds": 0, "bases": 0}
+    stats = {"noeuds": 0, "bases": 0, "limite": limite_motifs}
     occurrences = 0
     for ticket in tickets_ens:
         chemin = [p for p in ticket if p in rang]
@@ -113,15 +123,15 @@ def cfp_growth_seuils(tickets, seuils, mis_tri=None):
     brut = {}
     fouiller_arbre(entete, rang, (), MIN, brut, stats)
 
-    # Étape 6 : test final, un groupe est fréquent si son support >= le plus petit MIS de ses produits.
+    # Étape 6 : test final, un groupe est fréquent si son support >= le plus petit seuil de ses produits.
     frequents = {}
     par_niveau = defaultdict(list)
     enumeres_par_niveau = defaultdict(int)
     for groupe, support in brut.items():
         taille = len(groupe)
         enumeres_par_niveau[taille] += 1
-        plus_petit_mis = min(seuils[p] for p in groupe)
-        if support >= plus_petit_mis:
+        plus_petit_seuil = min(seuils[p] for p in groupe)
+        if support >= plus_petit_seuil:
             noms = tuple(sorted(groupe))
             frequents[noms] = support
             par_niveau[taille].append(noms)
@@ -139,88 +149,18 @@ def cfp_growth_seuils(tickets, seuils, mis_tri=None):
             "MIN": MIN, "ordre_arbre": ordre}
 
 
-# 4. Renvoie {produit: nombre de tickets qui le contiennent}.
-def compter_supports(tickets):
-    nb = defaultdict(int)
-    for ticket in tickets:
-        for produit in set(ticket):
-            nb[produit] += 1
-    return dict(nb)
+# 5. Fonction principale : lit mis.txt (écrit par mis.py) puis lance CFP-Growth.
+def cfp_growth(tickets, fichier_mis, limite_motifs=None):
+    mis, seuils = lire_mis_txt(fichier_mis)
 
+    # Vérification : chaque produit des tickets doit avoir une ligne dans mis.txt.
+    produits = {p for t in tickets for p in t}
+    manquants = produits - set(seuils)
+    if manquants:
+        raise ValueError("mis.txt ne correspond pas aux données (produits absents : %s). "
+                         "Relance main.py pour régénérer mis.txt." % sorted(manquants)[:5])
 
-# 5. MIS automatique : quartiles (méthode B, interpolation linéaire) puis beta calculé par formule.
-def quantile_interpolation(valeurs, p):
-    """Quantile par interpolation linéaire : position P = 1 + (n-1) x p (en partant de 1), puis
-    interpolation entre les deux valeurs voisines si P n'est pas entier."""
-    v = sorted(valeurs)
-    n = len(v)
-    pos = 1 + (n - 1) * p
-    i = int(math.floor(pos))
-    reste = pos - i
-    if i >= n:
-        return float(v[-1])
-    return v[i - 1] + reste * (v[i] - v[i - 1])
-
-
-def categories_quartiles(nb, niveaux=(0.25, 0.75)):
-    """Renvoie (coupures, catégorie de chaque produit) avec 0 = faible, 1 = moyenne, 2 = forte."""
-    supports = list(nb.values())
-    coupures = [quantile_interpolation(supports, p) for p in niveaux]
-    categories = {}
-    for produit in nb:
-        categories[produit] = sum(1 for coupure in coupures if nb[produit] >= coupure)
-    return coupures, categories
-
-
-def calculer_betas(nb, ls, niveaux=(0.25, 0.75)):
-    """Beta automatique : beta = LS + (1 - LS) x (s - s_min) / (s_max - s_min), avec
-    s = Q1 (faible), (Q1 + Q3) / 2 (moyen), Q3 (fort). Renvoie (betas, coupures)."""
-    supports = list(nb.values())
-    smin, smax = min(supports), max(supports)
-    q1, q3 = [quantile_interpolation(supports, p) for p in niveaux]
-    etendue = smax - smin
-    betas = []
-    for s in (q1, (q1 + q3) / 2, q3):
-        x = 0.0 if etendue == 0 else (s - smin) / etendue   # évite la division par 0
-        betas.append(ls + (1 - ls) * x)
-    return tuple(betas), [q1, q3]
-
-
-def calculer_ls_auto(nb, N, niveau=0.75):
-    """LS automatique = max(1 / racine(N), Q3(supports) / N), en fraction des tickets.
-    1/racine(N) : plancher (en dessous, un support ne se distingue pas du hasard).
-    Q3 : troisième quartile des supports des produits (même méthode d'interpolation que pour beta)."""
-    q3 = quantile_interpolation(list(nb.values()), niveau)
-    return max(1 / math.sqrt(N), q3 / N)
-
-
-def calculer_mis_quartiles(nb, N, ls, niveaux=(0.25, 0.75)):
-    """MIS de chaque produit en nombre de tickets : max(LS x N, beta de sa catégorie x support)."""
-    betas, _ = calculer_betas(nb, ls, niveaux)
-    coupures, categories = categories_quartiles(nb, niveaux)
-    mis = {}
-    for produit in nb:
-        beta = betas[categories[produit]]
-        mis[produit] = max(round(ls * N, 9), round(beta * nb[produit], 9))
-    return mis, categories, coupures, betas
-
-
-def cfp_growth(tickets, ls=None, niveaux=(0.25, 0.75)):
-    """Fonction principale : CFP-Growth avec MIS automatique (beta par formule).
-    ls = plancher en fraction ; s'il n'est pas donné, il est calculé par calculer_ls_auto."""
-    N = len(tickets)
-    nb = compter_supports(tickets)
-    if ls is None:
-        ls = calculer_ls_auto(nb, N)
-    mis, categories, coupures, betas = calculer_mis_quartiles(nb, N, ls, niveaux)
-    seuils = {p: math.ceil(mis[p]) for p in nb}
-
-    res = cfp_growth_seuils(tickets, seuils, mis_tri=mis)
-    res["mis"] = {p: mis[p] / N for p in nb}
-    res["support"] = nb
+    res = cfp_growth_seuils(tickets, seuils, mis_tri=mis, limite_motifs=limite_motifs)
+    res["mis"] = mis
     res["seuils"] = seuils
-    res["categories"] = categories
-    res["coupures"] = coupures
-    res["betas"] = betas
-    res["ls"] = ls
     return res
