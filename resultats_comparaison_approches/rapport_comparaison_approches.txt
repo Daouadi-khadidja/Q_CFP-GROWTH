@@ -1,0 +1,15 @@
+DONNÉES : 10935 tickets, 131 items (rares, support < 5 % : 61) | items par catégorie : faible 27, moyenne 71, forte 33
+RÈGLES : confiance >= 60 %, lift > 1 | itemsets de taille <= 3 | règle fiable = au moins 5 tickets
+NOTRE APPROCHE : bêtas (faible / moyen / fort) = 0.00021 / 0.00795 / 0.01569 | seuils de 1 à 172 tickets
+
+--- Exécution (chaque ligne = une version) ---
+
+=== TABLEAU RÉCAPITULATIF (moyenne des tirages) ===
+Version                                                    Itemsets        Candidats           Règles          Fiables          % bruit     Rares gardés Rappel fiables %        Temps (s)
+Notre approche (automatique)                                  33484            37313            31099            21730             30.1               61             99.1             1.11
+Originale : β = 0,05, LS = 1                                  26059            37313            27883            19533             29.9               61             89.0             1.03
+Originale : β = 0,5, LS = 1                                    6929            37313            12589             8946             28.9               61             40.8             1.04
+Originale : β = 0,1, LS = 110                                  9576             9761            11166            11166              0.0               17             50.9             0.86
+Originale : β = 0,2, LS = 547                                  2280             2280             3709             3709              0.0                0             16.9             0.43
+Aléatoire, plage large 1–60 % (moy. de 5)                      1460             8002             2200             2200              0.0                6             10.0             1.43
+Aléatoire, même plage que nous 0–1,57 % (moy. de 5)            15876            32093            15585            15398              1.2               40             70.2             2.75

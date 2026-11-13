@@ -11,8 +11,8 @@ DOSSIER = os.path.dirname(os.path.abspath(__file__))
 FICHIER_MIS = os.path.join(DOSSIER, "resultats_solaire", "mis.txt")              # fichier modèle (donne la liste des produits)
 FICHIER_SORTIE = os.path.join(DOSSIER, "resultats_solaire", "mis_aleatoire.txt")  # fichier créé
 
-MIS_MIN = 0.12      # plus petit MIS possible (12 % des tickets). Ne pas descendre trop bas : sinon CFP-Growth énumère trop de groupes.
-MIS_MAX = 0.60      # plus grand MIS possible (60 % des tickets)
+MIS_MIN = 0.009563    # = LS
+MIS_MAX = 0.6    
 GRAINE = 42         # même nombre = mêmes valeurs à chaque lancement ; change-le pour obtenir d'autres valeurs aléatoires
 
 SEP = "\t"
